@@ -208,9 +208,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
 
       <div class="url-label">URL del sitio a auditar</div>
       <div class="url-row">
-        <input class="url-input" id="urlInput" type="url" placeholder="https://mi-negocio.com" />
+        <input class="url-input" id="urlInput" type="text" placeholder="https://mi-negocio.com" oninput="validarURLEnVivo(this.value)" />
         <button class="audit-btn" id="auditBtn" onclick="startAudit()">Auditar →</button>
       </div>
+      <div id="urlHint" style="font-size:.78rem;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        💡 <strong>¿Cómo escribir la URL?</strong> Cópiala directo desde la barra del navegador mientras estás en el sitio.<br>
+        ✅ Correcto: <code style="background:#f0e4ff;padding:1px 6px;border-radius:4px;font-size:.76rem">https://www.mi-negocio.com</code> &nbsp;|&nbsp; <code style="background:#f0e4ff;padding:1px 6px;border-radius:4px;font-size:.76rem">https://mi-negocio.com</code><br>
+        ❌ No pongas: <code style="background:#ffe4e4;padding:1px 6px;border-radius:4px;font-size:.76rem">mi-negocio.com/</code> &nbsp;(sin https ni slash al final) &nbsp;|&nbsp; <code style="background:#ffe4e4;padding:1px 6px;border-radius:4px;font-size:.76rem">www.mi-negocio.com</code> &nbsp;(falta https://)
+      </div>
+      <div id="urlFixBanner" style="display:none;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.3);border-radius:10px;padding:9px 13px;font-size:.8rem;color:#15803d;margin-bottom:10px"></div>
 
       <div id="pasteSection" style="display:none">
         <div class="divider"><div class="divider-line"></div><div class="divider-text">El sitio bloqueó el acceso automático — opción manual</div><div class="divider-line"></div></div>
@@ -342,12 +348,73 @@ function setMsg(m) { const el = document.getElementById('loadingMsg'); if (el) e
 function showError(msg) { const el = document.getElementById('errorBanner'); el.textContent = msg; el.style.display = 'block'; }
 function hideError() { document.getElementById('errorBanner').style.display = 'none'; }
 
+function validarYNormalizarURL(raw) {
+  let url = raw.trim();
+  let aviso = null;
+
+  if (!url) return { error: 'Escribe la URL del sitio. Ejemplo: https://mi-negocio.com' };
+
+  // Espacios
+  if (url.includes(' ')) return { error: `La URL tiene espacios — quítalos. Recibido: "${url}"` };
+
+  // Parece email
+  if (url.includes('@') && !url.includes('://')) return { error: 'Eso parece un correo electrónico, no una URL. Escribe la dirección del sitio web.' };
+
+  // Slash al final — auto-corregir
+  const urlSinSlash = url.replace(/\/+$/, '');
+  if (urlSinSlash !== url && urlSinSlash.split('/').length <= 4) {
+    aviso = `✅ Corregimos la URL — quitamos el "/" del final: ${urlSinSlash.startsWith('http') ? urlSinSlash : 'https://'+urlSinSlash}`;
+    url = urlSinSlash;
+  }
+
+  // Sin protocolo — auto-corregir
+  if (!url.startsWith('http')) {
+    if (url.startsWith('www.') || url.includes('.')) {
+      const fixed = 'https://' + url;
+      aviso = `✅ Corregimos la URL — agregamos "https://" al inicio: ${fixed}`;
+      url = fixed;
+    } else {
+      return { error: `La URL no parece válida. Debe ser como: https://mi-negocio.com` };
+    }
+  }
+
+  // http sin s — sugerir https
+  if (url.startsWith('http://')) {
+    aviso = aviso || `ℹ️ Estás usando "http://" — si el sitio tiene "https://" funciona mejor con seguridad activada.`;
+  }
+
+  // Validar estructura
+  try { new URL(url); } catch(e) {
+    return { error: `La URL "${url}" no es válida. Formato correcto: https://mi-negocio.com` };
+  }
+
+  return { url, aviso };
+}
+
+function validarURLEnVivo(raw) {
+  const fixBanner = document.getElementById('urlFixBanner');
+  if (!raw.trim()) { fixBanner.style.display = 'none'; return; }
+  const result = validarYNormalizarURL(raw);
+  if (result.aviso) {
+    fixBanner.textContent = result.aviso;
+    fixBanner.style.display = 'block';
+  } else {
+    fixBanner.style.display = 'none';
+  }
+}
+
 async function startAudit() {
-  const url = document.getElementById('urlInput').value.trim();
+  const raw = document.getElementById('urlInput').value;
   hideError();
   document.getElementById('pasteSection').style.display = 'none';
-  if (!url) { showError('Ingresa una URL válida, por ejemplo: https://mi-negocio.com'); return; }
-  if (!url.startsWith('http')) { showError('La URL debe comenzar con https:// o http://'); return; }
+  document.getElementById('urlFixBanner').style.display = 'none';
+
+  const resultado = validarYNormalizarURL(raw);
+  if (resultado.error) { showError(resultado.error); return; }
+
+  const url = resultado.url;
+  // Actualizar el input con la URL corregida
+  document.getElementById('urlInput').value = url;
 
   document.getElementById('inputState').style.display = 'none';
   document.getElementById('loadingState').style.display = 'block';
