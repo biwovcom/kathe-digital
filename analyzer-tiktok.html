@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis TikTok | Kathe Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fdf2fc;--card:#fff;--border:#f0ccea;
+  --accent:#e91e8c;--purple:#9333ea;
+  --tiktok:#010101;--tiktok2:#fe2c55;
+  --green:#16a34a;--red:#dc2626;--orange:#ea580c;
+  --text:#1a0a2e;--muted:#a07ab5;
+  --grad:linear-gradient(135deg,#e91e8c,#9333ea);
+  --shadow:0 2px 16px rgba(233,30,140,.08);
+  --shadow-lg:0 8px 32px rgba(233,30,140,.14);
+}
+body{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+.header{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow);position:sticky;top:0;z-index:100}
+.logo{font-size:1.1rem;font-weight:800}.logo span{color:var(--accent)}
+.header-tag{background:var(--grad);color:#fff;font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:99px;text-transform:uppercase;letter-spacing:.06em}
+.back-link{font-size:.8rem;color:var(--muted);text-decoration:none}.back-link:hover{color:var(--accent)}
+
+.wrap{max-width:780px;margin:0 auto;padding:48px 24px 40px}
+.page-title{font-size:2.1rem;font-weight:900;line-height:1.15;margin-bottom:10px;text-align:center}
+.page-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--muted);text-align:center;margin-bottom:32px;font-size:.97rem}
+
+.steps-bar{display:flex;gap:0;margin-bottom:32px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}
+.step-tab{flex:1;padding:12px 8px;text-align:center;font-size:.78rem;font-weight:700;color:var(--muted);border-right:1px solid var(--border)}
+.step-tab:last-child{border-right:none}
+.step-tab.active{background:var(--grad);color:#fff}
+.step-tab.done{background:rgba(22,163,74,.1);color:var(--green)}
+
+.step-section{margin-bottom:28px}
+.step-header{font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.step-num-badge{width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;font-size:.8rem;font-weight:900;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+
+.instructions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.instr-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px}
+.instr-card .ic-num{font-size:1.4rem;margin-bottom:8px}
+.instr-card h4{font-size:.88rem;font-weight:800;margin-bottom:6px;color:var(--accent)}
+.instr-card ol{padding-left:16px;display:flex;flex-direction:column;gap:4px}
+.instr-card ol li{font-size:.8rem;color:var(--text);line-height:1.4}
+.instr-card ol li strong{color:var(--purple)}
+
+.upload-area{border:2px dashed rgba(233,30,140,.35);border-radius:16px;padding:36px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fff}
+.upload-area:hover,.upload-area.over{border-color:var(--accent);background:rgba(233,30,140,.03);transform:translateY(-2px)}
+.upload-icon{font-size:2.8rem;margin-bottom:10px}
+.upload-main{font-size:1rem;font-weight:700;margin-bottom:4px}
+.upload-sub{font-size:.83rem;color:var(--muted)}
+.upload-types{margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.upload-type{background:rgba(233,30,140,.1);color:var(--accent);padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:700;border:1px solid rgba(233,30,140,.2)}
+
+.screenshots-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:16px}
+.screenshot-thumb{position:relative;border-radius:10px;overflow:hidden;border:2px solid var(--border);background:#fff;aspect-ratio:9/16;cursor:pointer}
+.screenshot-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.screenshot-thumb .del-btn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.screenshot-thumb .ss-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:.65rem;font-weight:700;padding:4px 6px;text-align:center}
+.gallery-hint{text-align:center;font-size:.82rem;color:var(--muted);margin-top:10px;font-style:italic}
+
+.img-modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:16px}
+.img-modal.open{display:flex}
+.img-modal img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain}
+.img-modal-close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.2rem;cursor:pointer}
+
+.form-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.form-card-title{font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.screenshot-ref{font-size:.72rem;font-weight:600;color:var(--accent);background:rgba(233,30,140,.08);padding:2px 8px;border-radius:99px;border:1px solid rgba(233,30,140,.2);text-transform:none;letter-spacing:0}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:.8rem;font-weight:700}
+.field .hint{font-size:.7rem;color:var(--muted);line-height:1.35}
+.field input,.field select{padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:.93rem;font-family:inherit;color:var(--text);background:var(--bg);transition:border-color .2s;outline:none;width:100%}
+.field input:focus,.field select:focus{border-color:var(--accent);background:#fff}
+.field input::placeholder{color:#c4a8d4}
+
+.analyze-btn{background:var(--grad);color:#fff;border:none;width:100%;padding:16px;border-radius:14px;font-size:1.05rem;font-weight:800;cursor:pointer;font-family:inherit;transition:opacity .2s}
+.analyze-btn:hover{opacity:.9}
+
+/* RESULTS */
+#resultsSection{display:none}
+.results-bar{background:var(--grad);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.results-bar-info .lbl{font-size:.72rem;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em}
+.results-bar-info .val{font-size:1rem;font-weight:700;color:#fff}
+.bar-btns{display:flex;gap:8px;flex-wrap:wrap}
+.bar-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 16px;border-radius:99px;cursor:pointer;font-size:.82rem;font-weight:600;font-family:inherit;transition:background .2s}
+.bar-btn:hover{background:rgba(255,255,255,.3)}
+.bar-btn.dl{background:rgba(255,255,255,.3)}
+
+.container{max-width:1100px;margin:0 auto;padding:28px 20px}
+.sec-block{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:var(--shadow)}
+.sec-title{font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+
+.score-row{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.score-circle{width:110px;height:110px;flex-shrink:0}
+.score-ring{transform:rotate(-90deg);transform-origin:center}
+.score-ring-bg{stroke:var(--border);fill:none;stroke-width:9}
+.score-ring-fill{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .9s ease}
+.score-num{font-size:2.1rem;font-weight:900;text-anchor:middle;dominant-baseline:middle}
+.score-lbl-svg{font-size:.58rem;font-weight:700;text-anchor:middle;dominant-baseline:middle;fill:var(--muted);text-transform:uppercase}
+.score-meta h2{font-size:1.4rem;font-weight:900;margin-bottom:4px}
+.score-meta p{color:var(--muted);font-size:.86rem;line-height:1.5}
+.score-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.score-cat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.score-cat .cv{font-size:1.4rem;font-weight:900;margin-bottom:2px}
+.score-cat .cl{font-size:.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.metric-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:13px;text-align:center}
+.metric-card .mv{font-size:1.4rem;font-weight:900;margin-bottom:2px}
+.metric-card .ml{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.mb{font-size:.67rem;padding:2px 8px;border-radius:99px;font-weight:700;display:inline-block}
+.mb.good{background:rgba(22,163,74,.12);color:#15803d}
+.mb.ok{background:rgba(234,88,12,.12);color:#c2410c}
+.mb.bad{background:rgba(220,38,38,.12);color:var(--red)}
+
+.algo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.algo-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:13px}
+.algo-card h4{font-size:.8rem;font-weight:800;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.algo-card p{font-size:.76rem;color:var(--muted);line-height:1.45}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.dot-good{background:var(--green)}.dot-warn{background:var(--orange)}.dot-bad{background:var(--red)}
+
+.funnel-stages{display:flex;flex-direction:column;gap:10px}
+.funnel-stage{display:flex;gap:14px;padding:14px;border-radius:12px;border:1px solid var(--border);align-items:flex-start;opacity:.45}
+.funnel-stage.active{background:linear-gradient(135deg,rgba(233,30,140,.05),rgba(147,51,234,.05));border-color:var(--accent);opacity:1}
+.funnel-stage .fs-ico{font-size:1.4rem;flex-shrink:0}
+.funnel-stage h4{font-size:.88rem;font-weight:800;margin-bottom:3px}
+.funnel-stage p{font-size:.8rem;color:var(--muted);line-height:1.4}
+.funnel-badge{font-size:.62rem;font-weight:800;background:var(--grad);color:#fff;padding:2px 8px;border-radius:99px;margin-left:8px}
+
+.avatar-grid,.pillar-grid,.algo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.avatar-item,.pillar{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:13px}
+.avatar-item h4{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px}
+.avatar-item ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+.avatar-item ul li{font-size:.8rem;line-height:1.35;padding-left:13px;position:relative}
+.avatar-item ul li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:.75rem}
+.pillar .p-ico{font-size:1.5rem;margin-bottom:6px}
+.pillar h4{font-size:.86rem;font-weight:800;margin-bottom:3px}
+.pillar p{font-size:.76rem;color:var(--muted);line-height:1.4}
+.pillar .p-pct{font-size:.7rem;font-weight:700;color:var(--accent);margin-top:5px}
+
+.script-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px}
+.script-card h4{font-size:.88rem;font-weight:800;margin-bottom:10px;color:var(--purple)}
+.script-step{display:flex;gap:10px;margin-bottom:7px;align-items:flex-start}
+.ss-n{width:24px;height:24px;border-radius:50%;background:var(--grad);color:#fff;font-size:.72rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.script-step p{font-size:.8rem;line-height:1.4}
+.script-step p em{color:var(--accent);font-style:italic}
+
+.rec-list{display:flex;flex-direction:column;gap:10px}
+.rec-item{display:flex;gap:12px;padding:13px 14px;border-radius:12px;border-left:4px solid var(--accent);background:var(--bg)}
+.rec-prio{font-size:.62rem;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:99px;display:inline-block;margin-bottom:3px}
+.prio-alta{background:rgba(220,38,38,.12);color:var(--red)}
+.prio-media{background:rgba(234,88,12,.12);color:var(--orange)}
+.prio-baja{background:rgba(22,163,74,.12);color:var(--green)}
+.rec-item strong{display:block;font-size:.88rem;margin-bottom:2px}
+.rec-item p{font-size:.8rem;color:var(--muted);line-height:1.4}
+
+.ss-in-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.ss-in-results img{width:100%;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:transform .2s}
+.ss-in-results img:hover{transform:scale(1.03)}
+
+/* Algorithm breakdown bar */
+.algo-bar{margin:8px 0;display:flex;align-items:center;gap:8px}
+.algo-bar-label{font-size:.75rem;font-weight:700;min-width:110px;color:var(--text)}
+.algo-bar-track{flex:1;background:var(--bg);border-radius:99px;height:8px;border:1px solid var(--border);overflow:hidden}
+.algo-bar-fill{height:100%;border-radius:99px;transition:width .8s ease}
+
+footer{padding:20px 24px;text-align:center;color:var(--muted);font-size:.82rem;border-top:1px solid var(--border)}
+footer a{color:var(--accent);text-decoration:none}
+@media(max-width:640px){.wrap{padding:28px 14px}.page-title{font-size:1.7rem}.score-row{grid-template-columns:1fr;text-align:center}.score-cats{grid-template-columns:repeat(2,1fr)}.container{padding:16px 10px}}
+
+/* IA Setup */
+.ia-banner{background:linear-gradient(135deg,rgba(233,30,140,.05),rgba(147,51,234,.05));border:1.5px solid rgba(147,51,234,.25);border-radius:16px;padding:20px 22px;margin-bottom:24px}
+.ia-banner-row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.ia-icon{font-size:2rem;flex-shrink:0}
+.ia-title{font-weight:900;font-size:1rem;margin-bottom:4px}
+.ia-sub{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.ia-connected{background:rgba(22,163,74,.1);color:#15803d;padding:5px 14px;border-radius:99px;font-size:.82rem;font-weight:700;display:inline-block}
+.ia-opts{display:flex;gap:8px;flex-wrap:wrap}
+.ia-opt-btn{padding:8px 16px;border-radius:99px;font-weight:800;font-size:.82rem;cursor:pointer;font-family:inherit;border:1.5px solid;transition:all .2s}
+.ia-opt-btn.primary{background:var(--grad);color:#fff;border-color:transparent}
+.ia-opt-btn.secondary{background:#fff;color:var(--purple);border-color:var(--purple)}
+.ia-opt-btn:hover{opacity:.85}
+.ia-panel{display:none;margin-top:18px;border-top:1px solid rgba(147,51,234,.15);padding-top:18px}
+.ia-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.ia-step-n{width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;font-size:.78rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ia-step p{font-size:.85rem;line-height:1.5;margin:0}
+.ia-key-row{display:flex;gap:8px;margin-top:12px}
+.ia-key-input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;color:var(--text);background:#fff;outline:none}
+.ia-key-input:focus{border-color:var(--purple)}
+.ia-save-btn{background:var(--grad);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit;white-space:nowrap}
+.ia-tabs{display:flex;gap:6px;margin-bottom:14px}
+.ia-tab{padding:6px 14px;border-radius:99px;font-size:.78rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--muted);font-family:inherit;transition:all .2s}
+.ia-tab.active{background:var(--grad);color:#fff;border-color:transparent}
+.ia-note{font-size:.72rem;color:var(--muted);margin-top:6px;line-height:1.4}
+
+.extract-box{background:#fff;border:2px solid rgba(147,51,234,.3);border-radius:14px;padding:18px 20px;text-align:center;margin-top:14px}
+.extract-btn{background:var(--grad);color:#fff;border:none;padding:13px 28px;border-radius:99px;font-weight:900;font-size:.95rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 18px rgba(233,30,140,.25);transition:opacity .2s}
+.extract-btn:disabled{opacity:.5;cursor:not-allowed}
+.extract-btn:not(:disabled):hover{opacity:.88}
+.extract-status{font-size:.8rem;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Kathe <span>Digital</span></div>
+  <span class="header-tag">🎵 TikTok</span>
+  <a class="back-link" href="kathe-digital.html">← Herramientas</a>
+</header>
+
+<div id="formSection">
+  <div class="wrap">
+    <h1 class="page-title">Analiza tu <span>TikTok</span></h1>
+    <p class="page-sub">Sin iniciar sesión · Sin riesgo de baneo · Tu cuenta siempre segura</p>
+    <div style="background:linear-gradient(135deg,rgba(22,163,74,.07),rgba(22,163,74,.03));border:1.5px solid rgba(22,163,74,.25);border-radius:12px;padding:12px 16px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start">
+      <div style="font-size:1.4rem;flex-shrink:0">🔒</div>
+      <div>
+        <div style="font-weight:800;font-size:.88rem;color:#15803d;margin-bottom:3px">¿Por qué subir capturas en vez de iniciar sesión?</div>
+        <div style="font-size:.8rem;color:#166534;line-height:1.55">TikTok puede <strong>bloquear o suspender cuentas</strong> que inician sesión desde apps o herramientas externas no autorizadas. Al subir capturas de pantalla, <strong>tu cuenta nunca está en riesgo</strong> — la herramienta solo lee lo que tú le muestras. La IA lee las imágenes y extrae los datos. Tu privacidad y tu cuenta siempre protegidas.</div>
+      </div>
+    </div>
+
+    <!-- IA SETUP BANNER -->
+    <div class="ia-banner">
+      <div class="ia-banner-row">
+        <div class="ia-icon">🤖</div>
+        <div style="flex:1;min-width:200px">
+          <div class="ia-title">Conecta una IA para leer tus capturas automáticamente</div>
+          <div class="ia-sub">Sin IA conectada debes escribir los números a mano. Con IA solo subes las fotos y ella extrae todo sola.</div>
+          <div id="iaStatusArea">
+            <div id="iaNoKey">
+              <div class="ia-opts">
+                <button class="ia-opt-btn primary" onclick="mostrarPanel('claude')">✦ Claude (Anthropic)</button>
+                <button class="ia-opt-btn secondary" onclick="mostrarPanel('gemini')">⚡ Gemini (Google · gratis)</button>
+              </div>
+            </div>
+            <div id="iaHasKey" style="display:none">
+              <span class="ia-connected" id="iaConnectedLabel">✅ IA conectada</span>
+              <button onclick="desconectarIA()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;margin-left:10px;text-decoration:underline">Cambiar / desconectar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Claude -->
+      <div class="ia-panel" id="panelClaude">
+        <div class="ia-tabs">
+          <button class="ia-tab active" onclick="switchTab('claude')">✦ Claude API</button>
+          <button class="ia-tab" onclick="switchTab('gemini')">⚡ Gemini API</button>
+        </div>
+        <div style="font-weight:800;font-size:.88rem;margin-bottom:10px">Cómo obtener tu clave de Claude (tiene $5 USD gratis al registrarte):</div>
+        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);font-weight:700">console.anthropic.com</a> y crea una cuenta gratuita (con correo)</p></div>
+        <div class="ia-step"><div class="ia-step-n">2</div><p>Una vez dentro, ve a <strong>"API Keys"</strong> en el menú izquierdo → toca <strong>"Create Key"</strong></p></div>
+        <div class="ia-step"><div class="ia-step-n">3</div><p>Copia la clave que empieza por <strong>sk-ant-...</strong> → pégala aquí:</p></div>
+        <div class="ia-key-row">
+          <input type="password" class="ia-key-input" id="claudeKeyInput" placeholder="sk-ant-api03-...">
+          <button class="ia-save-btn" onclick="guardarClave('claude')">Guardar →</button>
+        </div>
+        <p class="ia-note">💡 Tu clave se guarda solo en tu navegador. Nadie más la ve. Los $5 iniciales equivalen a cientos de análisis.</p>
+      </div>
+
+      <!-- Panel Gemini -->
+      <div class="ia-panel" id="panelGemini">
+        <div class="ia-tabs">
+          <button class="ia-tab" onclick="switchTab('claude')">✦ Claude API</button>
+          <button class="ia-tab active" onclick="switchTab('gemini')">⚡ Gemini API</button>
+        </div>
+        <div style="font-weight:800;font-size:.88rem;margin-bottom:10px">Cómo obtener tu clave de Gemini (100% gratis, solo necesitas cuenta Google):</div>
+        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent);font-weight:700">aistudio.google.com/apikey</a> → inicia sesión con tu cuenta de Google</p></div>
+        <div class="ia-step"><div class="ia-step-n">2</div><p>Toca el botón <strong>"Create API Key"</strong> (botón azul en la parte superior)</p></div>
+        <div class="ia-step"><div class="ia-step-n">3</div><p>Copia la clave que empieza por <strong>AIza...</strong> → pégala aquí:</p></div>
+        <div class="ia-key-row">
+          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="AIzaSy...">
+          <button class="ia-save-btn" onclick="guardarClave('gemini')">Guardar →</button>
+        </div>
+        <p class="ia-note">💡 Gemini es completamente gratis — puedes hacer cientos de análisis sin costo. Tu clave se guarda solo en tu navegador.</p>
+      </div>
+    </div>
+    <!-- / IA SETUP BANNER -->
+
+    <div class="steps-bar">
+      <div class="step-tab active" id="stab1">1 · Toma capturas</div>
+      <div class="step-tab" id="stab2">2 · Súbelas aquí</div>
+      <div class="step-tab" id="stab3">3 · Ingresa datos</div>
+      <div class="step-tab" id="stab4">4 · Ver análisis</div>
+    </div>
+
+    <!-- PASO 1 -->
+    <div class="step-section">
+      <div class="step-header"><span class="step-num-badge">1</span> Toma exactamente estas 4 capturas en TikTok</div>
+      <div style="background:rgba(233,30,140,.06);border:1px solid rgba(233,30,140,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.82rem;line-height:1.5">
+        📌 <strong>Todas desde el mismo video:</strong> abre TikTok → ve a un video tuyo → toca los <strong>3 puntos ···</strong> → <strong>"Análisis del video"</strong>. Desde ahí tomas las 4 capturas.
+      </div>
+      <div class="instructions-grid">
+        <div class="instr-card">
+          <div class="ic-num">📊</div>
+          <h4>Captura 1 — Pestaña "Resumen"</h4>
+          <ol>
+            <li>Toca la pestaña <strong>Resumen</strong></li>
+            <li>Verás: <strong>Visualizaciones, Likes, Comentarios, Compartidos, Guardados</strong></li>
+            <li>También: <strong>Tiempo promedio y % que vio completo</strong></li>
+            <li>📸 Toma el pantallazo aquí</li>
+          </ol>
+        </div>
+        <div class="instr-card">
+          <div class="ic-num">👥</div>
+          <h4>Captura 2 — Pestaña "Espectadores"</h4>
+          <ol>
+            <li>Toca la pestaña <strong>Espectadores</strong></li>
+            <li>Verás: <strong>Sexo (% hombre/mujer)</strong></li>
+            <li>También: <strong>Edades y países/ciudades</strong></li>
+            <li>📸 Toma el pantallazo aquí</li>
+          </ol>
+        </div>
+        <div class="instr-card">
+          <div class="ic-num">📈</div>
+          <h4>Captura 3 — Pestaña "Inspiración"</h4>
+          <ol>
+            <li>Toca la pestaña <strong>Inspiración</strong> (o Fuentes de tráfico)</li>
+            <li>Verás: de dónde vienen las vistas (FYP, seguidores, búsqueda)</li>
+            <li>📸 Toma el pantallazo aquí</li>
+          </ol>
+        </div>
+        <div class="instr-card">
+          <div class="ic-num">▶️</div>
+          <h4>Captura 4 — Pestaña "Participación"</h4>
+          <ol>
+            <li>Toca la pestaña <strong>Participación</strong></li>
+            <li>Verás la curva de retención del video</li>
+            <li>También: <strong>nuevos seguidores</strong> que ganaste con este video</li>
+            <li>📸 Toma el pantallazo aquí</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="step-section">
+      <div class="step-header"><span class="step-num-badge">2</span> Sube tus 4 capturas <span style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">(máximo 4 imágenes)</span></div>
+      <div class="upload-area" id="dropZone" onclick="document.getElementById('imgInput').click()">
+        <div class="upload-icon">📲</div>
+        <div class="upload-main">Arrastra tus capturas aquí o toca para seleccionar</div>
+        <div class="upload-sub">Máximo 4 imágenes · JPG, PNG, HEIC, WEBP</div>
+        <div class="upload-types">
+          <span class="upload-type">Captura 1 · Resumen</span>
+          <span class="upload-type">Captura 2 · Espectadores</span>
+          <span class="upload-type">Captura 3 · Tráfico</span>
+          <span class="upload-type">Captura 4 · Participación</span>
+        </div>
+      </div>
+      <input type="file" id="imgInput" accept="image/*" multiple style="display:none">
+      <div class="screenshots-gallery" id="gallery"></div>
+      <div id="galleryHint" style="display:none;margin-top:14px">
+        <!-- Extract with AI box (shown when IA is configured) -->
+        <div id="extractBox" class="extract-box" style="display:none">
+          <div style="font-weight:900;font-size:1rem;margin-bottom:6px">🤖 IA lista para leer tus capturas</div>
+          <div style="font-size:.83rem;color:var(--muted);margin-bottom:12px">Toca el botón y la IA extraerá todos los números automáticamente</div>
+          <button class="extract-btn" id="btnExtract" onclick="extraerConIA()">✨ Extraer datos con IA automáticamente</button>
+          <div class="extract-status" id="extractStatus"></div>
+        </div>
+
+        <!-- Manual fallback (shown when no IA) -->
+        <div id="manualHint" style="background:rgba(233,30,140,.08);border:2px solid rgba(233,30,140,.3);border-radius:14px;padding:16px 18px;text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:4px">👇</div>
+          <strong style="font-size:.95rem;color:#1a0a2e;display:block;margin-bottom:4px">¡Capturas guardadas! Ahora escribe los números en el formulario.</strong>
+          <p style="font-size:.8rem;color:#a07ab5;margin:6px 0 10px">Sin IA conectada debes ingresar los números manualmente. <button onclick="mostrarPanel('gemini')" style="background:none;border:none;color:var(--accent);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0">Conectar IA gratis →</button></p>
+          <button onclick="document.getElementById('formPaso3').scrollIntoView({behavior:'smooth'})" style="background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;border:none;padding:9px 20px;border-radius:99px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit">Ir al formulario ↓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="step-section" id="formPaso3">
+      <div class="step-header"><span class="step-num-badge">3</span> Ingresa los números de tus capturas</div>
+
+      <div class="form-card">
+        <div class="form-card-title">🎵 Tu cuenta</div>
+        <div class="form-grid">
+          <div class="field"><label>Nombre del negocio / marca</label><input type="text" id="f_brand" placeholder="ej. Mi Marca"></div>
+          <div class="field"><label>Nicho</label>
+            <select id="f_niche">
+              <option value="">Selecciona...</option>
+              <option value="moda">Moda y ropa</option>
+              <option value="belleza">Belleza y skincare</option>
+              <option value="fitness">Fitness y salud</option>
+              <option value="alimentacion">Alimentación y gastronomía</option>
+              <option value="educacion">Educación y coaching</option>
+              <option value="negocios">Negocios y emprendimiento</option>
+              <option value="entretenimiento">Entretenimiento / humor</option>
+              <option value="viajes">Viajes</option>
+              <option value="servicios">Servicios profesionales</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div class="field"><label>Objetivo principal</label>
+            <select id="f_goal">
+              <option value="ventas">Generar ventas</option>
+              <option value="seguidores">Crecer en seguidores</option>
+              <option value="reconocimiento">Reconocimiento de marca</option>
+              <option value="fyp">Llegar al For You Page (FYP)</option>
+            </select>
+          </div>
+          <div class="field"><label>Seguidores totales de la cuenta</label><input type="number" id="f_followers" placeholder="ej. 8 000" min="0"></div>
+          <div class="field"><label>Videos publicados por semana</label><input type="number" id="f_freq" placeholder="ej. 5" min="0" max="30"></div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">📊 Métricas del video <span class="screenshot-ref">📸 Captura 1 · Pestaña Resumen</span></div>
+        <div class="form-grid">
+          <div class="field"><label>Visualizaciones</label><input type="number" id="f_avg_views" placeholder="ej. 2 916" min="0"><span class="hint">Campo "Visualizaciones de video" en la pestaña Resumen</span></div>
+          <div class="field"><label>Me gusta ❤️</label><input type="number" id="f_likes" placeholder="ej. 108" min="0"></div>
+          <div class="field"><label>Comentarios 💬</label><input type="number" id="f_comments" placeholder="ej. 4" min="0"></div>
+          <div class="field"><label>Compartidos ➦</label><input type="number" id="f_shares" placeholder="ej. 11" min="0"></div>
+          <div class="field"><label>Guardados 🔖</label><input type="number" id="f_saves" placeholder="ej. 78" min="0"></div>
+          <div class="field"><label>Tiempo promedio de visualización (segundos)</label><input type="number" id="f_avg_watch_time" placeholder="ej. 8" min="0"><span class="hint">Ej: si dice "8.1s" escribe 8</span></div>
+          <div class="field"><label>% que vio el video completo</label><input type="number" id="f_completion" placeholder="ej. 3.89" min="0" max="100" step="0.1"><span class="hint">🔑 Señal #1 en TikTok. Campo "Vio el video completo"</span></div>
+          <div class="field"><label>Nuevos seguidores de este video</label><input type="number" id="f_new_followers" placeholder="ej. 10" min="0"><span class="hint">Campo "Nuevos seguidores" en la pestaña Participación</span></div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">👥 Espectadores (audiencia) <span class="screenshot-ref">📸 Captura 2 · Pestaña Espectadores</span></div>
+        <div class="form-grid">
+          <div class="field"><label>% de espectadores femeninos</label><input type="number" id="f_gender_female" placeholder="ej. 62" min="0" max="100"><span class="hint">En "Espectadores" → Sexo. Escribe el % del género mayoritario femenino</span></div>
+          <div class="field"><label>Rango de edad principal</label>
+            <select id="f_top_age">
+              <option value="">Selecciona el rango con más %</option>
+              <option value="13-17">13 – 17 años</option>
+              <option value="18-24">18 – 24 años</option>
+              <option value="25-34">25 – 34 años</option>
+              <option value="35-44">35 – 44 años</option>
+              <option value="45+">45 años o más</option>
+            </select>
+          </div>
+          <div class="field"><label>País o ciudad principal</label><input type="text" id="f_top_location" placeholder="ej. Colombia · Bogotá"><span class="hint">El país o ciudad que aparece primero en la lista de ubicaciones</span></div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">📈 Fuente de tráfico <span class="screenshot-ref">📸 Captura 3 · Pestaña Inspiración</span></div>
+        <div class="form-grid">
+          <div class="field"><label>Fuente principal de vistas</label>
+            <select id="f_traffic">
+              <option value="fyp">For You Page (FYP) — la mayoría viene del FYP</option>
+              <option value="seguidores">Mis seguidores — viene de quienes ya me siguen</option>
+              <option value="busqueda">Búsqueda — encontraron el video buscando</option>
+              <option value="perfil">Perfil personal — entraron a mi perfil</option>
+            </select>
+          </div>
+          <div class="field"><label>¿Usas sonidos/audios trending?</label>
+            <select id="f_sounds">
+              <option value="siempre">Siempre (flecha ↑ en el audio)</option>
+              <option value="aveces">A veces</option>
+              <option value="nunca">Casi nunca</option>
+            </select>
+          </div>
+          <div class="field"><label>Duración promedio de tus videos</label>
+            <select id="f_duration">
+              <option value="short">Menos de 15 seg</option>
+              <option value="medium">15 – 45 seg</option>
+              <option value="long">45 seg – 2 min</option>
+              <option value="vlg">Más de 2 min</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">🏢 Información de tu negocio <span style="font-size:.7rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">(ayuda a la IA a entender qué hace tu empresa)</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field">
+            <label>Bio actual de tu cuenta TikTok</label>
+            <textarea id="f_bio" rows="2" placeholder="Copia aquí exactamente lo que dice tu bio en TikTok (ej: 🌿 Masajes terapéuticos · Medellín · Agenda por WhatsApp 📲)" style="padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--bg);resize:vertical;outline:none;width:100%;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)';this.style.background='#fff'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--bg)'"></textarea>
+            <span class="hint">La bio es lo primero que ve tu audiencia. La analizaremos para ver si está optimizada.</span>
+          </div>
+          <div class="field">
+            <label>¿Qué hace tu negocio? ¿Cuál es tu producto o servicio principal?</label>
+            <textarea id="f_business" rows="2" placeholder="Ej: Ofrezco masajes terapéuticos y relajantes en Medellín, especializada en deportistas y personas con estrés. Precio desde $80.000 COP por sesión." style="padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--bg);resize:vertical;outline:none;width:100%;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)';this.style.background='#fff'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--bg)'"></textarea>
+          </div>
+          <div class="field">
+            <label>¿Alguna observación sobre tus estadísticas o algo que quieras aclarar?</label>
+            <textarea id="f_context" rows="3" placeholder="Ej: Este video funcionó bien pero fue antes de un cambio de estrategia. Normalmente mis videos tienen más compartidos. También quiero saber por qué mis guardados son tan altos pero no convierte en seguidores." style="padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--bg);resize:vertical;outline:none;width:100%;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)';this.style.background='#fff'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--bg)'"></textarea>
+            <span class="hint">Cualquier contexto o corrección que ayude a que el análisis sea más preciso para tu situación real.</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="analyze-btn" onclick="analizarTikTok()">🎵 Generar análisis completo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="resultsSection">
+  <div class="results-bar">
+    <div class="results-bar-info">
+      <div class="lbl">Análisis de TikTok</div>
+      <div class="val" id="rBrand">Tu marca</div>
+    </div>
+    <div class="bar-btns">
+      <button class="bar-btn dl" onclick="descargarReporte()">⬇ Descargar Reporte</button>
+      <button class="bar-btn" onclick="volverForm()">← Nuevo análisis</button>
+    </div>
+  </div>
+
+  <div class="container" id="reporteContenido">
+
+    <div class="sec-block" id="ssBlock" style="display:none">
+      <div class="sec-title">📲 Tus capturas de pantalla</div>
+      <div class="ss-in-results" id="ssResultsGallery"></div>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:10px;text-align:center">Toca una para ampliarla</p>
+    </div>
+
+    <div class="sec-block" id="contextBlock" style="display:none">
+      <div class="sec-title">💬 Contexto de tu negocio</div>
+      <p id="contextText" style="font-size:.88rem;line-height:1.6;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px"></p>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">Puntuación General</div>
+      <div class="score-row">
+        <svg class="score-circle" viewBox="0 0 110 110">
+          <circle class="score-ring-bg" cx="55" cy="55" r="46"/>
+          <circle class="score-ring-fill" id="scoreRing" cx="55" cy="55" r="46"/>
+          <text class="score-num" id="scoreNum" x="55" y="51" fill="#1a0a2e">0</text>
+          <text class="score-lbl-svg" x="55" y="67">/100</text>
+        </svg>
+        <div class="score-meta">
+          <h2 id="scoreLabel">—</h2>
+          <p id="scoreDesc">—</p>
+          <div class="score-cats" id="scoreCats"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">Métricas Clave</div>
+      <div class="metrics-grid" id="metricsGrid"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">🔓 Cómo funciona el Algoritmo de TikTok</div>
+      <p style="font-size:.84rem;color:var(--muted);margin-bottom:16px;line-height:1.55">TikTok evalúa cada video con una audiencia inicial pequeña. Si las métricas son buenas, lo muestra a más personas. La señal #1 es el <strong>% de reproducción</strong> — cuánto de tu video ven las personas.</p>
+      <div style="margin-bottom:16px" id="algoBar"></div>
+      <div class="algo-grid" id="algoGrid"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">📊 Psicología del Consumidor — Etapa de la Empresa</div>
+      <div class="funnel-stages" id="funnelStages"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">🎯 Avatar del Cliente Ideal</div>
+      <div class="avatar-grid" id="avatarGrid"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">🎬 Estructura de Videos Ganadores</div>
+      <div id="scriptsEl"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">🏛️ Tipos de Contenido Recomendados</div>
+      <div class="pillar-grid" id="pillarGrid"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">🚀 Plan de Acción — Próximas 4 Semanas</div>
+      <div class="rec-list" id="recList"></div>
+    </div>
+
+    <div class="sec-block" id="coherenceBlock" style="display:none">
+      <div class="sec-title">🔍 Análisis de Coherencia — Bio + Contenido + Métricas</div>
+      <div id="coherenceContent"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">✏️ ¿Algún dato no está bien? Corrígelo aquí</div>
+      <p style="font-size:.83rem;color:var(--muted);margin-bottom:12px;line-height:1.5">Si la IA leyó mal algún número, o quieres añadir contexto para mejorar el análisis, escríbelo abajo y regenera el análisis con tus correcciones.</p>
+      <textarea id="f_feedback" rows="3" placeholder="Ej: El % de reproducción que extrajo la IA fue 3.89% pero en realidad tengo varios videos con más del 40%. Este video en particular fue de prueba. También quiero añadir que empecé hace 2 semanas." style="padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--bg);outline:none;width:100%;min-height:80px;resize:vertical;line-height:1.5;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)';this.style.background='#fff'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--bg)'"></textarea>
+      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+        <button onclick="regenerarConFeedback()" style="background:var(--grad);color:#fff;border:none;padding:10px 22px;border-radius:99px;font-weight:800;font-size:.88rem;cursor:pointer;font-family:inherit">🔄 Actualizar análisis con esta corrección</button>
+        <button onclick="volverForm()" style="background:#fff;color:var(--purple);border:1.5px solid var(--purple);padding:10px 22px;border-radius:99px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit">← Volver al formulario</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Herramienta de <a href="kathe-digital.html">Kathe Digital</a> · Datos procesados localmente · Sin conexión a TikTok</footer>
+</div>
+
+<!-- Modal imagen -->
+<div class="img-modal" id="imgModal" onclick="cerrarImgModal()">
+  <button class="img-modal-close">✕</button>
+  <img id="imgModalSrc" src="" alt="Captura">
+</div>
+
+<script>
+// ─── Screenshot upload ──────────────────────────────────────────────────────
+const screenshots = [];
+
+document.getElementById('imgInput').addEventListener('change', e => addFiles(e.target.files));
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); addFiles(e.dataTransfer.files); });
+
+function addFiles(files) {
+  const allowed = 4 - screenshots.length;
+  if (allowed <= 0) { alert('Máximo 4 capturas. Elimina alguna para agregar más.'); return; }
+  Array.from(files).slice(0, allowed).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => { screenshots.push({dataURL:e.target.result,name:file.name}); renderGallery(); };
+    reader.readAsDataURL(file);
+  });
+  setTimeout(() => {
+    document.getElementById('stab2').classList.add('done');
+    document.getElementById('stab3').classList.add('active');
+    document.getElementById('stab3').classList.remove('done');
+    actualizarHint();
+    document.getElementById('galleryHint').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 400);
+}
+
+function actualizarHint() {
+  const hint = document.getElementById('galleryHint');
+  if (!screenshots.length) { hint.style.display = 'none'; return; }
+  hint.style.display = 'block';
+  const tieneIA = !!localStorage.getItem('kd_claude_key') || !!localStorage.getItem('kd_gemini_key');
+  document.getElementById('extractBox').style.display = tieneIA ? 'block' : 'none';
+  document.getElementById('manualHint').style.display = tieneIA ? 'none' : 'block';
+}
+
+function renderGallery() {
+  const gal = document.getElementById('gallery');
+  if (!screenshots.length) { gal.innerHTML=''; actualizarHint(); return; }
+  gal.innerHTML = screenshots.map((ss,i) => `
+    <div class="screenshot-thumb">
+      <img src="${ss.dataURL}" alt="${ss.name}" onclick="abrirImgModal('${ss.dataURL}')">
+      <button class="del-btn" onclick="borrarCaptura(${i})">✕</button>
+      <div class="ss-label">Captura ${i+1}</div>
+    </div>`).join('');
+  actualizarHint();
+}
+
+function borrarCaptura(i) { screenshots.splice(i,1); renderGallery(); }
+function abrirImgModal(src) { document.getElementById('imgModalSrc').src=src; document.getElementById('imgModal').classList.add('open'); document.body.style.overflow='hidden'; }
+function cerrarImgModal() { document.getElementById('imgModal').classList.remove('open'); document.body.style.overflow=''; }
+
+// ─── Analysis ───────────────────────────────────────────────────────────────
+function analizarTikTok() {
+  const brand        = document.getElementById('f_brand').value.trim() || 'Tu marca';
+  const niche        = document.getElementById('f_niche').value || 'default';
+  const goal         = document.getElementById('f_goal').value;
+  const bio          = document.getElementById('f_bio')?.value.trim() || '';
+  const business     = document.getElementById('f_business')?.value.trim() || '';
+  const context      = document.getElementById('f_context')?.value.trim() || '';
+  const feedback     = document.getElementById('f_feedback')?.value.trim() || '';
+  const followers    = +document.getElementById('f_followers').value || 0;
+  const newFoll      = +document.getElementById('f_new_followers').value || 0;
+  const avgViews     = +document.getElementById('f_avg_views').value || 0;
+  const likes        = +document.getElementById('f_likes').value || 0;
+  const comments     = +document.getElementById('f_comments').value || 0;
+  const shares       = +document.getElementById('f_shares').value || 0;
+  const saves        = +document.getElementById('f_saves').value || 0;
+  const completion   = +document.getElementById('f_completion').value || 0;
+  const avgWatchTime = +document.getElementById('f_avg_watch_time').value || 0;
+  const freq         = +document.getElementById('f_freq').value || 0;
+  const traffic      = document.getElementById('f_traffic').value;
+  const sounds       = document.getElementById('f_sounds').value;
+  const duration     = document.getElementById('f_duration').value;
+  const genderFem    = +document.getElementById('f_gender_female').value || 0;
+  const topAge       = document.getElementById('f_top_age').value || '';
+  const topLocation  = document.getElementById('f_top_location').value.trim() || '';
+
+  if (!avgViews && !followers) { alert('Por favor ingresa al menos las visualizaciones del video.'); return; }
+
+  // Cálculos
+  const engRate    = avgViews > 0 ? (likes + comments + shares) / avgViews * 100 : 0;
+  const shareRate  = avgViews > 0 ? shares / avgViews * 100 : 0;
+  const saveRate   = avgViews > 0 ? saves / avgViews * 100 : 0;
+  const growthRate = followers > 0 && newFoll > 0 ? newFoll / followers * 100 : 0;
+  const viewRate   = followers > 0 && avgViews > 0 ? avgViews / followers * 100 : 0;
+
+  // Scoring
+  let catCompletion = completion>=70?30:completion>=50?22:completion>=30?14:completion>=15?7:2;
+  let catEngagement = engRate>=8?25:engRate>=4?18:engRate>=2?11:engRate>=1?5:2;
+  let catGrowth = growthRate>=10?25:growthRate>=5?18:growthRate>=2?12:growthRate>=.5?6:2;
+  let catContent = (freq>=7?20:freq>=4?14:freq>=2?8:2);
+  if (sounds==='siempre') catContent = Math.min(catContent+5,20);
+  if (duration==='medium') catContent = Math.min(catContent+3,20);
+  const score = catCompletion + catEngagement + catGrowth + catContent;
+
+  let funnelStage = 'awareness';
+  if (followers >= 3000 && engRate >= 3 && viewRate >= 50) funnelStage = 'consideracion';
+  if (engRate >= 5 && shareRate >= 1 && followers >= 5000) funnelStage = 'conversion';
+
+  document.getElementById('rBrand').textContent = brand;
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+  window.scrollTo(0,0);
+
+  // Screenshots
+  if (screenshots.length > 0) {
+    document.getElementById('ssBlock').style.display = 'block';
+    document.getElementById('ssResultsGallery').innerHTML = screenshots.map(ss =>
+      `<img src="${ss.dataURL}" alt="Captura" onclick="abrirImgModal('${ss.dataURL}')">`).join('');
+  }
+
+  // Context block
+  const ctxBlock = document.getElementById('contextBlock');
+  if (context) {
+    ctxBlock.style.display = 'block';
+    document.getElementById('contextText').textContent = context;
+  } else {
+    ctxBlock.style.display = 'none';
+  }
+
+  // Score ring
+  const circ = 2*Math.PI*46;
+  const ring = document.getElementById('scoreRing');
+  ring.style.strokeDasharray = circ;
+  ring.style.strokeDashoffset = circ;
+  const col = score>=70?'#16a34a':score>=45?'#ea580c':'#dc2626';
+  ring.style.stroke = col;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreNum').setAttribute('fill', col);
+  setTimeout(()=>{ ring.style.strokeDashoffset = circ-(score/100)*circ; },100);
+
+  const lbls = ['Requiere trabajo urgente','En proceso de crecimiento','Buen desempeño','Perfil en crecimiento','TikToker de alto impacto'];
+  const descs = [
+    'Tu cuenta necesita ajustes en estrategia de contenido y señales al algoritmo.',
+    'Vas por buen camino. Hay señales clave que el algoritmo de TikTok aún no recibe.',
+    'Buenas bases — hay oportunidades claras de escalar tu alcance rápido.',
+    'El algoritmo de TikTok te está distribuyendo. Mantén la consistencia.',
+    '¡Excelente desempeño! Estás entre los mejores creadores de tu nicho.'
+  ];
+  const idx = score>=80?4:score>=65?3:score>=45?2:score>=25?1:0;
+  document.getElementById('scoreLabel').textContent = lbls[idx];
+  document.getElementById('scoreDesc').textContent = descs[idx];
+  document.getElementById('scoreCats').innerHTML = [
+    {v:catCompletion,m:30,l:'Reproducción'},{v:catEngagement,m:25,l:'Engagement'},
+    {v:catGrowth,m:25,l:'Crecimiento'},{v:catContent,m:20,l:'Contenido'}
+  ].map(c=>`<div class="score-cat"><div class="cv" style="color:${c.v/c.m>=.75?'#16a34a':c.v/c.m>=.5?'#ea580c':'#dc2626'}">${c.v}<small>/${c.m}</small></div><div class="cl">${c.l}</div></div>`).join('');
+
+  // Metrics
+  const f = n => n>=1000?(n/1000).toFixed(1)+'K':n.toFixed(1);
+  const badge = (v,g,ok) => v>=g?'<span class="mb good">Excelente</span>':v>=ok?'<span class="mb ok">Aceptable</span>':'<span class="mb bad">Bajo</span>';
+  document.getElementById('metricsGrid').innerHTML = `
+    <div class="metric-card"><div class="mv" style="color:var(--accent)">${completion}%</div><div class="ml">% Reproducción</div>${badge(completion,70,50)}<br><span style="font-size:.66rem;color:var(--muted)">Meta:&gt;70% · Aceptable:50%+</span></div>
+    <div class="metric-card"><div class="mv" style="color:var(--purple)">${f(engRate)}%</div><div class="ml">Eng Rate (views)</div>${badge(engRate,8,4)}<br><span style="font-size:.66rem;color:var(--muted)">Bueno:&gt;4% · Excel:&gt;8%</span></div>
+    <div class="metric-card"><div class="mv" style="color:#2563eb">${f(shareRate)}%</div><div class="ml">Tasa Compartidos</div>${badge(shareRate,2,0.5)}<br><span style="font-size:.66rem;color:var(--muted)">Viral:&gt;2%</span></div>
+    <div class="metric-card"><div class="mv" style="color:#16a34a">${f(growthRate)}%</div><div class="ml">Crecimiento Mensual</div>${badge(growthRate,10,3)}<br><span style="font-size:.66rem;color:var(--muted)">Bueno:&gt;5%</span></div>
+    ${avgViews>0?`<div class="metric-card"><div class="mv" style="color:#ea580c">${f(viewRate)}%</div><div class="ml">Vistas/Seguidores</div>${badge(viewRate,100,30)}<br><span style="font-size:.66rem;color:var(--muted)">Meta:superar 100%</span></div>`:''}
+    ${saveRate>0?`<div class="metric-card"><div class="mv" style="color:#9333ea">${f(saveRate)}%</div><div class="ml">Tasa de Guardados</div>${badge(saveRate,3,1)}<br><span style="font-size:.66rem;color:var(--muted)">Bueno:&gt;1%</span></div>`:''}`;
+
+  // Algorithm bar
+  const signals = [
+    {l:'% Reproducción',v:completion,max:100,col:'#e91e8c'},
+    {l:'Compartidos',v:Math.min(shareRate*25,100),max:100,col:'#9333ea'},
+    {l:'Comentarios',v:Math.min((comments/(avgViews||1)*100)*20,100),max:100,col:'#2563eb'},
+    {l:'Me gusta',v:Math.min(engRate*8,100),max:100,col:'#16a34a'},
+    {l:'Guardados',v:Math.min(saveRate*30,100),max:100,col:'#ea580c'}
+  ];
+  document.getElementById('algoBar').innerHTML = `
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:12px">Peso de cada señal en el algoritmo de TikTok (del más al menos importante):</p>
+    ${signals.map(s=>`
+    <div class="algo-bar">
+      <div class="algo-bar-label">${s.l}</div>
+      <div class="algo-bar-track"><div class="algo-bar-fill" style="width:${s.v}%;background:${s.col}"></div></div>
+      <div style="font-size:.72rem;font-weight:700;color:${s.col};min-width:36px;text-align:right">${Math.round(s.v)}%</div>
+    </div>`).join('')}`;
+
+  // Algorithm cards
+  document.getElementById('algoGrid').innerHTML = [
+    {title:'% de Reproducción (señal #1)',dot:completion>=70?'good':completion>=50?'warn':'bad',
+     desc:completion>=70?`${completion}% — excelente. El algoritmo te distribuye ampliamente. Tu contenido engancha desde el inicio.`:completion>=50?`${completion}% — aceptable. Para subir: mejor hook en los primeros 2 segundos, texto en pantalla, ritmo más rápido.`:`${completion}% — bajo. Prioridad máxima: hooks más fuertes, elimina silencios al inicio, muestra el beneficio en los primeros 3 segundos.`},
+    {title:'Compartidos (viral)',dot:shareRate>=2?'good':shareRate>=.5?'warn':'bad',
+     desc:shareRate>=2?`${f(shareRate)}% — tu contenido se viraliza. El algoritmo lo distribuye a millones.`:shareRate>=.5?`${f(shareRate)}% — mejorable. Crea contenido que la gente quiera mandar a sus amigos: humor, datos sorprendentes, tips útiles.`:`${f(shareRate)}% — bajo. Piensa: ¿mandarías este video a alguien? Si la respuesta es no, replantea el concepto.`},
+    {title:'Consistencia y frecuencia',dot:freq>=5?'good':freq>=3?'warn':'bad',
+     desc:freq>=5?`${freq} videos/semana — excelente. El algoritmo de TikTok favorece fuertemente la consistencia.`:freq>=3?`${freq} videos/semana — aceptable. TikTok recomienda 3-5 videos diarios para crecer rápido.`:`${freq||0} videos/semana — insuficiente. TikTok premia la consistencia sobre la perfección. Más videos = más datos para el algoritmo.`},
+    {title:'Uso de sonidos trending',dot:sounds==='siempre'?'good':sounds==='aveces'?'warn':'bad',
+     desc:sounds==='siempre'?'Usas sonidos trending — excelente. TikTok impulsa videos que usan audios virales porque los agrupa en tendencias.':sounds==='aveces'?'A veces usas trending sounds. Intenta usarlos en el 70%+ de tus videos para aprovechar el impulso del algoritmo.':'No usas sonidos trending. Estás perdiendo un impulso gratuito del algoritmo. Usa audios con la flecha ↑ (trending) para más distribución.'},
+    {title:'Fuente de tráfico',dot:traffic==='fyp'?'good':traffic==='busqueda'?'good':'warn',
+     desc:traffic==='fyp'?'Tu tráfico viene principalmente del FYP — excelente. Significa que el algoritmo distribuye tu contenido a nuevas audiencias activamente.':traffic==='seguidores'?'Tu tráfico es mayormente de seguidores. Para llegar al FYP: mejora el % de reproducción, usa trending sounds y publica más frecuente.':traffic==='busqueda'?'Tráfico por búsqueda — buena señal de SEO en TikTok. Asegúrate de usar palabras clave en tus captions y primeros segundos del video.':'Tráfico del perfil — indica que tus seguidores visitan tu perfil directamente. Añade más CTAs para que compartan a nuevas audiencias.'}
+  ].map(a=>`<div class="algo-card"><h4><span class="dot dot-${a.dot}"></span>${a.title}</h4><p>${a.desc}</p></div>`).join('');
+
+  // Funnel
+  document.getElementById('funnelStages').innerHTML = [
+    {id:'awareness',ico:'📣',title:'Awareness — Reconocimiento',desc:'TikTok es el mejor canal para awareness masivo. Contenido educativo, entretenido y relatable que genere shares llegará a millones que no te conocen.'},
+    {id:'consideracion',ico:'🤔',title:'Consideración — Evaluación',desc:'Tu audiencia te conoce pero evalúa confiar en ti. Necesitas casos de éxito, videos de proceso, prueba social y respuestas a objeciones.'},
+    {id:'conversion',ico:'💰',title:'Conversión — Compra',desc:'Lista para vender. CTAs claros en el video y la bio, link de ventas accesible, series de "unboxing" o testimonios que empujen la decisión final.'}
+  ].map(s=>`<div class="funnel-stage ${s.id===funnelStage?'active':''}">
+    <span class="fs-ico">${s.ico}</span>
+    <div><h4>${s.title}${s.id===funnelStage?'<span class="funnel-badge">📍 Aquí estás</span>':''}</h4><p>${s.desc}</p></div>
+  </div>`).join('');
+
+  // Avatar
+  const nicheAvatars = {
+    moda:{edad:'18-35 años',int:['looks del día','hauls','OOTD','fashion inspo'],dol:['no saber cómo combinar','ropa cara','sin identidad de estilo'],des:['verse increíble','tener estilo propio','admiración'],obj:['precio','talla','calidad']},
+    belleza:{edad:'16-38 años',int:['skincare routine','GRWM','makeup tutorials'],dol:['piel con problemas','rutinas caras','productos que no funcionan'],des:['piel perfecta','rutina sencilla','verse bien sin maquillaje'],obj:['¿funciona en mi tipo de piel?','precio','autenticidad']},
+    fitness:{edad:'18-40 años',int:['workout videos','transformaciones','nutrición','bienestar'],dol:['sin resultados','sin tiempo','no saber cómo empezar'],des:['cuerpo ideal','energía','disciplina'],obj:['ya lo intenté','tiempo','escepticismo']},
+    alimentacion:{edad:'22-45 años',int:['recetas rápidas','foodie','cocina casera','restaurantes'],dol:['sin ideas para cocinar','tiempo limitado','comida aburrida'],des:['comer rico y sano','impresionar','explorar sabores'],obj:['tiempo','ingredientes difíciles','precio']},
+    educacion:{edad:'20-40 años',int:['aprendizaje','finanzas personales','carrera','desarrollo personal'],dol:['estancado profesional','ingresos bajos','confusión sobre su camino'],des:['crecer','ganar más','claridad'],obj:['¿es real?','tiempo','precio']},
+    negocios:{edad:'22-45 años',int:['emprendimiento','marketing','dinero','libertad financiera'],dol:['sin clientes','pocas ventas','no saber cómo escalar'],des:['negocio exitoso','independencia','reconocimiento'],obj:['ya intenté y falló','es caro','¿funciona para mí?']},
+    entretenimiento:{edad:'15-30 años',int:['humor','reels virales','trends','gaming'],dol:['aburrimiento','estrés','FOMO'],des:['entretenimiento','risas','comunidad'],obj:['tiempo','data']},
+    default:{edad:'18-40 años',int:['TikTok','tendencias','redes sociales'],dol:['no encontrar lo que busca','contenido aburrido'],des:['entretenerse y aprender'],obj:['precio','confianza']}
+  };
+  const av = nicheAvatars[niche]||nicheAvatars.default;
+  const edadReal = topAge ? topAge + ' años' : av.edad;
+  const generoDesc = genderFem > 60 ? `${genderFem}% femenino` : genderFem > 40 ? `${genderFem}% femenino / ${100-genderFem}% masculino` : genderFem > 0 ? `${100-genderFem}% masculino` : av.edad;
+  const locationDesc = topLocation || 'No especificado';
+  document.getElementById('avatarGrid').innerHTML = `
+    <div class="avatar-item"><h4>📌 Perfil real (tus espectadores)</h4><ul><li>Edad principal: <strong>${edadReal}</strong></li><li>Género: <strong>${genderFem>0?generoDesc:'No ingresado'}</strong></li><li>Ubicación principal: <strong>${locationDesc}</strong></li><li>Tiempo en TikTok: 1-2h/día</li></ul></div>
+    <div class="avatar-item"><h4>❤️ Intereses en TikTok</h4><ul>${av.int.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+    <div class="avatar-item"><h4>😰 Dolores</h4><ul>${av.dol.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+    <div class="avatar-item"><h4>✨ Deseos</h4><ul>${av.des.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+    <div class="avatar-item"><h4>🚧 Objeciones</h4><ul>${av.obj.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+    <div class="avatar-item"><h4>💬 Cómo hablarle en TikTok</h4><ul><li>Directo desde el primer segundo</li><li>Usa el lenguaje de su nicho</li><li>Muestra, no solo cuentes</li><li>Texto en pantalla (muchos ven sin audio)</li></ul></div>`;
+
+  // Scripts
+  document.getElementById('scriptsEl').innerHTML = [
+    {title:'🔥 Estructura que maximiza % de reproducción',steps:[
+      {n:1,t:'<em>HOOK (0-2s):</em> La razón para NO saltar. Empieza con el punto más interesante, una pregunta, o una acción sorprendente. NO saludes al inicio.'},
+      {n:2,t:'<em>PROBLEMA O PROMESA (2-5s):</em> Establece de qué trata el video claramente. "Hoy te voy a enseñar X que cambió Y."'},
+      {n:3,t:'<em>VALOR / CONTENIDO (5-45s):</em> Entrega el valor prometido. Habla rápido, usa texto en pantalla, cambia ángulos cada 2-3 segundos.'},
+      {n:4,t:'<em>CTA CLARO (últimos 3s):</em> Una sola acción: "Comenta X si quieres saber más" o "Sigue para parte 2"'}
+    ]},
+    {title:'💰 Video de Ventas que Convierte',steps:[
+      {n:1,t:'<em>PAIN HOOK (0-2s):</em> "¿Por qué no te están comprando?" — Nombra el dolor exacto de tu cliente.'},
+      {n:2,t:'<em>IDENTIFICACIÓN (2-8s):</em> Muéstrale que entiendes su situación. Cuéntale algo que él/ella ya piensa.'},
+      {n:3,t:'<em>SOLUCIÓN (8-30s):</em> Presenta lo que ofreces como la solución obvia. Muéstralo en acción.'},
+      {n:4,t:'<em>PRUEBA SOCIAL (30-40s):</em> Resultado real. Un número. Una transformación antes/después.'},
+      {n:5,t:'<em>CTA (último segundo):</em> "Link en bio" + urgencia si aplica. Simple y directo.'}
+    ]},
+    {title:'📈 Video Educativo que Genera Seguidores',steps:[
+      {n:1,t:'<em>HOOK DATO (0-2s):</em> "El 90% de [tu nicho] no sabe esto..." — Crea curiosidad inmediata.'},
+      {n:2,t:'<em>SETUP (2-5s):</em> Por qué esto importa para ellos. El contexto en 1 oración.'},
+      {n:3,t:'<em>DESARROLLO (5-40s):</em> 3-5 puntos concretos con ejemplos reales. Usa texto en pantalla para cada punto.'},
+      {n:4,t:'<em>RESUMEN (40-50s):</em> Resume los puntos más importantes. Quien llegó al final merece el bonus.'},
+      {n:5,t:'<em>CTA SEGUIR:</em> "Sigue para aprender más de [tema]" — Dile exactamente por qué seguirte.'}
+    ]}
+  ].map(s=>`<div class="script-card"><h4>${s.title}</h4>${s.steps.map(st=>`<div class="script-step"><div class="ss-n">${st.n}</div><p>${st.t}</p></div>`).join('')}</div>`).join('');
+
+  // Pillars
+  const goalPillars = {
+    ventas:[
+      {ico:'🎬',title:'Demos / Unboxing',pct:'30%',desc:'Muestra tu producto en acción. TikTok adora los videos donde se ve el antes/después.'},
+      {ico:'💬',title:'Testimonios en Video',pct:'20%',desc:'Clientes hablando de su experiencia. La prueba social más poderosa en TikTok.'},
+      {ico:'😂',title:'Humor de Nicho',pct:'25%',desc:'Memes y situaciones cotidianas de tu sector. Genera shares masivos y reconocimiento.'},
+      {ico:'💡',title:'Tips y Valor',pct:'15%',desc:'Educa sobre tu área. Posiciónate como experto y genera confianza.'},
+      {ico:'📢',title:'Ofertas / CTA',pct:'10%',desc:'Llamados a la acción directos con urgencia. Cierra la venta que los otros videos prepararon.'}
+    ],
+    seguidores:[
+      {ico:'🔥',title:'Trending Sounds',pct:'30%',desc:'Adapta las tendencias de audio a tu nicho. El algoritmo agrupa videos con el mismo trending sound.'},
+      {ico:'💡',title:'Series Educativas',pct:'25%',desc:'"Parte 1, 2, 3..." — las series generan seguidores que quieren ver la continuación.'},
+      {ico:'😂',title:'Entretenimiento',pct:'25%',desc:'El contenido que divierte se comparte. El share es la señal que lleva al FYP masivo.'},
+      {ico:'🤝',title:'Duetos / Stitches',pct:'20%',desc:'Reacciona a contenido viral de tu nicho. El algoritmo te muestra a la audiencia del video original.'}
+    ],
+    fyp:[
+      {ico:'🎵',title:'Trending Audio Always',pct:'35%',desc:'Videos con audios trending tienen mayor probabilidad de FYP. Revisa la pestaña "Descubrir" diariamente.'},
+      {ico:'⚡',title:'Hooks Imposibles de Skip',pct:'30%',desc:'Tu único objetivo: que no salten. Primer frame con movimiento, cara sorprendida, texto provocador.'},
+      {ico:'🔄',title:'Replay Bait',pct:'20%',desc:'Contenido que la gente ve 2-3 veces: bucles perfectos, detalles ocultos, humor con doble sentido.'},
+      {ico:'💬',title:'Generadores de Comentarios',pct:'15%',desc:'Preguntas controversiales, "¿cuál equipo eres?" o datos que la gente quiere refutar.'}
+    ],
+    reconocimiento:[
+      {ico:'🧠',title:'Perspectiva Única',pct:'35%',desc:'Tu punto de vista diferente sobre un tema de tu industria. Que la gente piense "nunca lo había visto así".'},
+      {ico:'📖',title:'Historia de Marca',pct:'25%',desc:'De dónde vienes, por qué haces lo que haces, errores aprendidos. La autenticidad conecta.'},
+      {ico:'💡',title:'Educativo de Alto Nivel',pct:'25%',desc:'Información que otros no comparten. Sé generoso con el conocimiento.'},
+      {ico:'🔊',title:'Collabs',pct:'15%',desc:'Videos con otros creadores de tu nicho. Amplifica tu audiencia rápidamente.'}
+    ]
+  };
+  document.getElementById('pillarGrid').innerHTML = (goalPillars[goal]||goalPillars.ventas).map(p=>`
+    <div class="pillar"><div class="p-ico">${p.ico}</div><h4>${p.title}</h4><p>${p.desc}</p><div class="p-pct">${p.pct}</div></div>`).join('');
+
+  // Recs
+  const recs = [];
+  if (completion<50) recs.push({p:'alta',t:'Mejorar el % de reproducción (prioridad #1)',w:`Tu % actual es ${completion}%. El algoritmo de TikTok considera esto la señal más importante. Solución: empieza los videos directamente en el punto más interesante, sin saludo. Usa texto en pantalla en los primeros 2 segundos.`});
+  if (shareRate<1) recs.push({p:'alta',t:'Crear contenido que se comparte',w:`Tasa de compartidos ${f(shareRate)}%. Los shares llevan tu video al FYP masivamente. Idea: crea contenido que la gente quiera mandar a sus amigos — humor de nicho, datos impactantes, consejos prácticos.`});
+  if (freq<3) recs.push({p:'alta',t:`Publicar más: mínimo 5 videos por semana`,w:`Publicas ${freq||0} video(s)/semana. TikTok recompensa fuertemente la consistencia y cantidad. Más videos = más datos = más distribución. No necesitan ser perfectos.`});
+  if (sounds==='nunca') recs.push({p:'media',t:'Usar trending sounds en el 70%+ de tus videos',w:'Los trending sounds dan un impulso gratuito del algoritmo. TikTok agrupa videos con el mismo audio y los muestra juntos. Revisa la pestaña "Descubrir" a diario para identificar trends de tu nicho.'});
+  if (completion<70 && duration==='long') recs.push({p:'media',t:'Reducir la duración de tus videos',w:`Videos más cortos (15-45 seg) tienen mejor % de reproducción. Con completion del ${completion}%, considera hacer videos más cortos y directos.`});
+  if (traffic==='seguidores') recs.push({p:'media',t:'Optimizar para el FYP, no para tus seguidores',w:'Tu tráfico principal es de seguidores actuales. Para escalar, necesitas llegar a nuevas audiencias vía FYP. Fórmula: mejor hook + trending sound + completion rate alto.'});
+  if (growthRate<3) recs.push({p:'media',t:'Implementar series de contenido',w:`Crecimiento mensual ${f(growthRate)}%. Las series ("Parte 1", "Parte 2") son la forma más rápida de ganar seguidores en TikTok porque crean expectativa. Crea 5 videos en torno a un mismo tema.`});
+  recs.push({p:'baja',t:'Optimizar tu bio y link para conversión',w:'Tu bio en TikTok debe tener: propuesta de valor en 1 línea + llamado a acción + link directo al siguiente paso (WhatsApp, web, tienda). Quienes visitan tu perfil ya están interesados — no los pierdas.'});
+
+  document.getElementById('recList').innerHTML = recs.slice(0,7).map(r=>`
+    <div class="rec-item"><div>
+      <span class="rec-prio prio-${r.p}">${r.p==='alta'?'🔴 Alta':r.p==='media'?'🟠 Media':'🟢 Baja'}</span>
+      <strong>${r.t}</strong><p>${r.w}</p>
+    </div></div>`).join('');
+
+  // Coherence analysis
+  const cbBlock = document.getElementById('coherenceBlock');
+  const coherenceItems = [];
+
+  if (bio || business) {
+    cbBlock.style.display = 'block';
+
+    // Bio analysis
+    if (bio) {
+      const bioLower = bio.toLowerCase();
+      const hasCTA = bioLower.includes('whatsapp') || bioLower.includes('wa.me') || bioLower.includes('link') || bioLower.includes('agenda') || bioLower.includes('escríb') || bioLower.includes('dm') || bioLower.includes('contacto') || bioLower.includes('compra');
+      const hasLocation = bioLower.includes('medellín') || bioLower.includes('bogotá') || bioLower.includes('cali') || bioLower.includes('colombia') || bioLower.includes('ciudad') || topLocation.toLowerCase().split('·')[0].trim().split(' ').some(w => w.length > 3 && bioLower.includes(w.toLowerCase()));
+      const hasEmoji = /\p{Emoji}/u.test(bio);
+      const bioLen = bio.length;
+
+      coherenceItems.push(`<div style="margin-bottom:14px">
+        <div style="font-weight:800;font-size:.88rem;margin-bottom:8px;color:var(--purple)">📝 Tu bio actual</div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:.88rem;font-style:italic;color:var(--text);margin-bottom:10px">"${bio}"</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">${hasCTA?'<span style="color:#15803d;font-weight:700">✅</span>':'<span style="color:#dc2626;font-weight:700">❌</span>'} <span>${hasCTA?'Tiene llamado a la acción (CTA) — ':'Sin llamado a la acción — '}${hasCTA?'Bien, la gente sabe qué hacer.':'Añade WhatsApp, "Agenda aquí" o "Escríbeme" para convertir visitas en clientes.'}</span></div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">${hasEmoji?'<span style="color:#15803d;font-weight:700">✅</span>':'<span style="color:#ea580c;font-weight:700">⚠️</span>'} <span>${hasEmoji?'Usa emojis — bien para captar atención.':'Sin emojis — añadir 2-3 emojis relevantes hace la bio más visual y atractiva.'}</span></div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">${bioLen<=150?'<span style="color:#15803d;font-weight:700">✅</span>':'<span style="color:#ea580c;font-weight:700">⚠️</span>'} <span>${bioLen<=150?`${bioLen} caracteres — concisa y clara.`:`${bioLen} caracteres — algo larga. TikTok muestra solo las primeras líneas. Lo más importante debe ir primero.`}</span></div>
+        </div>
+      </div>`);
+    }
+
+    // Business / content coherence
+    if (business) {
+      const bLower = business.toLowerCase();
+      const nicheWords = {moda:['ropa','moda','outfit','look'],belleza:['maquillaje','skincare','belleza','piel'],fitness:['ejercicio','fitness','gym','salud'],alimentacion:['comida','receta','gastronomía','cocina'],educacion:['curso','aprendizaje','coaching','enseñar'],negocios:['negocio','emprender','ventas','marketing'],servicios:['servicio','asesoría','consulta','sesión']};
+      const words = nicheWords[niche] || [];
+      const isCoherent = niche === 'default' || words.some(w => bLower.includes(w));
+      coherenceItems.push(`<div style="margin-bottom:14px">
+        <div style="font-weight:800;font-size:.88rem;margin-bottom:8px;color:var(--purple)">🏢 Tu negocio</div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:.88rem;color:var(--text);margin-bottom:8px">${business}</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.5">${isCoherent || niche==='default'?'✅ El negocio que describes está alineado con el nicho seleccionado.':'⚠️ Hay diferencia entre el nicho seleccionado y lo que describes — esto puede afectar las recomendaciones de contenido. Ajusta el nicho en el formulario para análisis más preciso.'}</div>
+      </div>`);
+    }
+
+    // Feedback
+    if (feedback || context) {
+      coherenceItems.push(`<div style="background:rgba(147,51,234,.06);border:1px solid rgba(147,51,234,.2);border-radius:10px;padding:12px">
+        <div style="font-weight:800;font-size:.82rem;color:var(--purple);margin-bottom:4px">💬 Tu observación / corrección</div>
+        <div style="font-size:.83rem;color:var(--text);line-height:1.5">${feedback || context}</div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:6px">Esta información fue tenida en cuenta para calibrar el análisis anterior.</div>
+      </div>`);
+    }
+
+    // Consistency check
+    const goalOk = (goal==='ventas'&&completion>=30)||(goal==='seguidores'&&freq>=3)||(goal==='fyp'&&traffic==='fyp')||(goal==='reconocimiento'&&engRate>=3);
+    coherenceItems.push(`<div style="margin-top:8px">
+      <div style="font-weight:800;font-size:.88rem;margin-bottom:8px;color:var(--purple)">🎯 Coherencia objetivo vs métricas</div>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.6">
+        Tu objetivo es <strong>${goal==='ventas'?'generar ventas':goal==='seguidores'?'crecer en seguidores':goal==='fyp'?'llegar al FYP':'reconocimiento de marca'}</strong>.
+        ${goal==='ventas'?`Para vender en TikTok necesitas ${completion>=30?'✅ buen % de reproducción':'❌ mejorar el % de reproducción a mínimo 30%'}, ${saveRate>=1?'✅ guardados sólidos':'⚠️ más guardados (tu audiencia guarda para "comprar después")'} y ${freq>=3?'✅ frecuencia consistente':'❌ publicar mínimo 3-5 veces/semana'}.`
+        :goal==='seguidores'?`Para crecer en seguidores necesitas ${freq>=5?'✅ buena frecuencia':'❌ publicar más (mínimo 5x/semana)'} y ${shareRate>=1?'✅ contenido que se comparte':'⚠️ contenido más compartible — el share es lo que te trae seguidores nuevos'}. Series de contenido son clave.`
+        :goal==='fyp'?`Para llegar al FYP la señal #1 es el % de reproducción. Tienes ${completion}% — ${completion>=50?'✅ bien posicionado':'❌ necesitas superar el 50% para que el algoritmo te distribuya masivamente'}. Trending sounds: ${sounds==='siempre'?'✅ bien':'⚠️ úsalos siempre'}.`
+        :`Para reconocimiento de marca necesitas ${engRate>=3?'✅ buen engagement':'⚠️ mejorar engagement'} y contenido con perspectiva propia que te diferencie. Colaboraciones y duetos aceleran el reconocimiento.`}
+      </div>
+    </div>`);
+
+    document.getElementById('coherenceContent').innerHTML = coherenceItems.join('');
+  } else {
+    cbBlock.style.display = 'none';
+  }
+}
+
+function regenerarConFeedback() {
+  const fb = document.getElementById('f_feedback')?.value.trim();
+  if (!fb) { alert('Escribe tu corrección o comentario antes de actualizar.'); return; }
+  // Add feedback to context field
+  const ctx = document.getElementById('f_context');
+  if (ctx) ctx.value = (ctx.value ? ctx.value + '\n' : '') + 'Corrección del usuario: ' + fb;
+  document.getElementById('f_feedback').value = '';
+  document.getElementById('formSection').style.display = 'block';
+  document.getElementById('resultsSection').style.display = 'none';
+  window.scrollTo(0,0);
+  setTimeout(() => analizarTikTok(), 100);
+}
+
+function volverForm() {
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('formSection').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function descargarReporte() {
+  const brand = document.getElementById('rBrand')?.textContent||'tiktok';
+  const date = new Date().toLocaleString('es-CO');
+  const body = document.getElementById('reporteContenido')?.innerHTML||'';
+  const css = `body{font-family:-apple-system,'Segoe UI',sans-serif;background:#fdf2fc;color:#1a0a2e;margin:0;padding:0}.container{max-width:1100px;margin:0 auto;padding:28px 20px}.sec-block{background:#fff;border:1px solid #f0ccea;border-radius:16px;padding:22px;margin-bottom:20px}.sec-title{font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#a07ab5;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #f0ccea}.score-row{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}.score-circle{width:110px;height:110px;flex-shrink:0}.score-ring{transform:rotate(-90deg);transform-origin:center}.score-ring-bg{stroke:#f0ccea;fill:none;stroke-width:9}.score-ring-fill{fill:none;stroke-width:9;stroke-linecap:round}.score-num{font-size:2.1rem;font-weight:900;text-anchor:middle;dominant-baseline:middle}.score-lbl-svg{font-size:.58rem;font-weight:700;text-anchor:middle;dominant-baseline:middle;fill:#a07ab5;text-transform:uppercase}.score-meta h2{font-size:1.4rem;font-weight:900;margin-bottom:4px}.score-meta p{color:#a07ab5}.score-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.score-cat{background:#fdf2fc;border:1px solid #f0ccea;border-radius:10px;padding:12px;text-align:center}.score-cat .cv{font-size:1.4rem;font-weight:900;margin-bottom:2px}.score-cat .cl{font-size:.66rem;font-weight:700;color:#a07ab5;text-transform:uppercase}.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}.metric-card{background:#fdf2fc;border:1px solid #f0ccea;border-radius:12px;padding:13px;text-align:center}.metric-card .mv{font-size:1.4rem;font-weight:900;margin-bottom:2px}.metric-card .ml{font-size:.68rem;font-weight:700;color:#a07ab5;text-transform:uppercase}.mb{font-size:.67rem;padding:2px 8px;border-radius:99px;font-weight:700;display:inline-block}.mb.good{background:rgba(22,163,74,.12);color:#15803d}.mb.ok{background:rgba(234,88,12,.12);color:#c2410c}.mb.bad{background:rgba(220,38,38,.12);color:#dc2626}.algo-grid,.avatar-grid,.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}.algo-card,.avatar-item,.pillar{background:#fdf2fc;border:1px solid #f0ccea;border-radius:12px;padding:13px}.algo-card h4{font-size:.8rem;font-weight:800;margin-bottom:5px;display:flex;align-items:center;gap:6px}.algo-card p{font-size:.76rem;color:#a07ab5;line-height:1.45}.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}.dot-good{background:#16a34a}.dot-warn{background:#ea580c}.dot-bad{background:#dc2626}.funnel-stages{display:flex;flex-direction:column;gap:10px}.funnel-stage{display:flex;gap:14px;padding:14px;border-radius:12px;border:1px solid #f0ccea;align-items:flex-start;opacity:.45}.funnel-stage.active{background:linear-gradient(135deg,rgba(233,30,140,.05),rgba(147,51,234,.05));border-color:#e91e8c;opacity:1}.fs-ico{font-size:1.4rem;flex-shrink:0}.funnel-stage h4{font-size:.88rem;font-weight:800;margin-bottom:3px}.funnel-stage p{font-size:.8rem;color:#a07ab5;line-height:1.4}.funnel-badge{font-size:.62rem;font-weight:800;background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;padding:2px 8px;border-radius:99px;margin-left:8px}.avatar-item h4{font-size:.75rem;font-weight:800;text-transform:uppercase;color:#a07ab5;margin-bottom:7px}.avatar-item ul{list-style:none;display:flex;flex-direction:column;gap:4px}.avatar-item ul li{font-size:.8rem;line-height:1.35;padding-left:13px;position:relative}.avatar-item ul li::before{content:'→';position:absolute;left:0;color:#e91e8c;font-size:.75rem}.pillar .p-ico{font-size:1.5rem;margin-bottom:6px}.pillar h4{font-size:.86rem;font-weight:800;margin-bottom:3px}.pillar p{font-size:.76rem;color:#a07ab5;line-height:1.4}.pillar .p-pct{font-size:.7rem;font-weight:700;color:#e91e8c;margin-top:5px}.script-card{background:#fdf2fc;border:1px solid #f0ccea;border-radius:12px;padding:16px;margin-bottom:10px}.script-card h4{font-size:.88rem;font-weight:800;margin-bottom:10px;color:#9333ea}.script-step{display:flex;gap:10px;margin-bottom:7px;align-items:flex-start}.ss-n{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;font-size:.72rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}.script-step p{font-size:.8rem;line-height:1.4}.script-step p em{color:#e91e8c;font-style:italic}.rec-list{display:flex;flex-direction:column;gap:10px}.rec-item{display:flex;gap:12px;padding:13px 14px;border-radius:12px;border-left:4px solid #e91e8c;background:#fdf2fc}.rec-prio{font-size:.62rem;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:99px;display:inline-block;margin-bottom:3px}.prio-alta{background:rgba(220,38,38,.12);color:#dc2626}.prio-media{background:rgba(234,88,12,.12);color:#ea580c}.prio-baja{background:rgba(22,163,74,.12);color:#16a34a}.rec-item strong{display:block;font-size:.88rem;margin-bottom:2px}.rec-item p{font-size:.8rem;color:#a07ab5;line-height:1.4}.algo-bar{margin:8px 0;display:flex;align-items:center;gap:8px}.algo-bar-label{font-size:.75rem;font-weight:700;min-width:110px}.algo-bar-track{flex:1;background:#fdf2fc;border-radius:99px;height:8px;border:1px solid #f0ccea;overflow:hidden}.algo-bar-fill{height:100%;border-radius:99px}.ss-in-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}.ss-in-results img{width:100%;border-radius:8px;border:1px solid #f0ccea}.bar-btns{display:none}.img-modal{display:none}`;
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Análisis TikTok ${brand} — Kathe Digital</title><style>${css}</style></head><body>
+    <div style="max-width:900px;margin:0 auto;padding:2rem;text-align:center;border-bottom:2px solid #f0ccea">
+      <h1 style="background:linear-gradient(135deg,#e91e8c,#9333ea);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.8rem;font-weight:900">✦ Kathe Digital</h1>
+      <p style="color:#a07ab5;font-size:.85rem">Análisis TikTok · ${brand} · ${date}</p>
+    </div>
+    <div class="container">${body}</div></body></html>`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+  a.download = `analisis-tiktok-${brand.replace(/[^a-z0-9]/gi,'-').toLowerCase()}-${Date.now()}.html`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+// ─── IA Setup ────────────────────────────────────────────────────────────────
+let _activePanel = null;
+
+function mostrarPanel(tipo) {
+  // Close any open panel
+  document.getElementById('panelClaude').style.display = 'none';
+  document.getElementById('panelGemini').style.display = 'none';
+  if (_activePanel === tipo) { _activePanel = null; return; }
+  document.getElementById(tipo === 'claude' ? 'panelClaude' : 'panelGemini').style.display = 'block';
+  _activePanel = tipo;
+  setTimeout(() => document.getElementById(tipo === 'claude' ? 'panelClaude' : 'panelGemini').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function switchTab(tipo) {
+  document.getElementById('panelClaude').style.display = tipo === 'claude' ? 'block' : 'none';
+  document.getElementById('panelGemini').style.display = tipo === 'gemini' ? 'block' : 'none';
+  _activePanel = tipo;
+}
+
+function guardarClave(tipo) {
+  const input = document.getElementById(tipo === 'claude' ? 'claudeKeyInput' : 'geminiKeyInput');
+  const key = input.value.trim();
+  if (!key) { alert('Por favor pega tu clave API primero.'); return; }
+  if (tipo === 'claude' && !key.startsWith('sk-ant-')) { alert('La clave de Claude debe empezar por sk-ant-... Revisa que la copiaste completa.'); return; }
+  if (tipo === 'gemini' && !key.startsWith('AIza')) { alert('La clave de Gemini debe empezar por AIza... Revisa que la copiaste completa.'); return; }
+  localStorage.setItem(tipo === 'claude' ? 'kd_claude_key' : 'kd_gemini_key', key);
+  mostrarEstadoIA();
+  document.getElementById('panelClaude').style.display = 'none';
+  document.getElementById('panelGemini').style.display = 'none';
+  _activePanel = null;
+  actualizarHint();
+}
+
+function desconectarIA() {
+  localStorage.removeItem('kd_claude_key');
+  localStorage.removeItem('kd_gemini_key');
+  mostrarEstadoIA();
+  actualizarHint();
+}
+
+function mostrarEstadoIA() {
+  const claudeKey = localStorage.getItem('kd_claude_key');
+  const geminiKey = localStorage.getItem('kd_gemini_key');
+  const tieneIA = claudeKey || geminiKey;
+  document.getElementById('iaNoKey').style.display = tieneIA ? 'none' : 'block';
+  document.getElementById('iaHasKey').style.display = tieneIA ? 'block' : 'none';
+  if (tieneIA) {
+    const proveedor = claudeKey ? '✦ Claude (Anthropic)' : '⚡ Gemini (Google)';
+    document.getElementById('iaConnectedLabel').textContent = `✅ ${proveedor} conectado`;
+  }
+}
+
+// Init IA state on load
+mostrarEstadoIA();
+
+// ─── Extract with AI ──────────────────────────────────────────────────────────
+const PROMPT_TIKTOK = `Analiza estas capturas de pantalla de TikTok Analytics y extrae todos los números visibles.
+
+Devuelve SOLO un objeto JSON válido, sin texto antes ni después, con este formato exacto (usa 0 si no ves el dato):
+{
+  "views": 0,
+  "likes": 0,
+  "comments": 0,
+  "shares": 0,
+  "saves": 0,
+  "avg_watch_time_seconds": 0,
+  "completion_pct": 0,
+  "new_followers_from_video": 0,
+  "total_followers": 0,
+  "gender_female_pct": 0,
+  "top_age_range": "",
+  "top_location": "",
+  "weekly_videos": 0,
+  "traffic_source": ""
+}
+
+Notas:
+- views = "Visualizaciones de video" o el número grande bajo el ícono de play
+- completion_pct = "Vio el video completo" en porcentaje
+- avg_watch_time_seconds = "Tiempo promedio de..." en segundos (si dice "8.1s" pon 8.1)
+- gender_female_pct = porcentaje de espectadores femeninos (número solo, sin %)
+- top_age_range = el rango de edad con mayor porcentaje (ej: "25-34")
+- top_location = primer país o ciudad en la lista de ubicaciones
+- traffic_source = fuente de tráfico principal (fyp, seguidores, busqueda, o perfil)`;
+
+async function extraerConIA() {
+  if (screenshots.length === 0) { alert('Primero sube tus capturas.'); return; }
+  const claudeKey = localStorage.getItem('kd_claude_key');
+  const geminiKey = localStorage.getItem('kd_gemini_key');
+  if (!claudeKey && !geminiKey) { mostrarPanel('gemini'); return; }
+
+  const btn = document.getElementById('btnExtract');
+  const status = document.getElementById('extractStatus');
+  btn.disabled = true;
+  btn.textContent = '⏳ Analizando capturas...';
+  status.textContent = 'La IA está leyendo tus imágenes. Puede tardar 10-20 segundos...';
+
+  try {
+    let metrics;
+    if (claudeKey) {
+      metrics = await extraerClaude(claudeKey);
+    } else {
+      metrics = await extraerGemini(geminiKey);
+    }
+    autoRellenarFormulario(metrics);
+    btn.textContent = '✅ ¡Datos extraídos con éxito!';
+    btn.style.background = '#16a34a';
+    status.innerHTML = '<span style="color:#15803d;font-weight:700">Revisa los campos y corrige si algo no está bien. Luego genera el análisis.</span>';
+    setTimeout(() => {
+      document.getElementById('formPaso3').scrollIntoView({ behavior: 'smooth' });
+    }, 600);
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = '❌ Error — intentar de nuevo';
+    btn.style.background = '';
+    status.textContent = 'Error: ' + err.message + '. Si persiste, escribe los números manualmente.';
+    console.error('IA extract error:', err);
+  }
+}
+
+async function extraerClaude(apiKey) {
+  const content = [
+    ...screenshots.map(ss => ({
+      type: 'image',
+      source: { type: 'base64', media_type: 'image/jpeg', data: ss.dataURL.split(',')[1] }
+    })),
+    { type: 'text', text: PROMPT_TIKTOK }
+  ];
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 512, messages: [{ role: 'user', content }] })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'Error Claude API'); }
+  const data = await res.json();
+  return parseJSON(data.content[0].text);
+}
+
+async function extraerGemini(apiKey) {
+  const parts = [
+    { text: PROMPT_TIKTOK },
+    ...screenshots.map(ss => ({ inline_data: { mime_type: 'image/jpeg', data: ss.dataURL.split(',')[1] } }))
+  ];
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts }] })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return parseJSON(data.candidates[0].content.parts[0].text);
+}
+
+function parseJSON(text) {
+  const m = text.match(/\{[\s\S]*\}/);
+  if (!m) throw new Error('No se encontró JSON en la respuesta de la IA');
+  return JSON.parse(m[0]);
+}
+
+function autoRellenarFormulario(m) {
+  const set = (id, val) => { if (val && document.getElementById(id)) document.getElementById(id).value = val; };
+  if (m.views)                   set('f_avg_views', m.views);
+  if (m.likes)                   set('f_likes', m.likes);
+  if (m.comments)                set('f_comments', m.comments);
+  if (m.shares)                  set('f_shares', m.shares);
+  if (m.saves)                   set('f_saves', m.saves);
+  if (m.completion_pct)          set('f_completion', m.completion_pct);
+  if (m.avg_watch_time_seconds)  set('f_avg_watch_time', m.avg_watch_time_seconds);
+  if (m.new_followers_from_video) set('f_new_followers', m.new_followers_from_video);
+  if (m.total_followers)         set('f_followers', m.total_followers);
+  if (m.gender_female_pct)       set('f_gender_female', m.gender_female_pct);
+  if (m.top_age_range)           set('f_top_age', m.top_age_range);
+  if (m.top_location)            set('f_top_location', m.top_location);
+  if (m.weekly_videos)           set('f_freq', m.weekly_videos);
+  if (m.traffic_source) {
+    const t = m.traffic_source.toLowerCase();
+    const sel = document.getElementById('f_traffic');
+    if (sel) {
+      if (t.includes('fyp') || t.includes('for you')) sel.value = 'fyp';
+      else if (t.includes('seguidor') || t.includes('follower')) sel.value = 'seguidores';
+      else if (t.includes('búsqueda') || t.includes('busqueda') || t.includes('search')) sel.value = 'busqueda';
+      else if (t.includes('perfil') || t.includes('profile')) sel.value = 'perfil';
+    }
+  }
+  // Highlight filled fields
+  document.querySelectorAll('#formPaso3 input, #formPaso3 select').forEach(el => {
+    if (el.value) { el.style.borderColor = '#9333ea'; el.style.background = 'rgba(147,51,234,.04)'; }
+  });
+}
+</script>
+</body>
+</html>
