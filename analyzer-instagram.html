@@ -245,8 +245,8 @@ footer a{color:var(--accent);text-decoration:none}
           <div id="iaStatusArea">
             <div id="iaNoKey">
               <div class="ia-opts">
-                <button class="ia-opt-btn primary" onclick="mostrarPanel('claude')">✦ Claude (Anthropic)</button>
-                <button class="ia-opt-btn secondary" onclick="mostrarPanel('gemini')">⚡ Gemini (Google · gratis)</button>
+                <button class="ia-opt-btn primary" onclick="mostrarPanel('gemini')">⚡ Gemini (Google · GRATIS)</button>
+                <button class="ia-opt-btn secondary" onclick="mostrarPanel('claude')">✦ Claude (Anthropic · pago)</button>
               </div>
             </div>
             <div id="iaHasKey" style="display:none">
@@ -256,35 +256,43 @@ footer a{color:var(--accent);text-decoration:none}
           </div>
         </div>
       </div>
+      <!-- Panel Gemini - GRATIS (primero) -->
+      <div class="ia-panel" id="panelGemini">
+        <div class="ia-tabs">
+          <button class="ia-tab active" onclick="switchTab('gemini')">⚡ Gemini (GRATIS)</button>
+          <button class="ia-tab" onclick="switchTab('claude')">✦ Claude (pago)</button>
+        </div>
+        <div style="font-weight:800;font-size:.88rem;margin-bottom:10px">Cómo obtener tu clave de Gemini — 100% gratis, solo necesitas cuenta de Google:</div>
+        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent);font-weight:700">aistudio.google.com/apikey</a> e inicia sesión con tu cuenta de Google (la misma del Gmail)</p></div>
+        <div class="ia-step"><div class="ia-step-n">2</div><p>Toca el botón azul <strong>"+ Crear clave de API"</strong> — está en la parte superior izquierda</p></div>
+        <div class="ia-step"><div class="ia-step-n">3</div><p>Se abre un cuadro llamado <strong>"Crea una clave nueva"</strong>:<br>
+          &nbsp;• <em>"Asigna un nombre a la clave"</em>: escribe <strong>Mi análisis</strong> (o cualquier nombre)<br>
+          &nbsp;• <em>"Elige un proyecto importado"</em>: toca el menú → si no hay proyectos, selecciona <strong>"Crear proyecto"</strong> → ponle cualquier nombre → selecciónalo. Si ya hay un proyecto en la lista, selecciónalo directamente.</p></div>
+        <div class="ia-step"><div class="ia-step-n">4</div><p>Toca el botón <strong>"Crear clave"</strong> (aparece en la esquina inferior derecha del cuadro)</p></div>
+        <div class="ia-step"><div class="ia-step-n">5</div><p>Aparece un nuevo cuadro: <strong>"Detalles de la clave de API"</strong> — verás una clave larga (puede empezar por <strong>AQ.</strong> o <strong>AIza</strong>). Toca el botón <strong>"Copy key"</strong> en la esquina inferior derecha para copiarla</p></div>
+        <div class="ia-step"><div class="ia-step-n">6</div><p>Vuelve aquí, pega la clave en el campo de abajo y toca <strong>"Guardar →"</strong></p></div>
+        <div class="ia-key-row">
+          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="Pega tu clave aquí (AQ.Ab8... o AIza...)">
+          <button class="ia-save-btn" onclick="guardarClave('gemini')">Guardar →</button>
+        </div>
+        <p class="ia-note">💡 Gemini es completamente gratis — cientos de análisis sin costo. Tu clave se guarda solo en tu navegador, nadie más la ve.</p>
+      </div>
+      <!-- Panel Claude - pago (segundo) -->
       <div class="ia-panel" id="panelClaude">
         <div class="ia-tabs">
-          <button class="ia-tab active" onclick="switchTab('claude')">✦ Claude API</button>
-          <button class="ia-tab" onclick="switchTab('gemini')">⚡ Gemini API</button>
+          <button class="ia-tab" onclick="switchTab('gemini')">⚡ Gemini (GRATIS)</button>
+          <button class="ia-tab active" onclick="switchTab('claude')">✦ Claude (pago)</button>
         </div>
         <div style="font-weight:800;font-size:.88rem;margin-bottom:10px">Cómo obtener tu clave de Claude (tiene $5 USD gratis al registrarte):</div>
-        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);font-weight:700">console.anthropic.com</a> y crea una cuenta gratuita</p></div>
-        <div class="ia-step"><div class="ia-step-n">2</div><p>En el menú izquierdo toca <strong>"API Keys"</strong> → <strong>"Create Key"</strong></p></div>
-        <div class="ia-step"><div class="ia-step-n">3</div><p>Copia la clave que empieza por <strong>sk-ant-...</strong> y pégala aquí:</p></div>
+        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);font-weight:700">console.anthropic.com</a> y crea una cuenta (con correo)</p></div>
+        <div class="ia-step"><div class="ia-step-n">2</div><p>Una vez dentro, toca <strong>"API Keys"</strong> en el menú izquierdo → toca <strong>"Create Key"</strong></p></div>
+        <div class="ia-step"><div class="ia-step-n">3</div><p>Ponle cualquier nombre → toca <strong>"Create Key"</strong> → copia la clave que aparece (empieza por <strong>sk-ant-...</strong>)</p></div>
+        <div class="ia-step"><div class="ia-step-n">4</div><p>Pega la clave aquí abajo y toca <strong>"Guardar →"</strong></p></div>
         <div class="ia-key-row">
           <input type="password" class="ia-key-input" id="claudeKeyInput" placeholder="sk-ant-api03-...">
           <button class="ia-save-btn" onclick="guardarClave('claude')">Guardar →</button>
         </div>
-        <p class="ia-note">💡 Tu clave se guarda solo en tu navegador. Los $5 iniciales equivalen a cientos de análisis.</p>
-      </div>
-      <div class="ia-panel" id="panelGemini">
-        <div class="ia-tabs">
-          <button class="ia-tab" onclick="switchTab('claude')">✦ Claude API</button>
-          <button class="ia-tab active" onclick="switchTab('gemini')">⚡ Gemini API</button>
-        </div>
-        <div style="font-weight:800;font-size:.88rem;margin-bottom:10px">Cómo obtener tu clave de Gemini (100% gratis, solo cuenta Google):</div>
-        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent);font-weight:700">aistudio.google.com/apikey</a> → inicia sesión con Google</p></div>
-        <div class="ia-step"><div class="ia-step-n">2</div><p>Toca <strong>"Create API Key"</strong> (botón azul)</p></div>
-        <div class="ia-step"><div class="ia-step-n">3</div><p>Copia la clave que empieza por <strong>AIza...</strong> y pégala aquí:</p></div>
-        <div class="ia-key-row">
-          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="AIzaSy...">
-          <button class="ia-save-btn" onclick="guardarClave('gemini')">Guardar →</button>
-        </div>
-        <p class="ia-note">💡 Gemini es 100% gratis. Tu clave se guarda solo en tu navegador.</p>
+        <p class="ia-note">💡 Tu clave se guarda solo en tu navegador. Nadie más la ve. Los $5 iniciales equivalen a cientos de análisis.</p>
       </div>
     </div>
     <!-- / IA SETUP BANNER -->
@@ -1009,7 +1017,7 @@ function guardarClave(tipo) {
   const key = input.value.trim();
   if (!key) { alert('Por favor pega tu clave API primero.'); return; }
   if (tipo === 'claude' && !key.startsWith('sk-ant-')) { alert('La clave de Claude debe empezar por sk-ant-... Revisa que la copiaste completa.'); return; }
-  if (tipo === 'gemini' && !key.startsWith('AIza')) { alert('La clave de Gemini debe empezar por AIza... Revisa que la copiaste completa.'); return; }
+  if (tipo === 'gemini' && key.length < 10) { alert('La clave de Gemini parece incompleta. Asegúrate de copiarla usando el botón "Copy key" en Gemini.'); return; }
   localStorage.setItem(tipo === 'claude' ? 'kd_claude_key' : 'kd_gemini_key', key);
   mostrarEstadoIA();
   document.getElementById('panelClaude').style.display = 'none';
@@ -1032,7 +1040,7 @@ function mostrarEstadoIA() {
   document.getElementById('iaNoKey').style.display = tieneIA ? 'none' : 'block';
   document.getElementById('iaHasKey').style.display = tieneIA ? 'block' : 'none';
   if (tieneIA) {
-    const proveedor = claudeKey ? '✦ Claude (Anthropic)' : '⚡ Gemini (Google)';
+    const proveedor = geminiKey ? '⚡ Gemini (Google)' : '✦ Claude (Anthropic)';
     document.getElementById('iaConnectedLabel').textContent = `✅ ${proveedor} conectado`;
   }
 }
