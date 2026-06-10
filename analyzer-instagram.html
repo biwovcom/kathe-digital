@@ -244,10 +244,12 @@ footer a{color:var(--accent);text-decoration:none}
           <div class="ia-sub">Sin IA conectada debes escribir los números a mano. Con IA solo subes las fotos y ella extrae todo sola.</div>
           <div id="iaStatusArea">
             <div id="iaNoKey">
+              <div style="font-size:.8rem;color:var(--muted);margin-bottom:8px;font-weight:600">👇 Elige con cuál IA conectarte y ve las instrucciones paso a paso:</div>
               <div class="ia-opts">
-                <button class="ia-opt-btn primary" onclick="mostrarPanel('gemini')">⚡ Gemini (Google · GRATIS)</button>
-                <button class="ia-opt-btn secondary" onclick="mostrarPanel('claude')">✦ Claude (Anthropic · pago)</button>
+                <button class="ia-opt-btn primary" onclick="mostrarPanel('gemini')">⚡ Gemini (Google · GRATIS) ▾</button>
+                <button class="ia-opt-btn secondary" onclick="mostrarPanel('claude')">✦ Claude (Anthropic · pago) ▾</button>
               </div>
+              <div style="font-size:.72rem;color:var(--muted);margin-top:7px">Toca cualquier botón para ver cómo obtener tu clave API en 6 pasos — también puedes cambiar de opción cuando quieras.</div>
             </div>
             <div id="iaHasKey" style="display:none">
               <span class="ia-connected" id="iaConnectedLabel">✅ IA conectada</span>
@@ -258,13 +260,14 @@ footer a{color:var(--accent);text-decoration:none}
       </div>
       <!-- Panel Gemini - GRATIS (primero) -->
       <div class="ia-panel" id="panelGemini">
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px">¿Prefieres usar Claude? Toca el botón de abajo para cambiar:</div>
         <div class="ia-tabs">
           <button class="ia-tab active" onclick="switchTab('gemini')">⚡ Gemini (GRATIS)</button>
           <button class="ia-tab" onclick="switchTab('claude')">✦ Claude (pago)</button>
         </div>
         <div style="font-weight:800;font-size:.88rem;margin-bottom:10px">Cómo obtener tu clave de Gemini — 100% gratis, solo necesitas cuenta de Google:</div>
         <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent);font-weight:700">aistudio.google.com/apikey</a> e inicia sesión con tu cuenta de Google (la misma del Gmail)</p></div>
-        <div class="ia-step"><div class="ia-step-n">2</div><p>Toca el botón azul <strong>"+ Crear clave de API"</strong> — está en la parte superior izquierda</p></div>
+        <div class="ia-step"><div class="ia-step-n">2</div><p>Toca el botón <strong>"Crear clave de API"</strong> — está en la esquina superior <strong>derecha</strong> de la pantalla</p></div>
         <div class="ia-step"><div class="ia-step-n">3</div><p>Se abre un cuadro llamado <strong>"Crea una clave nueva"</strong>:<br>
           &nbsp;• <em>"Asigna un nombre a la clave"</em>: escribe <strong>Mi análisis</strong> (o cualquier nombre)<br>
           &nbsp;• <em>"Elige un proyecto importado"</em>: toca el menú → si no hay proyectos, selecciona <strong>"Crear proyecto"</strong> → ponle cualquier nombre → selecciónalo. Si ya hay un proyecto en la lista, selecciónalo directamente.</p></div>
@@ -279,6 +282,7 @@ footer a{color:var(--accent);text-decoration:none}
       </div>
       <!-- Panel Claude - pago (segundo) -->
       <div class="ia-panel" id="panelClaude">
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px">¿Prefieres usar Gemini gratis? Toca el botón de abajo para cambiar:</div>
         <div class="ia-tabs">
           <button class="ia-tab" onclick="switchTab('gemini')">⚡ Gemini (GRATIS)</button>
           <button class="ia-tab active" onclick="switchTab('claude')">✦ Claude (pago)</button>
@@ -1126,7 +1130,7 @@ async function extraerGemini(apiKey) {
     { text: PROMPT_IG },
     ...screenshots.map(ss => ({ inline_data: { mime_type: 'image/jpeg', data: ss.dataURL.split(',')[1] } }))
   ];
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ contents: [{ parts }] })
