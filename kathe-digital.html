@@ -343,6 +343,27 @@ document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) cerrarModal();
 });
 
+// ─── Supabase ────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://zfmiwodvtupvcgelsixl.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Tgo_nM-ENjDbJXcBYnrzJA_euT8GILx';
+
+async function guardarEnSupabase(data) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+}
+
 async function enviarLead(e) {
   e.preventDefault();
   const nombre = document.getElementById('leadName').value.trim();
@@ -354,26 +375,24 @@ async function enviarLead(e) {
   btn.textContent = 'Guardando...';
   btn.disabled = true;
 
-  // Guardar en localStorage (base de datos local)
+  const leadData = {
+    nombre,
+    email,
+    whatsapp: tel,
+    herramienta: tool,
+    fecha: new Date().toLocaleString('es-CO')
+  };
+
+  // 1. Guardar siempre en localStorage (funciona aunque no haya internet)
   const leads = JSON.parse(localStorage.getItem('kd_leads') || '[]');
-  leads.push({
-    nombre, email, whatsapp: tel, herramienta: tool,
-    fecha: new Date().toLocaleString('es-CO'),
-    ts: Date.now()
-  });
+  leads.push({ ...leadData, ts: Date.now() });
   localStorage.setItem('kd_leads', JSON.stringify(leads));
 
-  // Enviar a Formspree (reemplaza YOUR_FORM_ID con tu ID real de formspree.io)
-  const FORMSPREE_ID = 'YOUR_FORM_ID';
-  if (FORMSPREE_ID !== 'YOUR_FORM_ID') {
-    try {
-      await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ nombre, email, whatsapp: tel, herramienta: tool,
-          fecha: new Date().toLocaleString('es-CO') })
-      });
-    } catch(_) {}
+  // 2. Guardar en Supabase (base de datos en la nube)
+  try {
+    await guardarEnSupabase(leadData);
+  } catch(err) {
+    console.warn('Supabase no disponible, lead guardado solo localmente:', err);
   }
 
   showToast('✅ ¡Listo! Redirigiendo...');
