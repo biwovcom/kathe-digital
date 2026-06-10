@@ -266,7 +266,32 @@ footer strong{color:var(--text)}
       <form class="form-group" id="leadForm" onsubmit="enviarLead(event)">
         <input class="form-input" type="text" id="leadName" placeholder="Tu nombre (opcional)" autocomplete="name">
         <input class="form-input" type="email" id="leadEmail" placeholder="Tu email *" required autocomplete="email">
-        <input class="form-input" type="tel" id="leadPhone" placeholder="WhatsApp / celular *" required autocomplete="tel">
+        <div style="display:flex;gap:6px">
+          <select class="form-input" id="leadCountry" style="flex:0 0 auto;width:auto;min-width:0;max-width:155px;padding:13px 10px;cursor:pointer;font-size:.88rem">
+            <option value="CO|+57|Colombia">🇨🇴 Colombia (+57)</option>
+            <option value="MX|+52|México">🇲🇽 México (+52)</option>
+            <option value="AR|+54|Argentina">🇦🇷 Argentina (+54)</option>
+            <option value="CL|+56|Chile">🇨🇱 Chile (+56)</option>
+            <option value="PE|+51|Perú">🇵🇪 Perú (+51)</option>
+            <option value="EC|+593|Ecuador">🇪🇨 Ecuador (+593)</option>
+            <option value="VE|+58|Venezuela">🇻🇪 Venezuela (+58)</option>
+            <option value="BO|+591|Bolivia">🇧🇴 Bolivia (+591)</option>
+            <option value="UY|+598|Uruguay">🇺🇾 Uruguay (+598)</option>
+            <option value="PY|+595|Paraguay">🇵🇾 Paraguay (+595)</option>
+            <option value="CR|+506|Costa Rica">🇨🇷 Costa Rica (+506)</option>
+            <option value="GT|+502|Guatemala">🇬🇹 Guatemala (+502)</option>
+            <option value="HN|+504|Honduras">🇭🇳 Honduras (+504)</option>
+            <option value="SV|+503|El Salvador">🇸🇻 El Salvador (+503)</option>
+            <option value="NI|+505|Nicaragua">🇳🇮 Nicaragua (+505)</option>
+            <option value="PA|+507|Panamá">🇵🇦 Panamá (+507)</option>
+            <option value="DO|+1809|Rep. Dominicana">🇩🇴 Rep. Dominicana (+1809)</option>
+            <option value="CU|+53|Cuba">🇨🇺 Cuba (+53)</option>
+            <option value="ES|+34|España">🇪🇸 España (+34)</option>
+            <option value="US|+1|Estados Unidos">🇺🇸 EEUU (+1)</option>
+            <option value="OT|+0|Otro">🌍 Otro</option>
+          </select>
+          <input class="form-input" type="tel" id="leadPhone" placeholder="Número WhatsApp *" required autocomplete="tel" style="flex:1;min-width:0">
+        </div>
         <input type="hidden" id="leadTool">
         <button class="form-submit" type="submit" id="modalBtn">Acceder a la herramienta →</button>
       </form>
@@ -279,12 +304,30 @@ footer strong{color:var(--text)}
 
 <script>
 let urlDestino = '';
+let _paisDetectado = false;
+
+// Detecta el país por IP (una sola vez) y pre-selecciona el selector
+async function detectarPais() {
+  if (_paisDetectado) return;
+  _paisDetectado = true;
+  try {
+    const r = await fetch('https://ipapi.co/json/');
+    const d = await r.json();
+    if (!d.country_code) return;
+    const select = document.getElementById('leadCountry');
+    const opts = Array.from(select.options);
+    const match = opts.find(o => o.value.startsWith(d.country_code + '|'));
+    if (match) select.value = match.value;
+  } catch(e) {} // Falla silenciosa — queda Colombia por defecto
+}
 
 function abrirModal(url, nombre, icono) {
   urlDestino = url;
   document.getElementById('modalIcon').textContent = icono;
   document.getElementById('modalToolName').textContent = nombre;
   document.getElementById('leadTool').value = nombre;
+
+  detectarPais(); // Auto-detectar país del visitante
 
   // ¿Ya conocemos a este usuario?
   const leads = JSON.parse(localStorage.getItem('kd_leads') || '[]');
@@ -295,7 +338,7 @@ function abrirModal(url, nombre, icono) {
     const nombreMostrar = ultimo.nombre || ultimo.email.split('@')[0];
     document.getElementById('recogName').textContent = nombreMostrar;
     document.getElementById('recogEmail').textContent = ultimo.email;
-    document.getElementById('recogPhone').textContent = ultimo.whatsapp ? '📱 ' + ultimo.whatsapp : '';
+    document.getElementById('recogPhone').textContent = ultimo.whatsapp ? '📱 ' + (ultimo.indicativo || '') + ' ' + ultimo.whatsapp : '';
     document.getElementById('quickBtn').textContent = `Acceder a ${nombre} →`;
     document.getElementById('recognizedState').style.display = 'block';
     document.getElementById('formState').style.display = 'none';
@@ -372,6 +415,10 @@ async function enviarLead(e) {
   const tool   = document.getElementById('leadTool').value;
   const btn    = document.getElementById('modalBtn');
 
+  // País e indicativo
+  const countryRaw = document.getElementById('leadCountry').value; // "CO|+57|Colombia"
+  const [, indicativo, pais] = countryRaw.split('|');
+
   btn.textContent = 'Guardando...';
   btn.disabled = true;
 
@@ -379,6 +426,8 @@ async function enviarLead(e) {
     nombre,
     email,
     whatsapp: tel,
+    pais,
+    indicativo,
     herramienta: tool,
     fecha: new Date().toLocaleString('es-CO')
   };
@@ -418,9 +467,9 @@ window.showLeads = () => {
 window.exportLeads = () => {
   const leads = JSON.parse(localStorage.getItem('kd_leads') || '[]');
   if (!leads.length) { console.log('No hay leads guardados'); return; }
-  const rows = ['Nombre,Email,WhatsApp,Herramienta,Fecha',
+  const rows = ['Nombre,Email,País,Indicativo,WhatsApp,Herramienta,Fecha',
     ...leads.map(l =>
-      `"${l.nombre||''}","${l.email}","${l.whatsapp}","${l.herramienta}","${l.fecha}"`)
+      `"${l.nombre||''}","${l.email||''}","${l.pais||''}","${l.indicativo||''}","${l.whatsapp||''}","${l.herramienta||''}","${l.fecha||''}"`)
   ];
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\n'));
