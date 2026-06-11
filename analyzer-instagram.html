@@ -1159,7 +1159,7 @@ async function extraerClaude(apiKey) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
-    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 512, messages: [{ role: 'user', content }] })
+    body: JSON.stringify({ model: 'claude-3-5-haiku-20241022', max_tokens: 512, messages: [{ role: 'user', content }] })
   });
   if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'Error Claude API'); }
   const data = await res.json();
