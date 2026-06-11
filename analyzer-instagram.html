@@ -1148,17 +1148,19 @@ async function extraerConIA() {
     btn.disabled = false;
     btn.textContent = '❌ Error — intentar de nuevo';
     btn.style.background = '';
-    const msg = err.message || '';
-    let textoError = 'Ocurrió un error. Intenta de nuevo en unos segundos.';
-    if (msg.includes('API_KEY_INVALID') || msg.includes('invalid') || msg.includes('403')) {
-      textoError = '🔑 La clave de Gemini no es válida. Toca "Cambiar clave / desconectar" arriba y pega la clave correcta desde aistudio.google.com';
-    } else if (msg.includes('RESOURCE_EXHAUSTED') || msg.includes('quota') || msg.includes('429')) {
-      textoError = '⏱️ Alcanzaste el límite gratuito por hoy (1,500 análisis/día). Espera hasta mañana o vuelve a intentar en unos minutos.';
-    } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('Failed')) {
+    const msg = (err.message || '').toLowerCase();
+    let textoError = 'Error: ' + (err.message || 'desconocido');
+    if (msg.includes('invalid') || msg.includes('api key') || msg.includes('403') || msg.includes('unauthorized') || msg.includes('permission')) {
+      textoError = '🔑 La clave de Gemini no es válida o no tiene permisos. Ve a aistudio.google.com → Claves de API → copia una clave activa y pégala de nuevo.';
+    } else if (msg.includes('exhausted') || msg.includes('quota') || msg.includes('429') || msg.includes('limit')) {
+      textoError = '⏱️ Todos los modelos de Gemini alcanzaron su límite. Espera unos minutos e intenta de nuevo, o crea una nueva clave en aistudio.google.com con un proyecto diferente.';
+    } else if (msg.includes('location') || msg.includes('region') || msg.includes('country') || msg.includes('not supported')) {
+      textoError = '🌍 Tu región no tiene acceso a este modelo de Gemini. Intenta con una VPN o contacta a Kathe Digital para una solución alternativa.';
+    } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed to fetch')) {
       textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
     }
-    status.textContent = textoError;
-    console.error('IA extract error:', err);
+    status.innerHTML = textoError;
+    console.error('IA extract error:', err.message);
   }
 }
 
