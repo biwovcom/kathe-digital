@@ -230,67 +230,54 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="ia-banner-row">
         <div class="ia-icon">🤖</div>
         <div style="flex:1;min-width:200px">
-          <div class="ia-title">Conecta una IA para leer tus capturas automáticamente</div>
-          <div class="ia-sub">Sin IA debes escribir los números a mano. Con IA solo subes las fotos y ella extrae todo sola.</div>
+          <div class="ia-title">Conecta ChatGPT para leer tus capturas automáticamente</div>
+          <div class="ia-sub">Solo necesitas una clave de ChatGPT. La herramienta lee tus fotos y extrae todos los números sola — sin escribir nada a mano.</div>
           <div id="iaStatusArea">
             <div id="iaNoKey">
-              <div style="font-size:.8rem;color:var(--muted);margin-bottom:8px;font-weight:600">👇 Elige con cuál IA conectarte:</div>
-              <div class="ia-opts">
-                <button class="ia-opt-btn primary" onclick="mostrarPanel('gemini')">⚡ Gemini (Google · GRATIS) ▾</button>
-                <button class="ia-opt-btn secondary" onclick="mostrarPanel('claude')">✦ Claude (pago · más preciso) ▾</button>
-              </div>
-              <div style="font-size:.72rem;color:var(--muted);margin-top:7px">Toca el botón para ver las instrucciones paso a paso.</div>
+              <button class="ia-opt-btn primary" onclick="mostrarPanel('openai')" style="margin-top:8px">🔑 Conectar ChatGPT — ver instrucciones ▾</button>
             </div>
             <div id="iaHasKey" style="display:none">
-              <span class="ia-connected" id="iaConnectedLabel">✅ IA conectada</span>
-              <button onclick="desconectarIA()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;margin-left:10px;text-decoration:underline">Cambiar / desconectar</button>
+              <span class="ia-connected" id="iaConnectedLabel">✅ ChatGPT conectado</span>
+              <button onclick="desconectarIA()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;margin-left:10px;text-decoration:underline">Cambiar clave / desconectar</button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Panel Gemini -->
-      <div class="ia-panel" id="panelGemini">
-        <div class="ia-tabs">
-          <button class="ia-tab active" onclick="switchTab('gemini')">⚡ Gemini (GRATIS)</button>
-          <button class="ia-tab" onclick="switchTab('claude')">✦ Claude (pago)</button>
+      <!-- Panel ChatGPT -->
+      <div class="ia-panel" id="panelOpenai">
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:6px">Cómo conectar ChatGPT — sigue estos pasos:</div>
+        <div style="background:rgba(16,163,127,.1);border:1px solid rgba(16,163,127,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.8rem;line-height:1.6">
+          💡 <strong>¿Cuánto cuesta?</strong> Con <strong>$5 USD</strong> tienes para más de <strong>5,000 análisis</strong> — suficiente para años de uso normal. La clave se guarda en tu navegador y nadie más la puede ver.
         </div>
-        <div style="font-weight:800;font-size:.88rem;margin-bottom:6px">Gemini gratis — solo necesitas cuenta de Google</div>
-        <div style="background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.3);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.78rem;line-height:1.5">
-          ⚡ <strong>Límite del plan gratis:</strong> ~1,500 análisis por día y ~30 por minuto por cuenta.<br>
-          Si se agota, la herramienta espera 35 segundos y reintenta automáticamente. Si sigue sin funcionar, espera 1-2 minutos o usa Claude.
+        <div class="ia-step">
+          <div class="ia-step-n">1</div>
+          <p>Abre <a href="https://platform.openai.com" target="_blank" style="color:var(--accent);font-weight:700">platform.openai.com</a> en el navegador e inicia sesión con tu cuenta de Gmail u otro correo.<br><span style="font-size:.78rem;color:var(--muted)">(Si no tienes cuenta, toca "Sign up" y créala gratis en 2 minutos)</span></p>
         </div>
-        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent);font-weight:700">aistudio.google.com/apikey</a> e inicia sesión con tu cuenta Google</p></div>
-        <div class="ia-step"><div class="ia-step-n">2</div><p>Toca <strong>"Crear clave de API"</strong> — botón en la esquina superior <strong>derecha</strong></p></div>
-        <div class="ia-step"><div class="ia-step-n">3</div><p>En el cuadro que aparece: pon cualquier nombre → elige o crea un proyecto → toca <strong>"Crear clave"</strong></p></div>
-        <div class="ia-step"><div class="ia-step-n">4</div><p>Aparece tu clave (empieza por <strong>AQ.</strong> o <strong>AIza</strong>) → toca <strong>"Copy key"</strong></p></div>
-        <div class="ia-step"><div class="ia-step-n">5</div><p>Pégala aquí abajo y toca <strong>"Guardar →"</strong></p></div>
+        <div class="ia-step">
+          <div class="ia-step-n">2</div>
+          <p>Una vez adentro, busca en el <strong>menú de la izquierda</strong> la opción <strong>"API keys"</strong> y tócala.<br><span style="font-size:.78rem;color:var(--muted)">(Si no ves el menú, toca el ícono de las 3 líneas ☰ arriba a la izquierda)</span></p>
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">3</div>
+          <p>Toca el botón <strong>"Create new secret key"</strong> → ponle cualquier nombre (por ejemplo "Mi análisis") → toca <strong>"Create secret key"</strong>.</p>
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">4</div>
+          <p>Aparece tu clave — empieza por <strong>sk-</strong>. Toca el ícono de <strong>copiar</strong> al lado. <strong>¡No la cierres sin copiarla, solo se muestra una vez!</strong></p>
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">5</div>
+          <p>Agrega créditos: en el menú izquierdo toca <strong>"Billing"</strong> → <strong>"Add to credit balance"</strong> → ingresa tu tarjeta y agrega mínimo <strong>$5 USD</strong>.<br><span style="font-size:.78rem;color:var(--muted)">Con $5 tienes más de 5,000 análisis — suficiente para años de uso.</span></p>
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">6</div>
+          <p>Vuelve a esta página, <strong>pega tu clave</strong> en el campo de abajo y toca <strong>"Guardar →"</strong>. ¡Listo!</p>
+        </div>
         <div class="ia-key-row">
-          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="Pega tu clave aquí (AQ.Ab8... o AIza...)">
-          <button class="ia-save-btn" onclick="guardarClave('gemini')">Guardar →</button>
+          <input type="password" class="ia-key-input" id="openaiKeyInput" placeholder="Pega tu clave aquí (sk-proj-... o sk-...)">
+          <button class="ia-save-btn" onclick="guardarClave('openai')">Guardar →</button>
         </div>
-        <p class="ia-note">💡 Tu clave se guarda solo en tu navegador, nadie más la ve. Es gratuita y puedes hacer cientos de análisis.</p>
-      </div>
-
-      <!-- Panel Claude -->
-      <div class="ia-panel" id="panelClaude">
-        <div class="ia-tabs">
-          <button class="ia-tab" onclick="switchTab('gemini')">⚡ Gemini (GRATIS)</button>
-          <button class="ia-tab active" onclick="switchTab('claude')">✦ Claude (pago)</button>
-        </div>
-        <div style="font-weight:800;font-size:.88rem;margin-bottom:6px">Claude — análisis más preciso, requiere cuenta con créditos</div>
-        <div style="background:rgba(147,51,234,.08);border:1px solid rgba(147,51,234,.2);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.78rem;line-height:1.5">
-          ✦ <strong>Sin límite de análisis</strong> — pagas por uso (~$0.001 USD por análisis). Al registrarte recibes $5 USD gratis = miles de análisis.
-        </div>
-        <div class="ia-step"><div class="ia-step-n">1</div><p>Ve a <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);font-weight:700">console.anthropic.com</a> y crea una cuenta con tu correo</p></div>
-        <div class="ia-step"><div class="ia-step-n">2</div><p>Toca <strong>"API Keys"</strong> en el menú izquierdo → toca <strong>"Create Key"</strong></p></div>
-        <div class="ia-step"><div class="ia-step-n">3</div><p>Ponle cualquier nombre → toca <strong>"Create Key"</strong> → copia la clave (empieza por <strong>sk-ant-...</strong>)</p></div>
-        <div class="ia-step"><div class="ia-step-n">4</div><p>Pégala aquí abajo y toca <strong>"Guardar →"</strong></p></div>
-        <div class="ia-key-row">
-          <input type="password" class="ia-key-input" id="claudeKeyInput" placeholder="sk-ant-api03-...">
-          <button class="ia-save-btn" onclick="guardarClave('claude')">Guardar →</button>
-        </div>
-        <p class="ia-note">💡 Tu clave se guarda solo en tu navegador. Nadie más la ve.</p>
+        <p class="ia-note">🔒 Tu clave se guarda únicamente en tu navegador. Kathe Digital nunca la ve ni la almacena en ningún servidor.</p>
       </div>
     </div>
     <!-- / IA SETUP BANNER -->
@@ -586,6 +573,11 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="sec-block">
       <div class="sec-title">🚀 Plan de Acción — Próximas 4 Semanas</div>
       <div class="rec-list" id="recList"></div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-title">🔥 Guía: ¿Tu Creativo Está Quemado?</div>
+      <div id="creativoContent"></div>
     </div>
 
     <div class="sec-block" id="coherenceBlock" style="display:none">
@@ -909,6 +901,71 @@ function analizarTikTok() {
       <strong>${r.t}</strong><p>${r.w}</p>
     </div></div>`).join('');
 
+  // Creativo quemado guide (TikTok)
+  const vidaUtil = freq >= 7 ? '3-5 días' : freq >= 5 ? '1 semana' : freq >= 3 ? '1-2 semanas' : '2-3 semanas';
+  const riesgoFatiga = engRate < 3 || (freq >= 5 && completion < 40);
+  const diagnosticoIco = riesgoFatiga ? '🚨' : engRate < 5 ? '⚠️' : '✅';
+  const diagnosticoTexto = riesgoFatiga
+    ? `Tu engagement de ${engRate.toFixed(1)}%${completion > 0 ? ` y retención de ${completion}%` : ''} son señales de que el algoritmo de TikTok no está distribuyendo tu contenido ampliamente. Puede ser fatiga del formato actual, hooks poco impactantes o creativos repetidos. Hora de experimentar con nuevos ángulos.`
+    : engRate < 5
+    ? `Tu engagement de ${engRate.toFixed(1)}% es moderado. Revisa semana a semana — si baja 2 semanas seguidas, rota el formato. TikTok satura mucho más rápido que Instagram.`
+    : `Tu engagement de ${engRate.toFixed(1)}% muestra que tu contenido actual resuena. Sigue rotando creativos para mantener el algoritmo activo y evitar saturación.`;
+
+  document.getElementById('creativoContent').innerHTML = `
+    <div style="background:rgba(220,38,38,.06);border:1.5px solid rgba(220,38,38,.18);border-radius:12px;padding:16px 18px;margin-bottom:18px">
+      <div style="font-weight:800;font-size:.9rem;color:#9b1c1c;margin-bottom:6px">${diagnosticoIco} Tu diagnóstico actual</div>
+      <div style="font-size:.84rem;color:var(--text);line-height:1.6">${diagnosticoTexto}</div>
+      ${freq > 0 ? `<div style="font-size:.78rem;color:var(--muted);margin-top:8px">📅 Con tu frecuencia de ${freq} video/semana, la vida útil típica de un creativo en TikTok es de <strong>${vidaUtil}</strong> — TikTok distribuye mucho más rápido, lo que también quema más rápido.</div>` : ''}
+    </div>
+
+    <div style="font-weight:800;font-size:.88rem;color:var(--purple);margin-bottom:10px">📉 Señales de creativo quemado en TikTok</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+      ${[
+        ['La retención cae por debajo del 30%', 'TikTok interpreta que tu contenido no es lo suficientemente interesante y reduce la distribución drásticamente.'],
+        ['El alcance cae aunque el número de posts se mantiene', 'El algoritmo priorizó otras cuentas. Tu formato ya no genera la señal de "quédate a ver" que TikTok necesita.'],
+        ['El mismo tipo de video no genera comentarios nuevos', 'Tu audiencia core ya vio ese ángulo. Los comentarios son el termómetro más rápido de interés genuino.'],
+        ['En anuncios (TikTok Ads): frecuencia >3 y CTR cayendo', 'La misma persona ve el anuncio repetido — el "swipe up" ya no sucede porque lo anticipan.'],
+        ['Llevas 2+ semanas con el mismo formato de hook', 'TikTok premia la novedad. Un hook idéntico al de la semana pasada pasa desapercibido porque el usuario lo reconoce inconscientemente.'],
+        ['Los videos nuevos rinden menos que los videos de hace 1 mes', 'No es un problema de calidad — es saturación acumulada del mismo estilo visual o narrativo.']
+      ].map(([s, e]) => `<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 13px">
+        <div style="font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:2px">🔴 ${s}</div>
+        <div style="font-size:.76rem;color:var(--muted);line-height:1.4">${e}</div>
+      </div>`).join('')}
+    </div>
+
+    <div style="font-weight:800;font-size:.88rem;color:var(--purple);margin-bottom:10px">⏱️ Vida útil típica en TikTok</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px">
+      ${[
+        ['🎵 Videos orgánicos', '3–10 días', 'TikTok puede viralizar un video meses después, pero la ventana principal de distribución es la primera semana.'],
+        ['🔁 Trends / audios virales', '3–7 días', 'Los trends tienen fecha de vencimiento. Publicar tarde (>1 semana del pico) puede no tener impacto.'],
+        ['💸 Anuncios (pauta)', '5–14 días', 'La frecuencia en TikTok Ads satura más rápido que Meta por el comportamiento de scroll. Revisar cada semana.'],
+        ['📚 Contenido educativo', '2–6 semanas', 'Los tutoriales y tips atemporales duran más. Se pueden re-usar con pequeños ajustes de audio o formato.']
+      ].map(([f, t, d]) => `<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px">
+        <div style="font-size:.88rem;font-weight:800;color:var(--text)">${f}</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--accent);margin:4px 0">${t}</div>
+        <div style="font-size:.74rem;color:var(--muted);line-height:1.4">${d}</div>
+      </div>`).join('')}
+    </div>
+
+    <div style="font-weight:800;font-size:.88rem;color:var(--purple);margin-bottom:10px">🔄 Qué hacer cuando un creativo se quema en TikTok</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+      ${[
+        ['1', 'Cambia el hook — el mismo concepto puede funcionar con otro inicio', 'Los primeros 1-2 segundos son todo en TikTok. Toma tu video más exitoso y graba 3 versiones con hooks diferentes: pregunta directa, dato impactante, afirmación polémica. El concepto puede vivir más tiempo.'],
+        ['2', 'Rota el formato: texto en pantalla → talking head → POV → pantalla verde', 'TikTok distribuye según el formato que su audiencia consume. Cambiar el formato es lo más rápido para llegar a un nuevo segmento de usuarios aunque el tema sea el mismo.'],
+        ['3', 'Usa el audio de un video viral de tu nicho', 'El algoritmo de TikTok asocia el audio con la audiencia que ya lo consumió. Usar el audio correcto puede multiplicar tu alcance sin cambiar nada más del contenido.'],
+        ['4', 'Establece el patrón: publicar → medir 48h → decidir', 'Si en 48 horas el video no supera el 30% de retención y el 3% de engagement, archívalo y publica la siguiente variación. TikTok da señales rápidas — no esperes una semana para decidir.'],
+        ['5', 'Prepara al menos 3 creativos distintos antes de empezar una pauta', 'En TikTok Ads, nunca pautar con un solo creativo. Lanza 3 versiones simultáneas, deja que el algoritmo optimice, y escala solo el ganador. Cuando se queme, ya tienes el próximo listo.']
+      ].map(([n, t, d]) => `<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+        <div style="min-width:28px;height:28px;background:var(--grad);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;color:#fff;flex-shrink:0">${n}</div>
+        <div><div style="font-size:.84rem;font-weight:700;color:var(--text);margin-bottom:3px">${t}</div><div style="font-size:.78rem;color:var(--muted);line-height:1.5">${d}</div></div>
+      </div>`).join('')}
+    </div>
+
+    <div style="background:rgba(147,51,234,.07);border:1.5px solid rgba(147,51,234,.2);border-radius:12px;padding:14px 16px">
+      <div style="font-weight:800;font-size:.84rem;color:var(--purple);margin-bottom:8px">💡 Regla de oro en TikTok: velocidad de rotación = ventaja competitiva</div>
+      <div style="font-size:.8rem;color:var(--text);line-height:1.6">Las cuentas que crecen más rápido en TikTok no tienen mejores ideas — tienen un sistema para testear y rotar creativos más rápido que su competencia. Publica, mide en 48h, rota, repite. La cuenta que publica 5 formatos diferentes por semana aprende 5 veces más rápido que la que espera a que uno "funcione perfectamente".</div>
+    </div>`;
+
   // Coherence analysis
   const cbBlock = document.getElementById('coherenceBlock');
   const coherenceItems = [];
@@ -1017,36 +1074,29 @@ function descargarReporte() {
 let _activePanel = null;
 
 function mostrarPanel(tipo) {
-  // Close any open panel
-  document.getElementById('panelClaude').style.display = 'none';
-  document.getElementById('panelGemini').style.display = 'none';
+  document.getElementById('panelOpenai').style.display = 'none';
   if (_activePanel === tipo) { _activePanel = null; return; }
-  document.getElementById(tipo === 'claude' ? 'panelClaude' : 'panelGemini').style.display = 'block';
+  document.getElementById('panelOpenai').style.display = 'block';
   _activePanel = tipo;
-  setTimeout(() => document.getElementById(tipo === 'claude' ? 'panelClaude' : 'panelGemini').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-}
-
-function switchTab(tipo) {
-  document.getElementById('panelClaude').style.display = tipo === 'claude' ? 'block' : 'none';
-  document.getElementById('panelGemini').style.display = tipo === 'gemini' ? 'block' : 'none';
-  _activePanel = tipo;
+  setTimeout(() => document.getElementById('panelOpenai').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
 function guardarClave(tipo) {
-  const input = document.getElementById(tipo === 'claude' ? 'claudeKeyInput' : 'geminiKeyInput');
-  const key = input.value.trim();
-  if (!key) { alert('Por favor pega tu clave API primero.'); return; }
-  if (tipo === 'claude' && !key.startsWith('sk-ant-')) { alert('La clave de Claude debe empezar por sk-ant-... Revisa que la copiaste completa.'); return; }
-  if (tipo === 'gemini' && key.length < 10) { alert('La clave de Gemini parece incompleta. Asegúrate de copiarla usando el botón "Copy key" en Gemini.'); return; }
-  localStorage.setItem(tipo === 'claude' ? 'kd_claude_key' : 'kd_gemini_key', key);
+  const key = document.getElementById('openaiKeyInput').value.trim();
+  if (!key) { alert('Por favor pega tu clave de ChatGPT primero.'); return; }
+  if (!key.startsWith('sk-')) { alert('La clave de ChatGPT debe empezar por "sk-". Revisa que la copiaste completa desde platform.openai.com'); return; }
+  if (key.length < 20) { alert('La clave parece incompleta. Asegúrate de copiarla completa.'); return; }
+  localStorage.setItem('kd_openai_key', key);
+  localStorage.removeItem('kd_claude_key');
+  localStorage.removeItem('kd_gemini_key');
   mostrarEstadoIA();
-  document.getElementById('panelClaude').style.display = 'none';
-  document.getElementById('panelGemini').style.display = 'none';
+  document.getElementById('panelOpenai').style.display = 'none';
   _activePanel = null;
   actualizarHint();
 }
 
 function desconectarIA() {
+  localStorage.removeItem('kd_openai_key');
   localStorage.removeItem('kd_claude_key');
   localStorage.removeItem('kd_gemini_key');
   mostrarEstadoIA();
@@ -1054,15 +1104,9 @@ function desconectarIA() {
 }
 
 function mostrarEstadoIA() {
-  const claudeKey = localStorage.getItem('kd_claude_key');
-  const geminiKey = localStorage.getItem('kd_gemini_key');
-  const tieneIA = claudeKey || geminiKey;
-  document.getElementById('iaNoKey').style.display = tieneIA ? 'none' : 'block';
-  document.getElementById('iaHasKey').style.display = tieneIA ? 'block' : 'none';
-  if (tieneIA) {
-    const proveedor = geminiKey ? '⚡ Gemini (Google)' : '✦ Claude (Anthropic)';
-    document.getElementById('iaConnectedLabel').textContent = `✅ ${proveedor} conectado`;
-  }
+  const openaiKey = localStorage.getItem('kd_openai_key');
+  document.getElementById('iaNoKey').style.display = openaiKey ? 'none' : 'block';
+  document.getElementById('iaHasKey').style.display = openaiKey ? 'block' : 'none';
 }
 
 // Init IA state on load
@@ -1100,129 +1144,77 @@ Notas:
 
 async function extraerConIA() {
   if (screenshots.length === 0) { alert('Primero sube tus capturas.'); return; }
-  const claudeKey = localStorage.getItem('kd_claude_key');
-  const geminiKey = localStorage.getItem('kd_gemini_key');
-  if (!claudeKey && !geminiKey) { mostrarPanel('gemini'); return; }
+  const openaiKey = localStorage.getItem('kd_openai_key');
+  if (!openaiKey) { mostrarPanel('openai'); return; }
 
   const btn = document.getElementById('btnExtract');
   const status = document.getElementById('extractStatus');
   btn.disabled = true;
-  btn.textContent = '⏳ Analizando capturas...';
-  status.textContent = 'La IA está leyendo tus imágenes. Puede tardar 10-20 segundos...';
+  btn.textContent = '⏳ ChatGPT está leyendo tus capturas...';
+  status.textContent = 'Analizando imágenes con ChatGPT. Puede tardar 10-20 segundos...';
 
-  const intentar = async (intentoNum) => {
-    if (claudeKey) return extraerClaude(claudeKey);
-    return extraerGemini(geminiKey);
-  };
-
-  let metrics;
   try {
-    metrics = await intentar(1);
+    const metrics = await extraerOpenAI(openaiKey);
+    autoRellenarFormulario(metrics);
+    btn.textContent = '✅ ¡Datos extraídos con éxito!';
+    btn.style.background = '#16a34a';
+    btn.disabled = false;
+    status.innerHTML = '<span style="color:#15803d;font-weight:700">Revisa los campos y corrige si algo no está bien. Luego genera el análisis.</span>';
+    setTimeout(() => document.getElementById('formPaso3').scrollIntoView({ behavior: 'smooth' }), 600);
   } catch(err) {
+    btn.disabled = false;
+    btn.textContent = '❌ Error — intentar de nuevo';
+    btn.style.background = '';
     const msg = err.message || '';
-    const esQuota = msg.includes('quota') || msg.includes('limit') || msg.includes('token_count') || msg.includes('RESOURCE_EXHAUSTED');
-    if (esQuota && !localStorage.getItem('kd_claude_key')) {
-      // Auto-reintento tras 35 segundos
-      let segs = 35;
-      const intervalo = setInterval(() => {
-        segs--;
-        status.textContent = `⏱️ Gemini ocupado — reintentando en ${segs}s automáticamente...`;
-        if (segs <= 0) clearInterval(intervalo);
-      }, 1000);
-      await new Promise(r => setTimeout(r, 35000));
-      clearInterval(intervalo);
-      status.textContent = '⏳ Reintentando...';
-      try {
-        metrics = await intentar(2);
-      } catch(err2) {
-        btn.disabled = false;
-        btn.textContent = '❌ Error — intentar de nuevo';
-        btn.style.background = '';
-        status.textContent = '⏱️ Gemini sigue saturado. Espera 2 minutos y vuelve a intentar, o sube solo 1-2 capturas en vez de 4.';
-        console.error('IA extract error (retry):', err2);
-        return;
-      }
-    } else {
-      btn.disabled = false;
-      btn.textContent = '❌ Error — intentar de nuevo';
-      btn.style.background = '';
-      const errMsg = msg;
-      let textoError = 'Ocurrió un error. Intenta de nuevo en unos segundos o escribe los números manualmente.';
-      if (errMsg.includes('API_KEY') || errMsg.includes('key') || errMsg.includes('auth') || errMsg.includes('401')) {
-        textoError = '🔑 La clave de IA no es válida. Ve al panel de IA (arriba), toca "Cambiar / desconectar" y pega una clave correcta.';
-      } else if (errMsg.includes('not found') || errMsg.includes('model')) {
-        textoError = '⚙️ Error con el modelo de IA. Recarga la página e intenta de nuevo.';
-      } else if (errMsg.includes('fetch') || errMsg.includes('network') || errMsg.includes('Failed')) {
-        textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
-      }
-      status.textContent = textoError;
-      console.error('IA extract error:', err);
-      return;
+    let textoError = 'Ocurrió un error. Intenta de nuevo en unos segundos.';
+    if (msg.includes('401') || msg.includes('Incorrect API key') || msg.includes('invalid_api_key')) {
+      textoError = '🔑 La clave de ChatGPT no es válida. Toca "Cambiar clave / desconectar" arriba y pega la clave correcta desde platform.openai.com';
+    } else if (msg.includes('insufficient_quota') || msg.includes('quota') || msg.includes('billing')) {
+      textoError = '💳 Tu cuenta de ChatGPT no tiene créditos. Ve a platform.openai.com → Billing → Add to credit balance, y agrega mínimo $5 USD.';
+    } else if (msg.includes('rate_limit') || msg.includes('429')) {
+      textoError = '⏱️ ChatGPT está ocupado. Espera 30 segundos y vuelve a intentar.';
+    } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('Failed')) {
+      textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
     }
+    status.textContent = textoError;
+    console.error('IA extract error:', err);
   }
-
-  autoRellenarFormulario(metrics);
-  btn.textContent = '✅ ¡Datos extraídos con éxito!';
-  btn.style.background = '#16a34a';
-  btn.disabled = false;
-  status.innerHTML = '<span style="color:#15803d;font-weight:700">Revisa los campos y corrige si algo no está bien. Luego genera el análisis.</span>';
-  setTimeout(() => {
-    document.getElementById('formPaso3').scrollIntoView({ behavior: 'smooth' });
-  }, 600);
 }
 
-async function extraerClaude(apiKey) {
-  const content = [
-    ...screenshots.map(ss => ({
-      type: 'image',
-      source: { type: 'base64', media_type: 'image/jpeg', data: ss.dataURL.split(',')[1] }
-    })),
-    { type: 'text', text: PROMPT_TIKTOK }
-  ];
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 512, messages: [{ role: 'user', content }] })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'Error Claude API'); }
-  const data = await res.json();
-  return parseJSON(data.content[0].text);
-}
-
-function comprimirImagen(dataURL, maxAncho = 600, calidad = 0.5) {
+function comprimirImagen(dataURL) {
+  // 512px ancho, calidad 40% — suficiente para que ChatGPT lea los números sin importar el tamaño original
   return new Promise(resolve => {
     const img = new Image();
     img.onload = () => {
+      const maxAncho = 512;
       const ratio = Math.min(1, maxAncho / img.width);
       const canvas = document.createElement('canvas');
       canvas.width = Math.round(img.width * ratio);
       canvas.height = Math.round(img.height * ratio);
       canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL('image/jpeg', calidad));
+      resolve(canvas.toDataURL('image/jpeg', 0.4));
     };
     img.src = dataURL;
   });
 }
 
-async function extraerGemini(apiKey) {
+async function extraerOpenAI(apiKey) {
   const comprimidas = await Promise.all(screenshots.map(ss => comprimirImagen(ss.dataURL)));
-  const parts = [
-    { text: PROMPT_TIKTOK },
-    ...comprimidas.map(dataURL => ({ inline_data: { mime_type: 'image/jpeg', data: dataURL.split(',')[1] } }))
+  const content = [
+    { type: 'text', text: PROMPT_TIKTOK },
+    ...comprimidas.map(dataURL => ({
+      type: 'image_url',
+      image_url: { url: dataURL, detail: 'low' }
+    }))
   ];
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`, {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts }] })
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    body: JSON.stringify({ model: 'gpt-4o-mini', max_tokens: 512, messages: [{ role: 'user', content }] })
   });
   const data = await res.json();
-  if (data.error) throw new Error(data.error.message);
-  return parseJSON(data.candidates[0].content.parts[0].text);
+  if (data.error) throw new Error(data.error.message || data.error.code || 'Error ChatGPT API');
+  return parseJSON(data.choices[0].message.content);
 }
 
 function parseJSON(text) {

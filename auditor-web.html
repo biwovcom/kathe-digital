@@ -442,7 +442,14 @@ async function startAudit() {
   await new Promise(r => setTimeout(r, 300));
   setStep(3); setMsg('Generando informe...');
   await new Promise(r => setTimeout(r, 200));
-  renderResults(url, html, mlData);
+  try {
+    renderResults(url, html, mlData);
+  } catch(e) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('inputState').style.display = 'block';
+    showError('Ocurrió un error al generar el informe. Intenta con otra URL o usa la opción manual.');
+    console.error('renderResults error:', e);
+  }
 }
 
 function analyzeFromPaste() {
