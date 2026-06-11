@@ -70,7 +70,7 @@ body{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:var(--bg);
 .creativo-name-input::placeholder{color:var(--muted)}
 .creativo-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;padding:4px 8px;border-radius:6px;font-family:inherit;white-space:nowrap;transition:all .15s}
 .creativo-del-btn:hover{background:#fef2f2;color:#dc2626}
-.creativo-images{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.creativo-images{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .img-slot{border-radius:9px;aspect-ratio:9/16;overflow:hidden;position:relative;cursor:pointer}
 .img-slot.empty{border:2px dashed rgba(233,30,140,.25);background:rgba(233,30,140,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .2s}
 .img-slot.empty:hover{border-color:var(--accent);background:rgba(233,30,140,.07)}
@@ -364,7 +364,6 @@ footer a{color:var(--accent);text-decoration:none}
         📌 <strong>Por cada video/creativo</strong> sube hasta 4 capturas en orden: <strong>Resumen → Espectadores → Tráfico → Participación</strong>.<br>
         Así la IA sabe exactamente qué pantallazos son de cuál video sin mezclarlos.
       </p>
-      <input type="file" id="imgInput" accept="image/*" multiple style="display:none">
       <div class="creativos-wrap" id="creativosWrap"></div>
       <button class="add-creativo-btn" id="addCreativoBtn" onclick="agregarCreativo()">➕ Agregar otro video / creativo</button>
 
@@ -535,7 +534,7 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="val" id="rBrand">Tu marca</div>
     </div>
     <div class="bar-btns">
-      <button class="bar-btn dl" onclick="descargarReporte()">⬇ Descargar Reporte</button>
+      <button class="bar-btn dl" onclick="descargarInforme()">⬇ Descargar Informe .doc</button>
       <button class="bar-btn" onclick="volverForm()">← Nuevo análisis</button>
     </div>
   </div>
@@ -646,47 +645,31 @@ footer a{color:var(--accent);text-decoration:none}
 // ─── Creative-grouped screenshot upload ─────────────────────────────────────
 let creativos = [];
 let _nextCreativoId = 1;
-let _currentCreativoId = 1;
-const SLOT_LABELS_TT = ['Resumen', 'Espectadores', 'Tráfico', 'Participación'];
+const MAX_SLOTS = 6;
+const MAX_GRUPOS = 8;
+const SLOT_LABELS_TT = ['Resumen','Espectadores','Tráfico','Participación','Nuevos Seg.','Otra stat'];
 
 function getAllScreenshots() { return creativos.flatMap(c => c.imagenes); }
 
-function initCreativos() {
-  creativos = []; _nextCreativoId = 1;
-  agregarCreativo();
-}
+function initCreativos() { creativos = []; _nextCreativoId = 1; agregarCreativo(); }
 
 function agregarCreativo() {
-  if (creativos.length >= 4) return;
+  if (creativos.length >= MAX_GRUPOS) return;
   const id = _nextCreativoId++;
   creativos.push({ id, nombre: '', imagenes: [] });
-  renderCreativos();
-  actualizarHint();
+  renderCreativos(); actualizarHint();
 }
 
 function eliminarCreativo(id) {
   if (creativos.length <= 1) return;
   creativos = creativos.filter(c => c.id !== id);
-  renderCreativos();
-  actualizarHint();
+  renderCreativos(); actualizarHint();
 }
-
-function abrirSelectorImagen(creativoId) {
-  const c = creativos.find(x => x.id === creativoId);
-  if (!c || c.imagenes.length >= 4) return;
-  _currentCreativoId = creativoId;
-  document.getElementById('imgInput').value = '';
-  document.getElementById('imgInput').click();
-}
-
-document.getElementById('imgInput').addEventListener('change', e => {
-  addFilesToCreativo(_currentCreativoId, e.target.files);
-});
 
 function addFilesToCreativo(creativoId, files) {
   const c = creativos.find(x => x.id === creativoId);
   if (!c) return;
-  const allowed = 4 - c.imagenes.length;
+  const allowed = MAX_SLOTS - c.imagenes.length;
   if (allowed <= 0) return;
   Array.from(files).slice(0, allowed).forEach(file => {
     if (!file.type.startsWith('image/')) return;
@@ -698,32 +681,35 @@ function addFilesToCreativo(creativoId, files) {
 
 function renderCreativos() {
   const wrap = document.getElementById('creativosWrap');
-  wrap.innerHTML = creativos.map((c, ci) => `
-    <div class="creativo-card">
+  wrap.innerHTML = creativos.map((c, ci) => {
+    const flat = getAllScreenshots();
+    const slots = Array.from({length: MAX_SLOTS}, (_, si) => {
+      const img = c.imagenes[si];
+      if (img) return `<div class="img-slot filled" onclick="abrirImgModal(${flat.indexOf(img)})">
+        <img src="${img.dataURL}" alt="${img.name}">
+        <button class="ss-del" onclick="event.stopPropagation();borrarImagenCreativo(${c.id},${si})">✕</button>
+        <div class="ss-lbl">${SLOT_LABELS_TT[si]||'+'}</div>
+      </div>`;
+      return `<div class="img-slot empty" onclick="document.getElementById('cc-img-${c.id}').click()">
+        <span class="slot-ico">📸</span>
+        <span class="slot-lbl">${SLOT_LABELS_TT[si]||'Captura '+(si+1)}</span>
+      </div>`;
+    }).join('');
+    return `<div class="creativo-card">
       <div class="creativo-card-header">
         <span class="creativo-num">${ci + 1}</span>
         <input class="creativo-name-input" type="text" placeholder="Nombre del video (ej. Tutorial Mayo, Promo Producto...)"
-          value="${c.nombre}"
+          value="${c.nombre.replace(/"/g,'&quot;')}"
           oninput="creativos.find(x=>x.id===${c.id}).nombre=this.value">
         ${creativos.length > 1 ? `<button class="creativo-del-btn" onclick="eliminarCreativo(${c.id})">✕ Eliminar</button>` : ''}
       </div>
-      <div class="creativo-images">
-        ${[0,1,2,3].map(si => {
-          const img = c.imagenes[si];
-          const flat = getAllScreenshots();
-          if (img) return `<div class="img-slot filled" onclick="abrirImgModal(${flat.indexOf(img)})">
-            <img src="${img.dataURL}" alt="${img.name}">
-            <button class="ss-del" onclick="event.stopPropagation();borrarImagenCreativo(${c.id},${si})">✕</button>
-            <div class="ss-lbl">${SLOT_LABELS_TT[si]||'Captura '+(si+1)}</div>
-          </div>`;
-          return `<div class="img-slot empty" onclick="abrirSelectorImagen(${c.id})">
-            <span class="slot-ico">📸</span>
-            <span class="slot-lbl">${SLOT_LABELS_TT[si]||'Captura '+(si+1)}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`).join('');
-  document.getElementById('addCreativoBtn').disabled = creativos.length >= 4;
+      <input type="file" id="cc-img-${c.id}" accept="image/*" multiple style="display:none"
+        onchange="addFilesToCreativo(${c.id},this.files);this.value=''">
+      <div class="creativo-images">${slots}</div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:6px;text-align:center">${c.imagenes.length}/${MAX_SLOTS} capturas · Toca un slot vacío para subir</div>
+    </div>`;
+  }).join('');
+  document.getElementById('addCreativoBtn').disabled = creativos.length >= MAX_GRUPOS;
   const stab2 = document.getElementById('stab2');
   if (stab2) stab2.classList.toggle('done', getAllScreenshots().length > 0);
 }
@@ -809,6 +795,12 @@ function analizarTikTok() {
   let funnelStage = 'awareness';
   if (followers >= 3000 && engRate >= 3 && viewRate >= 50) funnelStage = 'consideracion';
   if (engRate >= 5 && shareRate >= 1 && followers >= 5000) funnelStage = 'conversion';
+
+  _lastAnalysis = { brand, niche, goal, followers, newFoll, avgViews, likes, comments, shares,
+    saves: +document.getElementById('f_saves')?.value||0,
+    completion, avgWatchTime, freq, genderFem, topAge, topLocation,
+    engRate, shareRate, saveRate, viewRate, growthRate,
+    catCompletion, catEngagement, catGrowth, catContent, score, funnelStage, fecha: new Date() };
 
   document.getElementById('rBrand').textContent = brand;
   document.getElementById('formSection').style.display = 'none';
@@ -1345,6 +1337,7 @@ function mostrarEstadoIA() {
 // Init IA state on load
 mostrarEstadoIA();
 initCreativos();
+let _lastAnalysis = null;
 
 // ─── Extract with AI ──────────────────────────────────────────────────────────
 const PROMPT_TIKTOK = `Analiza estas capturas de pantalla de TikTok Analytics. Las imágenes están organizadas por video/creativo (cada grupo marcado con === NOMBRE ===). Extrae los números del video principal o promedia si hay varios.
@@ -1494,6 +1487,92 @@ function autoRellenarFormulario(m) {
   document.querySelectorAll('#formPaso3 input, #formPaso3 select').forEach(el => {
     if (el.value) { el.style.borderColor = '#9333ea'; el.style.background = 'rgba(147,51,234,.04)'; }
   });
+}
+
+// ─── Download Report ──────────────────────────────────────────────────────────
+function descargarInforme() {
+  const d = _lastAnalysis;
+  if (!d) { alert('Genera el análisis primero.'); return; }
+  const fmt = n => isNaN(n)?'—':(+n>=1000?((+n)/1000).toFixed(1)+'K':(+n).toFixed(1));
+  const pct = n => isNaN(n)?'—':(+n).toFixed(1)+'%';
+  const fecha = d.fecha.toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
+  const col = d.score>=70?'#15803d':d.score>=45?'#ea580c':'#dc2626';
+  const funnelLabels = {awareness:'Reconocimiento',consideracion:'Consideración',conversion:'Conversión'};
+  const goalLabels = {ventas:'Ventas',seguidores:'Crecer seguidores',reconocimiento:'Reconocimiento',engagement:'Engagement'};
+
+  const metricsRows = [
+    ['Engagement Rate', pct(d.engRate), d.engRate>=8?'Excelente':d.engRate>=3?'Aceptable':'Bajo'],
+    ['Tasa de Completación', pct(d.completion), d.completion>=70?'Excelente':d.completion>=40?'Aceptable':'Bajo'],
+    ['Tasa de Guardados', pct(d.saveRate), d.saveRate>=2?'Excelente':d.saveRate>=1?'Aceptable':'Bajo'],
+    ['Tasa de Compartidos', pct(d.shareRate), d.shareRate>=2?'Excelente':d.shareRate>=0.5?'Aceptable':'Bajo'],
+    ['Crecimiento seguidores', pct(d.growthRate), d.growthRate>=10?'Excelente':d.growthRate>=3?'Aceptable':'Bajo'],
+    ['Promedio de vistas', fmt(d.avgViews), ''],
+    ['Seguidores totales', fmt(d.followers), ''],
+    ['Frecuencia semanal', d.freq+' videos/semana', ''],
+  ].map(([label, val, status]) => `<tr><td>${label}</td><td style="text-align:center;font-weight:700">${val}</td><td style="text-align:center;color:${status==='Excelente'?'#15803d':status==='Bajo'?'#dc2626':'#ca8a04'}">${status}</td></tr>`).join('');
+
+  const catRows = [
+    ['Reproducción (max 30)', d.catCompletion, 30],
+    ['Engagement (max 25)', d.catEngagement, 25],
+    ['Crecimiento (max 25)', d.catGrowth, 25],
+    ['Contenido (max 20)', d.catContent, 20],
+  ].map(([label, val, max]) => {
+    const pctBar = Math.round((val||0)/max*100);
+    return `<tr><td>${label}</td><td style="text-align:center;font-weight:700">${val||0}/${max}</td><td><div style="background:#f0ccea;border-radius:4px;height:10px;width:100px"><div style="background:${(val||0)/max>=.75?'#15803d':(val||0)/max>=.5?'#ea580c':'#dc2626'};height:100%;width:${pctBar}%;border-radius:4px"></div></div></td></tr>`;
+  }).join('');
+
+  const allSS = getAllScreenshots();
+  const ssHtml = allSS.length > 0 ? `<h2>📸 Capturas de Pantalla</h2><div style="display:flex;flex-wrap:wrap;gap:8px">${allSS.map(ss=>`<img src="${ss.dataURL}" style="width:120px;border-radius:6px;border:1px solid #f0ccea">`).join('')}</div>` : '';
+
+  const html = `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8"><meta name=ProgId content=Word.Document>
+<style>
+  body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1a0a2e;margin:2cm 2.5cm;line-height:1.5}
+  h1{font-size:22pt;color:#e91e8c;text-align:center;margin-bottom:2pt}
+  h2{font-size:13pt;color:#9333ea;border-bottom:1.5pt solid #f0ccea;padding-bottom:4pt;margin-top:20pt}
+  .kd-header{text-align:center;background:#fdf2fc;border:1pt solid #f0ccea;padding:14pt;margin-bottom:18pt}
+  table{width:100%;border-collapse:collapse;margin-bottom:12pt;font-size:10pt}
+  th{background:#9333ea;color:#fff;padding:6pt 8pt;text-align:left}
+  td{padding:5pt 8pt;border-bottom:0.5pt solid #f0ccea}
+  tr:nth-child(even) td{background:#fdf2fc}
+  .summ{background:rgba(147,51,234,.05);border-left:3pt solid #9333ea;padding:10pt 14pt;margin:10pt 0;font-size:10pt}
+  .footer{margin-top:24pt;text-align:center;font-size:8pt;color:#a07ab5;border-top:0.5pt solid #f0ccea;padding-top:8pt}
+</style></head>
+<body>
+<div class="kd-header">
+  <h1>✦ Kathe Digital</h1>
+  <div style="font-size:12pt;font-weight:700;color:#9333ea">Informe de Análisis — TikTok</div>
+  <div style="font-size:9pt;color:#a07ab5">Cuenta: <strong>${d.brand}</strong> &nbsp;|&nbsp; Generado el ${fecha}</div>
+</div>
+<div style="text-align:center;margin-bottom:18pt">
+  <div style="display:inline-block;background:#fff;border:2pt solid ${col};border-radius:50%;width:90pt;height:90pt;text-align:center;vertical-align:middle;padding:15pt">
+    <span style="font-size:28pt;font-weight:700;color:${col};display:block">${d.score}</span>
+    <span style="font-size:8pt;color:#a07ab5;text-transform:uppercase">Puntuación</span>
+  </div>
+  <div style="font-size:10pt;color:#5a3a6e;margin-top:8pt">${d.score>=80?'Canal viral':d.score>=65?'Buen desempeño':d.score>=45?'En crecimiento':'Requiere trabajo'}</div>
+  <div style="font-size:8pt;color:#a07ab5;margin-top:4pt">Nicho: ${d.niche} &nbsp;|&nbsp; Objetivo: ${goalLabels[d.goal]||d.goal} &nbsp;|&nbsp; Etapa: ${funnelLabels[d.funnelStage]||d.funnelStage}</div>
+</div>
+<div class="summ">
+  <strong>Resumen ejecutivo:</strong> La cuenta <em>${d.brand}</em> obtiene <strong>${d.score}/100</strong> puntos.
+  Tasa de completación: <strong>${pct(d.completion)}</strong>${(d.completion||0)>=40?' (buena retención)':' (mejorar hooks)'}.
+  Engagement rate: <strong>${pct(d.engRate)}</strong>. Crecimiento: <strong>${pct(d.growthRate)}</strong>.
+  Etapa del embudo: <strong>${funnelLabels[d.funnelStage]||d.funnelStage}</strong>. Publica <strong>${d.freq} videos/semana</strong>.
+</div>
+<h2>📊 Métricas Principales</h2>
+<table><thead><tr><th>Métrica</th><th>Valor</th><th>Estado</th></tr></thead><tbody>${metricsRows}</tbody></table>
+<h2>🏆 Puntuación por Categoría</h2>
+<table><thead><tr><th>Categoría</th><th>Puntos</th><th>Barra</th></tr></thead><tbody>${catRows}</tbody></table>
+${ssHtml}
+<div class="footer">Informe generado con <strong>Kathe Digital</strong> · ${fecha}</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `informe-tiktok-${d.brand.replace(/[^a-z0-9]/gi,'-').toLowerCase()}-${d.fecha.toISOString().split('T')[0]}.doc`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
 }
 </script>
 </body>

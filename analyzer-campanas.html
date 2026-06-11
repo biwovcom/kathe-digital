@@ -179,13 +179,38 @@ tr:hover td { background: rgba(233,30,140,.02); }
     <div id="ccHasKey" style="display:none;font-size:.82rem;color:#15803d;font-weight:700">✅ Claude conectado — listo para verificar</div>
   </div>
 
-  <!-- Upload creative -->
-  <div class="cc-upload-area" id="ccDrop" onclick="document.getElementById('ccInput').click()">
-    <div style="font-size:1.8rem;margin-bottom:8px">🖼️</div>
-    <div style="font-weight:800;font-size:.95rem;margin-bottom:4px">Sube capturas de tus anuncios</div>
-    <div style="font-size:.8rem;color:var(--muted)">Imagen del creativo, copy del anuncio, pantallazos del Administrador de Anuncios — hasta 4 imágenes</div>
+  <!-- Upload tabs: images or video -->
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <button id="ccTabImg" onclick="ccSwitchTab('img')" style="flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--purple);background:linear-gradient(135deg,var(--purple),#2563eb);color:#fff;font-weight:800;font-size:.84rem;cursor:pointer;font-family:inherit">🖼️ Imágenes / Capturas</button>
+    <button id="ccTabVid" onclick="ccSwitchTab('vid')" style="flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--muted);font-weight:800;font-size:.84rem;cursor:pointer;font-family:inherit">🎬 Video (extrae frames)</button>
   </div>
-  <input type="file" id="ccInput" accept="image/*" multiple style="display:none" onchange="ccAddFiles(this.files)">
+
+  <!-- Image upload -->
+  <div id="ccPanelImg">
+    <div class="cc-upload-area" onclick="document.getElementById('ccInput').click()">
+      <div style="font-size:1.8rem;margin-bottom:8px">🖼️</div>
+      <div style="font-weight:800;font-size:.95rem;margin-bottom:4px">Sube capturas de tus anuncios</div>
+      <div style="font-size:.8rem;color:var(--muted)">Imagen del creativo, copy del anuncio, pantallazos del Administrador de Anuncios — hasta 4 imágenes</div>
+    </div>
+    <input type="file" id="ccInput" accept="image/*" multiple style="display:none" onchange="ccAddFiles(this.files)">
+  </div>
+
+  <!-- Video upload -->
+  <div id="ccPanelVid" style="display:none">
+    <div class="cc-upload-area" onclick="document.getElementById('ccVideoInput').click()">
+      <div style="font-size:1.8rem;margin-bottom:8px">🎬</div>
+      <div style="font-weight:800;font-size:.95rem;margin-bottom:4px">Sube el video de tu anuncio</div>
+      <div style="font-size:.8rem;color:var(--muted)">Claude extrae 6 fotogramas automáticamente y analiza el contenido visual · MP4, MOV, AVI — hasta 200MB</div>
+    </div>
+    <input type="file" id="ccVideoInput" accept="video/*" style="display:none" onchange="ccCargarVideo(this.files[0])">
+    <div id="ccVideoStatus" style="font-size:.82rem;color:var(--muted);margin-top:8px;text-align:center"></div>
+    <div id="ccVideoPreview" style="display:none;margin-top:10px">
+      <video id="ccVideoEl" muted style="max-width:100%;border-radius:10px;max-height:180px;display:block;margin:0 auto"></video>
+      <div style="font-size:.78rem;color:var(--muted);text-align:center;margin-top:4px">Vista previa del video subido</div>
+      <button onclick="ccQuitarVideo()" style="display:block;margin:8px auto 0;background:none;border:1px solid var(--border);border-radius:8px;padding:5px 14px;font-size:.78rem;cursor:pointer;font-family:inherit;color:var(--muted)">✕ Quitar video</button>
+    </div>
+  </div>
+
   <div class="cc-thumbs" id="ccThumbs"></div>
 
   <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
@@ -867,6 +892,136 @@ function ccRenderResults(data) {
 
   results.style.display = 'block';
   results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ─── Video tab + frame extraction ────────────────────────────────────────────
+let _ccVideoFile = null;
+let _ccActiveTab = 'img';
+
+function ccSwitchTab(tab) {
+  _ccActiveTab = tab;
+  document.getElementById('ccPanelImg').style.display = tab === 'img' ? 'block' : 'none';
+  document.getElementById('ccPanelVid').style.display = tab === 'vid' ? 'block' : 'none';
+  const imgBtn = document.getElementById('ccTabImg');
+  const vidBtn = document.getElementById('ccTabVid');
+  imgBtn.style.background = tab === 'img' ? 'linear-gradient(135deg,var(--purple),#2563eb)' : '#fff';
+  imgBtn.style.color = tab === 'img' ? '#fff' : 'var(--muted)';
+  imgBtn.style.borderColor = tab === 'img' ? 'var(--purple)' : 'var(--border)';
+  vidBtn.style.background = tab === 'vid' ? 'linear-gradient(135deg,#dc2626,#ea580c)' : '#fff';
+  vidBtn.style.color = tab === 'vid' ? '#fff' : 'var(--muted)';
+  vidBtn.style.borderColor = tab === 'vid' ? '#dc2626' : 'var(--border)';
+}
+
+function ccCargarVideo(file) {
+  if (!file) return;
+  _ccVideoFile = file;
+  const preview = document.getElementById('ccVideoPreview');
+  const videoEl = document.getElementById('ccVideoEl');
+  const status = document.getElementById('ccVideoStatus');
+  videoEl.src = URL.createObjectURL(file);
+  preview.style.display = 'block';
+  status.textContent = `✅ Video cargado: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB). Toca "Verificar" para extraer frames y analizar.`;
+  document.getElementById('ccBtn').style.display = 'inline-block';
+  document.getElementById('ccInput').value = '';
+}
+
+function ccQuitarVideo() {
+  _ccVideoFile = null;
+  const videoEl = document.getElementById('ccVideoEl');
+  URL.revokeObjectURL(videoEl.src);
+  videoEl.src = '';
+  document.getElementById('ccVideoPreview').style.display = 'none';
+  document.getElementById('ccVideoStatus').textContent = '';
+  document.getElementById('ccVideoInput').value = '';
+  if (ccFiles.length === 0) document.getElementById('ccBtn').style.display = 'none';
+}
+
+async function extraerFramesVideo(videoFile, numFrames = 6) {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    const url = URL.createObjectURL(videoFile);
+    video.src = url; video.muted = true; video.preload = 'metadata';
+    video.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo cargar el video')); };
+    video.addEventListener('loadedmetadata', async () => {
+      const dur = video.duration;
+      if (!dur || !isFinite(dur)) { URL.revokeObjectURL(url); reject(new Error('Duración del video no detectada')); return; }
+      const times = [0.05, 0.18, 0.35, 0.52, 0.70, 0.90].map(p => p * dur);
+      const frames = [];
+      const captureAt = t => new Promise(res => {
+        video.currentTime = t;
+        video.addEventListener('seeked', function h() {
+          video.removeEventListener('seeked', h);
+          const maxW = 640;
+          const w = Math.min(video.videoWidth || 640, maxW);
+          const h2 = Math.round(w * (video.videoHeight || 360) / (video.videoWidth || 640));
+          const c = document.createElement('canvas'); c.width = w; c.height = h2;
+          c.getContext('2d').drawImage(video, 0, 0, w, h2);
+          res(c.toDataURL('image/jpeg', 0.6));
+        }, { once: true });
+      });
+      for (const t of times) { try { frames.push(await captureAt(t)); } catch(e) {} }
+      URL.revokeObjectURL(url);
+      resolve(frames);
+    });
+  });
+}
+
+// Override verificarCreativo to handle video tab
+const _origVerificar = verificarCreativo;
+async function verificarCreativo() {
+  if (_ccActiveTab === 'vid' && _ccVideoFile) {
+    await verificarVideo();
+  } else {
+    await _origVerificar();
+  }
+}
+
+async function verificarVideo() {
+  const apiKey = localStorage.getItem('kd_claude_key');
+  if (!apiKey) { alert('Conecta tu clave Claude primero'); return; }
+  if (!_ccVideoFile) { alert('Sube un video primero'); return; }
+
+  const btn = document.getElementById('ccBtn');
+  const status = document.getElementById('ccStatus');
+  const results = document.getElementById('ccResults');
+  btn.disabled = true; btn.textContent = '⏳ Extrayendo frames del video…';
+  status.textContent = 'Analizando el video fotograma a fotograma con Claude…';
+  results.style.display = 'none';
+
+  try {
+    status.textContent = 'Paso 1/2 — Extrayendo 6 fotogramas del video…';
+    const frames = await extraerFramesVideo(_ccVideoFile);
+    if (frames.length === 0) throw new Error('No se pudo extraer frames del video');
+
+    status.textContent = `Paso 2/2 — Enviando ${frames.length} frames a Claude para análisis…`;
+    const imageContent = frames.map(d => ({
+      type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] }
+    }));
+    const videoPrompt = PROMPT_META + `\n\nIMPORTANTE: Estas imágenes son FOTOGRAMAS EXTRAÍDOS DE UN VIDEO publicitario (en orden cronológico). Analiza el contenido visual del video: qué muestra, qué texto aparece, qué producto/servicio se promociona, y si el contenido viola alguna política de Meta Ads. También evalúa el creativo como video: hook visual, ritmo, CTA visible.`;
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-haiku-4-5', max_tokens:1600,
+        messages:[{ role:'user', content:[...imageContent,{type:'text',text:videoPrompt}] }] })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    const match = data.content[0].text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Respuesta inválida de Claude');
+    const parsed = JSON.parse(match[0]);
+    // Show frames as thumbnails
+    document.getElementById('ccThumbs').innerHTML = frames.map((f,i) => `
+      <div class="cc-thumb"><img src="${f}" alt="Frame ${i+1}">
+        <div style="position:absolute;bottom:3px;left:3px;background:rgba(0,0,0,.7);color:#fff;font-size:.55rem;padding:2px 5px;border-radius:4px">Frame ${i+1}</div>
+      </div>`).join('');
+    ccRenderResults(parsed);
+    status.textContent = '✅ Video analizado — ' + frames.length + ' frames procesados';
+  } catch(e) {
+    status.textContent = '❌ Error: ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = '🔍 Verificar políticas Meta';
+  }
 }
 
 ccInit();

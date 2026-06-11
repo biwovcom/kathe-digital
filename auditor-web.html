@@ -215,6 +215,23 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
 .footer { text-align: center; padding: 32px 24px; color: var(--muted); font-size: .8rem; border-top: 1px solid var(--border); margin-top: 24px; }
 .footer a { color: var(--accent); text-decoration: none; }
 
+/* LP GOAL BUTTONS */
+.lp-goal-btn{padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;color:var(--muted);transition:all .2s;text-align:center;line-height:1.4}
+.lp-goal-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(233,30,140,.04)}
+.lp-goal-btn.active{background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;border-color:transparent}
+
+/* FUNNEL SECTION */
+.funnel-wrap{display:flex;flex-direction:column;gap:0}
+.funnel-step{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:0;position:relative}
+.funnel-step:first-child{border-radius:14px 14px 0 0}
+.funnel-step:last-child{border-radius:0 0 14px 14px}
+.funnel-step+.funnel-step{border-top:none}
+.funnel-step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;font-weight:900;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.funnel-step-body{flex:1}
+.funnel-step-label{font-weight:800;font-size:.88rem;margin-bottom:3px}
+.funnel-step-why{font-size:.78rem;color:var(--muted);line-height:1.5}
+.funnel-arrow{text-align:center;color:var(--muted);font-size:.9rem;padding:2px 0;background:rgba(233,30,140,.04);border-left:1px solid var(--border);border-right:1px solid var(--border);margin:0}
+
 @media (max-width: 640px) {
   .input-title { font-size: 1.6rem; }
   .url-row { flex-direction: column; }
@@ -249,6 +266,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
         <button class="type-tab lp" id="btnLanding" onclick="selType('landing',this)">🎯 Landing Page</button>
       </div>
       <div class="type-desc-box" id="typeDescBox">Análisis completo: SEO, técnico, conversión y píxeles. Para sitios con múltiples páginas, tienda online, portafolio o blog.</div>
+
+      <!-- LP Objective (shown only for landing page type) -->
+      <div id="lpGoalArea" style="display:none;margin-bottom:16px">
+        <div class="url-label" style="margin-bottom:8px">¿Cuál es el objetivo de la landing page?</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px" id="lpGoalGrid">
+          <button class="lp-goal-btn active" data-goal="ventas" onclick="selGoal('ventas',this)">🛍️ Vender un producto/servicio</button>
+          <button class="lp-goal-btn" data-goal="leads" onclick="selGoal('leads',this)">📋 Capturar leads / contactos</button>
+          <button class="lp-goal-btn" data-goal="citas" onclick="selGoal('citas',this)">📅 Agendar citas / demos</button>
+          <button class="lp-goal-btn" data-goal="registro" onclick="selGoal('registro',this)">✍️ Registro a evento / curso</button>
+          <button class="lp-goal-btn" data-goal="descarga" onclick="selGoal('descarga',this)">⬇️ Descarga de recurso gratuito</button>
+        </div>
+        <div id="lpGoalDesc" style="font-size:.78rem;color:var(--muted);margin-top:8px;background:rgba(233,30,140,.05);border:1px solid rgba(233,30,140,.15);border-radius:8px;padding:8px 12px;line-height:1.5"></div>
+      </div>
 
       <div class="url-label">URL del sitio a auditar</div>
       <div class="url-row">
@@ -594,6 +624,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
       <div id="lpChecksEl"></div>
     </div>
 
+    <div class="section-block" id="funnelSection" style="display:none">
+      <div class="sec-title">🔀 Estructura de Embudo Sugerida</div>
+      <p id="funnelIntro" style="font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.5"></p>
+      <div id="funnelEl"></div>
+    </div>
+
     <div class="section-block">
       <div class="sec-title">Recomendaciones Prioritarias</div>
       <div class="recs" id="recsEl"></div>
@@ -766,10 +802,19 @@ async function startAudit() {
   try {
     renderResults(url, html, mlData);
   } catch(e) {
-    document.getElementById('loadingState').style.display = 'none';
-    document.getElementById('inputState').style.display = 'block';
-    showError('Ocurrió un error al generar el informe. Intenta con otra URL o usa la opción manual.');
     console.error('renderResults error:', e);
+    // If we have at least some data, try to show partial results
+    if (html || mlData) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('inputState').style.display = 'block';
+      showError(`El informe se generó parcialmente. Puede que el sitio use JavaScript avanzado que dificulta el análisis automático. Prueba pegando el HTML manualmente (Ctrl+U → Ctrl+A → Ctrl+C → pegar abajo). Error técnico: ${e.message}`);
+      document.getElementById('pasteSection').style.display = 'block';
+    } else {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('inputState').style.display = 'block';
+      showError('No se pudo generar el informe para este sitio. El sitio puede estar bloqueando el análisis automático. Usa la opción manual: abre el sitio → Ctrl+U → Ctrl+A → Ctrl+C → pega abajo.');
+      document.getElementById('pasteSection').style.display = 'block';
+    }
   }
 }
 
@@ -789,8 +834,15 @@ function renderResults(url, html, mlData) {
   document.getElementById('loadingState').style.display = 'none';
 
   const parser = new DOMParser();
-  const doc = html ? parser.parseFromString(html, 'text/html') : null;
-  const results = runChecks(doc, url, html || '', mlData);
+  let doc = null;
+  try { doc = html ? parser.parseFromString(html, 'text/html') : null; } catch(e) { doc = null; }
+  let results;
+  try {
+    results = runChecks(doc, url, html || '', mlData);
+  } catch(e) {
+    console.warn('runChecks partial error, using fallback:', e);
+    results = { totalScore: 0, categories: [], recs: [{ level:'normal', icon:'⚠️', title:'Análisis parcial', desc:'No se pudieron extraer todas las métricas del sitio. Usa la opción de pegar HTML manualmente para un análisis completo.' }] };
+  }
 
   document.getElementById('resultUrl').textContent = url;
 
@@ -940,6 +992,25 @@ function renderResults(url, html, mlData) {
       </div>`).join('')}`;
   } else {
     document.getElementById('lpSection').style.display = 'none';
+  }
+
+  // ── FUNNEL SECTION (solo si tipo = landing) ────────────────────────────────
+  if (currentType === 'landing') {
+    const goalData = LP_GOAL_DATA[currentLpGoal] || LP_GOAL_DATA['ventas'];
+    const f = goalData.funnel;
+    document.getElementById('funnelSection').style.display = 'block';
+    document.getElementById('funnelIntro').textContent = `Basado en tu objetivo (${currentLpGoal}), te recomendamos la estructura "${f.name}". ${f.why}`;
+    document.getElementById('funnelEl').innerHTML = f.steps.map((s, i) => `
+      ${i > 0 ? '<div class="funnel-arrow">↓</div>' : ''}
+      <div class="funnel-step">
+        <div class="funnel-step-num">${i + 1}</div>
+        <div class="funnel-step-body">
+          <div class="funnel-step-label">${s.label}</div>
+          <div class="funnel-step-why">💡 ${s.why}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    document.getElementById('funnelSection').style.display = 'none';
   }
 
   document.getElementById('resultsState').style.display = 'block';
@@ -1185,6 +1256,93 @@ function downloadReport() {
 
 // ── Tipo de análisis ──────────────────────────────────────────────────────
 let currentType = 'sitio';
+let currentLpGoal = 'ventas';
+
+const LP_GOAL_DATA = {
+  ventas: {
+    desc: 'Evalúa si la página es persuasiva y tiene los elementos para cerrar ventas: propuesta de valor, beneficios, prueba social, precio, garantía y CTA directo.',
+    funnel: {
+      name: 'AIDA + Cierre (enfocado en ventas directas)',
+      why: 'Para vender directamente, el visitante debe pasar de "no sé qué es esto" a "lo quiero ahora". AIDA captura la atención, genera deseo y empuja al cierre.',
+      steps: [
+        { label: '🪝 Hook / Atención — Headline con la transformación', why: 'Tienes 3 segundos. El título debe decirle AL CLIENTE qué gana él, no qué ofreces tú. Ej: "Pierde 10 kg en 8 semanas sin dietas extremas".' },
+        { label: '😮 Problema — Agita el dolor del cliente', why: 'El cliente solo compra cuando siente que su problema es urgente. Describe el dolor con sus propias palabras para que sienta "esto es para mí".' },
+        { label: '✨ Solución — Presenta tu oferta como la respuesta', why: 'Muestra cómo tu producto/servicio resuelve exactamente ese problema. Usa bullets de beneficios (no características técnicas).' },
+        { label: '🏆 Prueba Social — Testimonios, resultados, clientes', why: 'El cerebro compra lo que otros ya compraron. 3-5 testimonios con foto y resultado real eliminan el miedo al riesgo.' },
+        { label: '💰 Oferta + Precio + Garantía', why: 'El precio solo duele si no hay valor percibido. Muestra qué incluye, tachado del precio normal si aplica, y garantía para eliminar el riesgo.' },
+        { label: '🚀 CTA único y urgente', why: 'Un solo botón de acción con texto orientado al beneficio ("Quiero mi consulta gratis") convierte más que múltiples opciones.' }
+      ]
+    }
+  },
+  leads: {
+    desc: 'Evalúa si la página está optimizada para capturar datos de contacto: formulario visible, incentivo claro (lead magnet), fricción mínima y confianza.',
+    funnel: {
+      name: 'Hook → Valor → Formulario (captura de leads)',
+      why: 'Para capturar leads, la fricción debe ser mínima y el intercambio de valor debe quedar claro: "dame tu email y yo te doy X".',
+      steps: [
+        { label: '🪝 Hook — Promesa del lead magnet en el título', why: 'El título debe decir exactamente qué recibirá el visitante: "Descarga gratis: Guía para triplicar tus ventas en Instagram".' },
+        { label: '📋 Bullets de lo que reciben', why: '3-5 puntos concretos de lo que obtienen al registrarse reducen la duda y aumentan la percepción de valor del recurso gratuito.' },
+        { label: '👤 Quién eres tú (autoridad breve)', why: 'Una línea de credibilidad ("He ayudado a +200 negocios") justifica por qué deben confiar en tu guía/recurso.' },
+        { label: '📝 Formulario corto (máx. 2-3 campos)', why: 'Cada campo adicional reduce la conversión ~20%. Pide solo lo esencial: nombre + email (o solo email).' },
+        { label: '🔒 Micro-compromiso de privacidad', why: '"No spam. Puedes cancelar cuando quieras" justo debajo del botón elimina la fricción de dar el email.' },
+        { label: '🎁 Entrega inmediata + siguiente paso', why: 'Confirma que recibirán el recurso inmediatamente y lleva a la página de gracias con el siguiente paso (agendar, comunidad, etc.).' }
+      ]
+    }
+  },
+  citas: {
+    desc: 'Evalúa si la página facilita agendar: propuesta clara, calendar/formulario visible, qué esperar de la cita, y eliminación del miedo a "venderme algo".',
+    funnel: {
+      name: 'Credibilidad → Valor de la cita → Booking (agendar)',
+      why: 'Para que alguien agende, debe responder "¿vale la pena mi tiempo?". El embudo construye confianza antes de pedir el clic en el calendar.',
+      steps: [
+        { label: '🪝 Hook — Qué gana en la cita (no "agenda tu cita")', why: 'El botón "Agenda una llamada" no convierte. "Descubre en 30 min cómo X puede aumentar tus ventas" le da un motivo concreto para agendar.' },
+        { label: '🎯 Para quién es esta cita (calificar leads)', why: 'Especificar "ideal si tienes un negocio con equipo de ventas" filtra prospectos no calificados y hace que los buenos se sientan identificados.' },
+        { label: '📋 Qué pasa en la cita (step by step)', why: 'El miedo a "me van a intentar vender" desaparece cuando describes los 3 pasos de la llamada. Transparencia = confianza.' },
+        { label: '🏆 Prueba social específica de la cita', why: 'Testimonios de personas que agendaron y qué lograron ("Después de la consulta gratuita, implementamos X y triplicamos leads").' },
+        { label: '📅 Calendar directo y visible (sin fricción)', why: 'El calendar de Calendly o similar debe estar embed en la página, no en un link externo. Menos clics = más conversiones.' },
+        { label: '🔒 Sin compromiso de compra', why: '"Esta llamada es 100% gratuita. Sin presión de venta." justo arriba del calendar disminuye la resistencia final a agendar.' }
+      ]
+    }
+  },
+  registro: {
+    desc: 'Evalúa si la página comunica el valor del evento/curso, fecha, quién es el speaker y genera urgencia por cupos limitados.',
+    funnel: {
+      name: 'Evento → Valor → Urgencia → Registro (inscripción)',
+      why: 'Para registros, la urgencia es clave: si no hay fecha límite o cupos, la persona lo deja "para después" y nunca regresa.',
+      steps: [
+        { label: '🪝 Hook — Qué aprenderá / qué logrará en el evento', why: 'El título debe ser el resultado prometido, no el nombre del evento. "Aprende a cerrar ventas por WhatsApp en 2 horas" > "Taller de ventas".' },
+        { label: '📅 Fecha, hora y formato clarísimos', why: 'La primera pregunta del visitante es "cuándo y cómo". Debe estar visible sin hacer scroll, con cuenta regresiva si es posible.' },
+        { label: '👤 Speaker — Credibilidad y autoridad', why: 'La gente asiste por el speaker, no por el tema. Foto profesional, logros concretos y medios donde ha aparecido construyen autoridad rápido.' },
+        { label: '📋 Agenda o bullets de lo que aprenderán', why: '3-5 temas concretos que cubrirá el evento transforman "puede que sea interesante" en "necesito estar ahí".' },
+        { label: '⏰ Urgencia real: cupos / precio anticipado', why: '"Solo 50 cupos disponibles" o "precio sube el viernes" activan el miedo a perderse algo (FOMO) y aceleran la decisión.' },
+        { label: '🚀 Formulario simple + confirmación inmediata', why: 'Nombre + email + botón. La confirmación debe llegar de inmediato al correo con los detalles del evento para reducir "no shows".' }
+      ]
+    }
+  },
+  descarga: {
+    desc: 'Evalúa si la página comunica claramente qué se descarga, por qué es valioso y facilita el intercambio email→recurso con mínima fricción.',
+    funnel: {
+      name: 'Promesa → Valor → Email → Descarga (lead magnet)',
+      why: 'Una descarga gratuita necesita el menor número de clics posible. El valor percibido debe superar el "costo" de dar el email.',
+      steps: [
+        { label: '🪝 Hook — Nombre del recurso + resultado concreto', why: '"Descarga gratis: 47 templates de stories que aumentan engagement 3x" es infinitamente más poderoso que "Descarga nuestra guía".' },
+        { label: '🖼️ Mockup visual del recurso', why: 'Una imagen del PDF, checklist o plantilla hace que el recurso se vea tangible y aumenta la percepción de valor del gratuito.' },
+        { label: '📋 "Dentro encontrarás..." — 3-5 bullets', why: 'Anticipa el contenido concreto. El visitante no descarga si no sabe exactamente qué está obteniendo y para qué le sirve.' },
+        { label: '📝 Formulario mínimo (email + nombre)', why: 'Más de 2 campos en una descarga gratuita es un error. Si pides empresa, cargo y teléfono, perderás el 60% de los registros.' },
+        { label: '🔒 Privacidad + frecuencia de emails', why: '"Recibirás el PDF + tips semanales. Puedes darte de baja cuando quieras." Elimina el miedo a ser spameado.' },
+        { label: '✅ Página de gracias con acceso inmediato', why: 'El recurso debe estar disponible al instante (descarga directa o link en el email). Si tarda, pierdes confianza y abren menos emails futuros.' }
+      ]
+    }
+  }
+};
+
+function selGoal(goal, btn) {
+  currentLpGoal = goal;
+  document.querySelectorAll('.lp-goal-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = LP_GOAL_DATA[goal];
+  if (d) document.getElementById('lpGoalDesc').textContent = d.desc;
+}
 
 function selType(type, btn) {
   currentType = type;
@@ -1196,7 +1354,12 @@ function selType(type, btn) {
   };
   document.getElementById('typeDescBox').textContent = descs[type];
   document.getElementById('checkLanding').style.display = type === 'landing' ? '' : 'none';
-  // Update header tag
+  document.getElementById('lpGoalArea').style.display = type === 'landing' ? '' : 'none';
+  if (type === 'landing') {
+    // Trigger first goal desc
+    const activeGoalBtn = document.querySelector('.lp-goal-btn.active');
+    if (activeGoalBtn) selGoal(activeGoalBtn.dataset.goal, activeGoalBtn);
+  }
   document.querySelector('.header-tag').textContent = type === 'landing' ? 'Auditor Landing Page' : 'Auditor de Sitios Web';
 }
 
@@ -1271,7 +1434,12 @@ function vaRenderThumbs() {
   if (btn) btn.style.display = vaFiles.length > 0 ? 'inline-block' : 'none';
 }
 
-const PROMPT_VISUAL_WEB = (type) => `Eres un experto en UX, diseño web y optimización de conversión (CRO).
+const PROMPT_VISUAL_WEB = (type, goal) => {
+  const goalCtx = (type === 'landing' && goal) ? (() => {
+    const labels = { ventas:'vender un producto/servicio', leads:'capturar leads/contactos', citas:'agendar citas o demos', registro:'inscripción a evento/curso', descarga:'descarga de recurso gratuito' };
+    return `\nOBJETIVO DE LA LANDING PAGE: ${labels[goal] || goal}. Enfoca tu análisis en si la página está optimizada para lograr ese objetivo específico.\n`;
+  })() : '';
+  return `Eres un experto en UX, diseño web y optimización de conversión (CRO).${goalCtx}
 Analiza visualmente estas capturas de pantalla de un ${type === 'landing' ? 'landing page' : 'sitio web'} y devuelve SOLO un JSON con esta estructura:
 {
   "puntaje_visual": 0-100,
@@ -1315,6 +1483,7 @@ Analiza visualmente estas capturas de pantalla de un ${type === 'landing' ? 'lan
   "siguiente_paso": "La acción más importante que debería tomar el dueño del sitio hoy"
 }
 Sé específico con lo que ves en las imágenes. No inventes elementos que no se vean. Responde SOLO con el JSON.`;
+};
 
 async function analizarVisual() {
   const apiKey = localStorage.getItem('kd_claude_key');
@@ -1345,7 +1514,7 @@ async function analizarVisual() {
       body: JSON.stringify({
         model: 'claude-haiku-4-5',
         max_tokens: 1800,
-        messages: [{ role: 'user', content: [...imageContent, { type: 'text', text: PROMPT_VISUAL_WEB(currentType) }] }]
+        messages: [{ role: 'user', content: [...imageContent, { type: 'text', text: PROMPT_VISUAL_WEB(currentType, currentLpGoal) }] }]
       })
     });
     const data = await res.json();

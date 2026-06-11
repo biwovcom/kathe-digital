@@ -75,7 +75,7 @@ body{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:var(--bg);
 .creativo-name-input::placeholder{color:var(--muted)}
 .creativo-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;padding:4px 8px;border-radius:6px;font-family:inherit;white-space:nowrap;transition:all .15s}
 .creativo-del-btn:hover{background:#fef2f2;color:#dc2626}
-.creativo-images{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.creativo-images{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .img-slot{border-radius:9px;aspect-ratio:9/16;overflow:hidden;position:relative;cursor:pointer}
 .img-slot.empty{border:2px dashed rgba(233,30,140,.25);background:rgba(233,30,140,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .2s}
 .img-slot.empty:hover{border-color:var(--accent);background:rgba(233,30,140,.07)}
@@ -377,7 +377,6 @@ footer a{color:var(--accent);text-decoration:none}
         📌 <strong>Por cada Reel/creativo</strong> sube hasta 4 capturas en orden: <strong>Métricas del Reel → Audiencia del Reel → Estadísticas cuenta → Audiencia general</strong>.<br>
         Así la IA sabe exactamente qué pantallazos son de cuál Reel sin mezclarlos.
       </p>
-      <input type="file" id="imgInput" accept="image/*" multiple style="display:none">
       <div class="creativos-wrap" id="creativosWrap"></div>
       <button class="add-creativo-btn" id="addCreativoBtn" onclick="agregarCreativo()">➕ Agregar otro creativo / Reel</button>
 
@@ -535,7 +534,7 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="val" id="rBrand">Tu marca</div>
     </div>
     <div class="bar-btns">
-      <button class="bar-btn dl" onclick="descargarReporte()">⬇ Descargar Reporte</button>
+      <button class="bar-btn dl" onclick="descargarInforme()">⬇ Descargar Informe .doc</button>
       <button class="bar-btn" onclick="volverForm()">← Nuevo análisis</button>
     </div>
   </div>
@@ -648,8 +647,9 @@ footer a{color:var(--accent);text-decoration:none}
 // ─── Creative-grouped screenshot upload ─────────────────────────────────────
 let creativos = []; // [{id, nombre, imagenes:[{dataURL,name}]}]
 let _nextCreativoId = 1;
-let _currentCreativoId = 1;
-const SLOT_LABELS_IG = ['Métricas del Reel', 'Audiencia Reel', 'Estadísticas Cuenta', 'Audiencia General'];
+const MAX_SLOTS = 6;
+const MAX_GRUPOS = 8;
+const SLOT_LABELS_IG = ['Métricas Reel','Audiencia Reel','Est. Cuenta','Audiencia Gral.','Alcance/Imp.','Otra stat'];
 
 function getAllScreenshots() { return creativos.flatMap(c => c.imagenes); }
 
@@ -659,68 +659,70 @@ function initCreativos() {
 }
 
 function agregarCreativo() {
-  if (creativos.length >= 4) return;
+  if (creativos.length >= MAX_GRUPOS) return;
   const id = _nextCreativoId++;
   creativos.push({ id, nombre: '', imagenes: [] });
   renderCreativos();
   actualizarHint();
 }
 
-function eliminarCreativo(id) {
-  if (creativos.length <= 1) return;
-  creativos = creativos.filter(c => c.id !== id);
-  renderCreativos();
-  actualizarHint();
-}
-
-function abrirSelectorImagen(creativoId) {
-  const c = creativos.find(x => x.id === creativoId);
-  if (!c || c.imagenes.length >= 4) return;
-  _currentCreativoId = creativoId;
-  document.getElementById('imgInput').value = '';
-  document.getElementById('imgInput').click();
-}
-
-document.getElementById('imgInput').addEventListener('change', (e) => {
-  addFilesToCreativo(_currentCreativoId, e.target.files);
-});
-
 function renderCreativos() {
   const wrap = document.getElementById('creativosWrap');
-  wrap.innerHTML = creativos.map((c, ci) => `
-    <div class="creativo-card">
+  wrap.innerHTML = creativos.map((c, ci) => {
+    const flat = getAllScreenshots();
+    const slots = Array.from({length: MAX_SLOTS}, (_, si) => {
+      const img = c.imagenes[si];
+      if (img) return `<div class="img-slot filled" onclick="abrirImgModal(${flat.indexOf(img)})">
+        <img src="${img.dataURL}" alt="${img.name}">
+        <button class="ss-del" onclick="event.stopPropagation();borrarImagenCreativo(${c.id},${si})">✕</button>
+        <div class="ss-lbl">${SLOT_LABELS_IG[si]||'+'}</div>
+      </div>`;
+      return `<div class="img-slot empty" onclick="document.getElementById('cc-img-${c.id}').click()">
+        <span class="slot-ico">📸</span>
+        <span class="slot-lbl">${SLOT_LABELS_IG[si]||'Captura '+(si+1)}</span>
+      </div>`;
+    }).join('');
+    return `<div class="creativo-card">
       <div class="creativo-card-header">
         <span class="creativo-num">${ci + 1}</span>
         <input class="creativo-name-input" type="text" placeholder="Nombre del Reel (ej. Tutorial Abril, Promo Mayo...)"
-          value="${c.nombre}"
+          value="${c.nombre.replace(/"/g,'&quot;')}"
           oninput="creativos.find(x=>x.id===${c.id}).nombre=this.value">
         ${creativos.length > 1 ? `<button class="creativo-del-btn" onclick="eliminarCreativo(${c.id})">✕ Eliminar</button>` : ''}
       </div>
-      <div class="creativo-images">
-        ${[0,1,2,3].map(si => {
-          const img = c.imagenes[si];
-          const flat = getAllScreenshots();
-          if (img) return `<div class="img-slot filled" onclick="abrirImgModal(${flat.indexOf(img)})">
-            <img src="${img.dataURL}" alt="${img.name}">
-            <button class="ss-del" onclick="event.stopPropagation();borrarImagenCreativo(${c.id},${si})">✕</button>
-            <div class="ss-lbl">${SLOT_LABELS_IG[si]||'Captura '+(si+1)}</div>
-          </div>`;
-          return `<div class="img-slot empty" onclick="abrirSelectorImagen(${c.id})">
-            <span class="slot-ico">📸</span>
-            <span class="slot-lbl">${SLOT_LABELS_IG[si]||'Captura '+(si+1)}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`).join('');
-  document.getElementById('addCreativoBtn').disabled = creativos.length >= 4;
-  const total = getAllScreenshots().length;
+      <input type="file" id="cc-img-${c.id}" accept="image/*" multiple style="display:none"
+        onchange="addFilesToCreativo(${c.id},this.files);this.value=''">
+      <div class="creativo-images">${slots}</div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:6px;text-align:center">${c.imagenes.length}/${MAX_SLOTS} capturas · Toca un slot vacío para subir</div>
+    </div>`;
+  }).join('');
+  document.getElementById('addCreativoBtn').disabled = creativos.length >= MAX_GRUPOS;
   const stab2 = document.getElementById('stab2');
-  if (stab2) stab2.classList.toggle('done', total > 0);
+  if (stab2) stab2.classList.toggle('done', getAllScreenshots().length > 0);
 }
 
 function borrarImagenCreativo(creativoId, imgIdx) {
   const c = creativos.find(x => x.id === creativoId);
   if (c) { c.imagenes.splice(imgIdx, 1); renderCreativos(); actualizarHint(); }
+}
+
+function addFilesToCreativo(creativoId, files) {
+  const c = creativos.find(x => x.id === creativoId);
+  if (!c) return;
+  const allowed = MAX_SLOTS - c.imagenes.length;
+  if (allowed <= 0) return;
+  Array.from(files).slice(0, allowed).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => { c.imagenes.push({ dataURL: e.target.result, name: file.name }); renderCreativos(); actualizarHint(); };
+    reader.readAsDataURL(file);
+  });
+}
+
+function eliminarCreativo(id) {
+  if (creativos.length <= 1) return;
+  creativos = creativos.filter(c => c.id !== id);
+  renderCreativos(); actualizarHint();
 }
 
 function actualizarHint() {
@@ -816,6 +818,10 @@ function analizarInstagram() {
   let funnelStage = 'awareness';
   if (followers>=5000 && engRate>=2) funnelStage = 'consideracion';
   if (engRate>=4 && saveRate>=3 && followers>=3000) funnelStage = 'conversion';
+
+  _lastAnalysis = { brand, niche, goal, followers, newFoll, reach, likes, comments, saves, shares, reelViews,
+    freq, genderFem, topAge, topLocation, contentType, engRate, saveRate, shareRate, growthRate, reelRate,
+    score, catEng, catAlgo, catGrowth, catContent, funnelStage, fecha: new Date() };
 
   document.getElementById('rBrand').textContent = brand;
   document.getElementById('formSection').style.display = 'none';
@@ -1332,6 +1338,7 @@ function mostrarEstadoIA() {
 
 mostrarEstadoIA();
 initCreativos();
+let _lastAnalysis = null;
 
 // ─── Extract with AI ──────────────────────────────────────────────────────────
 const PROMPT_IG = `Analiza estas capturas de pantalla de Instagram Insights/Estadísticas. Las imágenes están organizadas por creativo/Reel (cada grupo marcado con === NOMBRE ===). Extrae los números del creativo principal o promedia si hay varios.
@@ -1494,6 +1501,115 @@ function autoRellenarFormulario(m) {
   document.querySelectorAll('#formPaso3 input, #formPaso3 select').forEach(el => {
     if (el.value) { el.style.borderColor = '#9333ea'; el.style.background = 'rgba(147,51,234,.04)'; }
   });
+}
+
+// ─── Download Report ──────────────────────────────────────────────────────────
+function descargarInforme() {
+  const d = _lastAnalysis;
+  if (!d) { alert('Genera el análisis primero.'); return; }
+  const fmt = n => isNaN(n)?'—':(+n>=1000?((+n)/1000).toFixed(1)+'K':(+n).toFixed(1));
+  const pct = n => isNaN(n)?'—':(+n).toFixed(1)+'%';
+  const fecha = d.fecha.toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
+  const col = d.score>=70?'#15803d':d.score>=45?'#ea580c':'#dc2626';
+  const funnelLabels = {awareness:'Reconocimiento (Awareness)',consideracion:'Consideración',conversion:'Conversión'};
+  const goalLabels = {ventas:'Aumentar ventas',seguidores:'Crecer seguidores',reconocimiento:'Reconocimiento de marca',engagement:'Mejorar engagement'};
+
+  const metricsRows = [
+    ['Engagement Rate', pct(d.engRate), d.engRate>=6?'Excelente':d.engRate>=3?'Aceptable':'Bajo'],
+    ['Tasa de Guardados', pct(d.saveRate), d.saveRate>=5?'Excelente':d.saveRate>=2?'Aceptable':'Bajo'],
+    ['Tasa de Compartidos', pct(d.shareRate), d.shareRate>=2?'Excelente':d.shareRate>=0.8?'Aceptable':'Bajo'],
+    ['Crecimiento mensual', pct(d.growthRate), d.growthRate>=5?'Excelente':d.growthRate>=2?'Aceptable':'Bajo'],
+    ['Seguidores', fmt(d.followers), ''],
+    ['Reproducciones del Reel', fmt(d.reelViews), ''],
+    ['Alcance', fmt(d.reach), ''],
+    ['Frecuencia de publicación', d.freq+' posts/semana', ''],
+  ].map(([label, val, status]) => `<tr><td>${label}</td><td style="text-align:center;font-weight:700">${val}</td><td style="text-align:center;color:${status==='Excelente'?'#15803d':status==='Bajo'?'#dc2626':'#ca8a04'}">${status}</td></tr>`).join('');
+
+  const catRows = [
+    ['Engagement (max 30)', d.catEng, 30],
+    ['Algoritmo (max 30)', d.catAlgo, 30],
+    ['Crecimiento (max 20)', d.catGrowth, 20],
+    ['Contenido (max 20)', d.catContent, 20],
+  ].map(([label, val, max]) => {
+    const pctBar = Math.round(val/max*100);
+    return `<tr><td>${label}</td><td style="text-align:center;font-weight:700">${val}/${max}</td><td><div style="background:#f0ccea;border-radius:4px;height:10px;width:100px"><div style="background:${val/max>=.75?'#15803d':val/max>=.5?'#ea580c':'#dc2626'};height:100%;width:${pctBar}%;border-radius:4px"></div></div></td></tr>`;
+  }).join('');
+
+  const allSS = getAllScreenshots();
+  const ssHtml = allSS.length > 0 ? `
+    <h2>📸 Capturas de Pantalla</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">${allSS.map(ss => `<img src="${ss.dataURL}" style="width:120px;border-radius:6px;border:1px solid #f0ccea">`).join('')}</div>` : '';
+
+  const html = `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8"><meta name=ProgId content=Word.Document>
+<style>
+  body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1a0a2e;margin:2cm 2.5cm;line-height:1.5}
+  h1{font-size:22pt;color:#e91e8c;text-align:center;margin-bottom:2pt}
+  h2{font-size:13pt;color:#9333ea;border-bottom:1.5pt solid #f0ccea;padding-bottom:4pt;margin-top:20pt}
+  .kd-header{text-align:center;background:#fdf2fc;border:1pt solid #f0ccea;border-radius:8pt;padding:14pt;margin-bottom:18pt}
+  .score-box{display:inline-block;background:#fff;border:2pt solid ${col};border-radius:50%;width:90pt;height:90pt;text-align:center;line-height:1.2;vertical-align:middle;padding:15pt}
+  .score-num{font-size:28pt;font-weight:700;color:${col};display:block}
+  .score-lbl{font-size:8pt;color:#a07ab5;text-transform:uppercase;letter-spacing:1pt}
+  table{width:100%;border-collapse:collapse;margin-bottom:12pt;font-size:10pt}
+  th{background:#9333ea;color:#fff;padding:6pt 8pt;text-align:left}
+  td{padding:5pt 8pt;border-bottom:0.5pt solid #f0ccea}
+  tr:nth-child(even) td{background:#fdf2fc}
+  .summ{background:rgba(147,51,234,.05);border-left:3pt solid #9333ea;padding:10pt 14pt;margin:10pt 0;font-size:10pt}
+  .footer{margin-top:24pt;text-align:center;font-size:8pt;color:#a07ab5;border-top:0.5pt solid #f0ccea;padding-top:8pt}
+  @media print{body{margin:1.5cm}}
+</style></head>
+<body>
+<div class="kd-header">
+  <h1>✦ Kathe Digital</h1>
+  <div style="font-size:12pt;font-weight:700;color:#9333ea">Informe de Análisis — Instagram</div>
+  <div style="font-size:9pt;color:#a07ab5">Cuenta: <strong>${d.brand}</strong> &nbsp;|&nbsp; Generado el ${fecha}</div>
+</div>
+
+<div style="text-align:center;margin-bottom:18pt">
+  <div class="score-box"><span class="score-num">${d.score}</span><span class="score-lbl">Puntuación</span></div>
+  <div style="font-size:10pt;color:#5a3a6e;margin-top:8pt">${d.score>=80?'Perfil de alto impacto':d.score>=65?'Perfil optimizado':d.score>=45?'Buen desempeño':d.score>=25?'En proceso de crecimiento':'Requiere trabajo urgente'}</div>
+  <div style="font-size:8pt;color:#a07ab5;margin-top:4pt">Nicho: ${d.niche} &nbsp;|&nbsp; Objetivo: ${goalLabels[d.goal]||d.goal} &nbsp;|&nbsp; Etapa: ${funnelLabels[d.funnelStage]||d.funnelStage}</div>
+</div>
+
+<div class="summ">
+  <strong>Resumen ejecutivo:</strong> La cuenta <em>${d.brand}</em> tiene una puntuación de <strong>${d.score}/100</strong>.
+  El engagement rate es de <strong>${pct(d.engRate)}</strong>${d.engRate>=3?' (saludable)':' (requiere mejora)'}, con una tasa de guardados del <strong>${pct(d.saveRate)}</strong>.
+  El crecimiento mensual es del <strong>${pct(d.growthRate)}</strong>.
+  La cuenta se encuentra en la etapa de <strong>${funnelLabels[d.funnelStage]||d.funnelStage}</strong> del embudo de ventas.
+  Frecuencia de publicación: <strong>${d.freq} posts/semana</strong>.
+</div>
+
+<h2>📊 Métricas Principales</h2>
+<table><thead><tr><th>Métrica</th><th>Valor</th><th>Estado</th></tr></thead><tbody>${metricsRows}</tbody></table>
+
+<h2>🏆 Puntuación por Categoría</h2>
+<table><thead><tr><th>Categoría</th><th>Puntos</th><th>Barra de progreso</th></tr></thead><tbody>${catRows}</tbody></table>
+
+<h2>👥 Audiencia</h2>
+<table><tbody>
+  <tr><td>Seguidores totales</td><td>${fmt(d.followers)}</td></tr>
+  <tr><td>Nuevos seguidores (mes)</td><td>${fmt(d.newFoll)}</td></tr>
+  <tr><td>Género predominante</td><td>${d.genderFem>60?`${d.genderFem}% femenino`:d.genderFem>0?`${d.genderFem}% femenino / ${100-d.genderFem}% masculino`:'No ingresado'}</td></tr>
+  <tr><td>Edad principal</td><td>${d.topAge||'No ingresada'}</td></tr>
+  <tr><td>Ubicación principal</td><td>${d.topLocation||'No ingresada'}</td></tr>
+</tbody></table>
+
+${ssHtml}
+
+<div class="footer">
+  Informe generado con <strong>Kathe Digital</strong> · ${fecha} · Uso interno únicamente<br>
+  Los datos provienen de las estadísticas ingresadas manualmente o extraídas con IA de los pantallazos
+</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const fechaFile = d.fecha.toISOString().split('T')[0];
+  a.download = `informe-instagram-${d.brand.replace(/[^a-z0-9]/gi,'-').toLowerCase()}-${fechaFile}.doc`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
 }
 </script>
 </body>
