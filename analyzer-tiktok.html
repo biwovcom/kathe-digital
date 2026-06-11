@@ -263,14 +263,14 @@ footer a{color:var(--accent);text-decoration:none}
         </div>
         <div class="ia-step">
           <div class="ia-step-n">4</div>
-          <p>Aparece tu clave — es una cadena que empieza por <strong>AIza</strong>. Toca el botón de <strong>copiar</strong> al lado de la clave.</p>
+          <p>Aparece tu clave — es una cadena larga (puede empezar por <strong>AIza</strong> o <strong>AQ.</strong> según el tipo de proyecto). Toca el botón <strong>"Copy key"</strong> o el ícono de copiar al lado.</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">5</div>
           <p>Vuelve a esta página, <strong>pega tu clave</strong> en el campo de abajo y toca <strong>"Guardar →"</strong>. ¡Listo, sin pagar nada!</p>
         </div>
         <div class="ia-key-row">
-          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="Pega tu clave aquí (AIza...)">
+          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="Pega tu clave aquí (AIza... o AQ...)">
           <button class="ia-save-btn" onclick="guardarClave('gemini')">Guardar →</button>
         </div>
         <p class="ia-note">🔒 Tu clave se guarda únicamente en tu navegador. Kathe Digital nunca la ve ni la almacena en ningún servidor.</p>
@@ -1080,8 +1080,7 @@ function mostrarPanel(tipo) {
 function guardarClave(tipo) {
   const key = document.getElementById('geminiKeyInput').value.trim();
   if (!key) { alert('Por favor pega tu clave de Gemini primero.'); return; }
-  if (!key.startsWith('AIza')) { alert('La clave de Gemini debe empezar por "AIza". Revisa que la copiaste completa desde aistudio.google.com'); return; }
-  if (key.length < 20) { alert('La clave parece incompleta. Asegúrate de copiarla completa.'); return; }
+  if (key.length < 20) { alert('La clave parece incompleta. Asegúrate de copiarla completa desde aistudio.google.com'); return; }
   localStorage.setItem('kd_gemini_key', key);
   localStorage.removeItem('kd_openai_key');
   localStorage.removeItem('kd_claude_key');
