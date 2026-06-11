@@ -635,7 +635,7 @@ function actualizarHint() {
   const hint = document.getElementById('galleryHint');
   if (!screenshots.length) { hint.style.display = 'none'; return; }
   hint.style.display = 'block';
-  const tieneIA = !!localStorage.getItem('kd_gemini_key');
+  const tieneIA = !!localStorage.getItem('kd_claude_key');
   document.getElementById('extractBox').style.display = tieneIA ? 'block' : 'none';
   document.getElementById('manualHint').style.display = tieneIA ? 'none' : 'block';
 }
