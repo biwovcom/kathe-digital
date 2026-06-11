@@ -60,6 +60,29 @@ body{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:var(--bg);
 .screenshot-thumb .del-btn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .screenshot-thumb .ss-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:.65rem;font-weight:700;padding:4px 6px;text-align:center}
 .gallery-hint{text-align:center;font-size:.82rem;color:var(--muted);margin-top:10px;font-style:italic}
+/* Creative groups */
+.creativos-wrap{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.creativo-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px 16px}
+.creativo-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.creativo-num{background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0}
+.creativo-name-input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s}
+.creativo-name-input:focus{border-color:var(--purple);background:#fff}
+.creativo-name-input::placeholder{color:var(--muted)}
+.creativo-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;padding:4px 8px;border-radius:6px;font-family:inherit;white-space:nowrap;transition:all .15s}
+.creativo-del-btn:hover{background:#fef2f2;color:#dc2626}
+.creativo-images{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.img-slot{border-radius:9px;aspect-ratio:9/16;overflow:hidden;position:relative;cursor:pointer}
+.img-slot.empty{border:2px dashed rgba(233,30,140,.25);background:rgba(233,30,140,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .2s}
+.img-slot.empty:hover{border-color:var(--accent);background:rgba(233,30,140,.07)}
+.img-slot.empty .slot-ico{font-size:1.2rem;margin-bottom:3px}
+.img-slot.empty .slot-lbl{font-size:.58rem;font-weight:700;color:var(--muted);text-align:center;padding:0 4px;line-height:1.3}
+.img-slot.filled img{width:100%;height:100%;object-fit:cover;display:block}
+.img-slot.filled .ss-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:50%;width:19px;height:19px;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;z-index:2}
+.img-slot.filled:hover .ss-del{opacity:1}
+.img-slot.filled .ss-lbl{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);color:#fff;font-size:.55rem;font-weight:700;padding:3px 4px;text-align:center}
+.add-creativo-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border:2px dashed rgba(147,51,234,.3);border-radius:12px;background:transparent;color:var(--purple);font-weight:800;font-size:.84rem;cursor:pointer;font-family:inherit;width:100%;margin-top:8px;transition:all .2s}
+.add-creativo-btn:hover{border-color:var(--purple);background:rgba(147,51,234,.04)}
+.add-creativo-btn:disabled{opacity:.4;cursor:not-allowed}
 
 .img-modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:16px}
 .img-modal.open{display:flex}
@@ -336,20 +359,14 @@ footer a{color:var(--accent);text-decoration:none}
 
     <!-- PASO 2 -->
     <div class="step-section">
-      <div class="step-header"><span class="step-num-badge">2</span> Sube tus capturas <span style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">(hasta 16 imágenes — puedes subir varios videos)</span></div>
-      <div class="upload-area" id="dropZone" onclick="document.getElementById('imgInput').click()">
-        <div class="upload-icon">📲</div>
-        <div class="upload-main">Arrastra tus capturas aquí o toca para seleccionar</div>
-        <div class="upload-sub">Hasta 16 imágenes — 4 capturas por video · JPG, PNG, HEIC, WEBP</div>
-        <div class="upload-types">
-          <span class="upload-type">Resumen</span>
-          <span class="upload-type">Espectadores</span>
-          <span class="upload-type">Tráfico</span>
-          <span class="upload-type">Participación</span>
-        </div>
-      </div>
+      <div class="step-header"><span class="step-num-badge">2</span> Sube tus capturas <span style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">por video — cada uno en su grupo separado</span></div>
+      <p style="font-size:.79rem;color:var(--muted);margin-bottom:10px;line-height:1.5;background:rgba(147,51,234,.05);border:1px solid rgba(147,51,234,.15);border-radius:9px;padding:9px 12px">
+        📌 <strong>Por cada video/creativo</strong> sube hasta 4 capturas en orden: <strong>Resumen → Espectadores → Tráfico → Participación</strong>.<br>
+        Así la IA sabe exactamente qué pantallazos son de cuál video sin mezclarlos.
+      </p>
       <input type="file" id="imgInput" accept="image/*" multiple style="display:none">
-      <div class="screenshots-gallery" id="gallery"></div>
+      <div class="creativos-wrap" id="creativosWrap"></div>
+      <button class="add-creativo-btn" id="addCreativoBtn" onclick="agregarCreativo()">➕ Agregar otro video / creativo</button>
 
       <!-- Bio upload -->
       <div style="margin-top:18px;border:1.5px dashed rgba(147,51,234,.35);border-radius:14px;padding:18px 20px;background:rgba(147,51,234,.03)">
@@ -626,56 +643,122 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <script>
-// ─── Screenshot upload ──────────────────────────────────────────────────────
-const screenshots = [];
+// ─── Creative-grouped screenshot upload ─────────────────────────────────────
+let creativos = [];
+let _nextCreativoId = 1;
+let _currentCreativoId = 1;
+const SLOT_LABELS_TT = ['Resumen', 'Espectadores', 'Tráfico', 'Participación'];
 
-document.getElementById('imgInput').addEventListener('change', e => addFiles(e.target.files));
-const dz = document.getElementById('dropZone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); addFiles(e.dataTransfer.files); });
+function getAllScreenshots() { return creativos.flatMap(c => c.imagenes); }
 
-function addFiles(files) {
-  const allowed = 16 - screenshots.length;
-  if (allowed <= 0) { alert('Máximo 16 capturas. Elimina alguna para agregar más.'); return; }
+function initCreativos() {
+  creativos = []; _nextCreativoId = 1;
+  agregarCreativo();
+}
+
+function agregarCreativo() {
+  if (creativos.length >= 4) return;
+  const id = _nextCreativoId++;
+  creativos.push({ id, nombre: '', imagenes: [] });
+  renderCreativos();
+  actualizarHint();
+}
+
+function eliminarCreativo(id) {
+  if (creativos.length <= 1) return;
+  creativos = creativos.filter(c => c.id !== id);
+  renderCreativos();
+  actualizarHint();
+}
+
+function abrirSelectorImagen(creativoId) {
+  const c = creativos.find(x => x.id === creativoId);
+  if (!c || c.imagenes.length >= 4) return;
+  _currentCreativoId = creativoId;
+  document.getElementById('imgInput').value = '';
+  document.getElementById('imgInput').click();
+}
+
+document.getElementById('imgInput').addEventListener('change', e => {
+  addFilesToCreativo(_currentCreativoId, e.target.files);
+});
+
+function addFilesToCreativo(creativoId, files) {
+  const c = creativos.find(x => x.id === creativoId);
+  if (!c) return;
+  const allowed = 4 - c.imagenes.length;
+  if (allowed <= 0) return;
   Array.from(files).slice(0, allowed).forEach(file => {
     if (!file.type.startsWith('image/')) return;
     const reader = new FileReader();
-    reader.onload = e => { screenshots.push({dataURL:e.target.result,name:file.name}); renderGallery(); };
+    reader.onload = e => { c.imagenes.push({dataURL:e.target.result,name:file.name}); renderCreativos(); actualizarHint(); };
     reader.readAsDataURL(file);
   });
-  setTimeout(() => {
-    document.getElementById('stab2').classList.add('done');
-    document.getElementById('stab3').classList.add('active');
-    document.getElementById('stab3').classList.remove('done');
-    actualizarHint();
-    document.getElementById('galleryHint').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 400);
+}
+
+function renderCreativos() {
+  const wrap = document.getElementById('creativosWrap');
+  wrap.innerHTML = creativos.map((c, ci) => `
+    <div class="creativo-card">
+      <div class="creativo-card-header">
+        <span class="creativo-num">${ci + 1}</span>
+        <input class="creativo-name-input" type="text" placeholder="Nombre del video (ej. Tutorial Mayo, Promo Producto...)"
+          value="${c.nombre}"
+          oninput="creativos.find(x=>x.id===${c.id}).nombre=this.value">
+        ${creativos.length > 1 ? `<button class="creativo-del-btn" onclick="eliminarCreativo(${c.id})">✕ Eliminar</button>` : ''}
+      </div>
+      <div class="creativo-images">
+        ${[0,1,2,3].map(si => {
+          const img = c.imagenes[si];
+          const flat = getAllScreenshots();
+          if (img) return `<div class="img-slot filled" onclick="abrirImgModal(${flat.indexOf(img)})">
+            <img src="${img.dataURL}" alt="${img.name}">
+            <button class="ss-del" onclick="event.stopPropagation();borrarImagenCreativo(${c.id},${si})">✕</button>
+            <div class="ss-lbl">${SLOT_LABELS_TT[si]||'Captura '+(si+1)}</div>
+          </div>`;
+          return `<div class="img-slot empty" onclick="abrirSelectorImagen(${c.id})">
+            <span class="slot-ico">📸</span>
+            <span class="slot-lbl">${SLOT_LABELS_TT[si]||'Captura '+(si+1)}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+  document.getElementById('addCreativoBtn').disabled = creativos.length >= 4;
+  const stab2 = document.getElementById('stab2');
+  if (stab2) stab2.classList.toggle('done', getAllScreenshots().length > 0);
+}
+
+function borrarImagenCreativo(creativoId, imgIdx) {
+  const c = creativos.find(x => x.id === creativoId);
+  if (c) { c.imagenes.splice(imgIdx, 1); renderCreativos(); actualizarHint(); }
 }
 
 function actualizarHint() {
   const hint = document.getElementById('galleryHint');
-  if (!screenshots.length) { hint.style.display = 'none'; return; }
+  const total = getAllScreenshots().length;
+  if (!total) { hint.style.display = 'none'; return; }
   hint.style.display = 'block';
   const tieneIA = !!localStorage.getItem('kd_claude_key');
   document.getElementById('extractBox').style.display = tieneIA ? 'block' : 'none';
   document.getElementById('manualHint').style.display = tieneIA ? 'none' : 'block';
+  setTimeout(() => { hint.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 200);
 }
 
-function renderGallery() {
-  const gal = document.getElementById('gallery');
-  if (!screenshots.length) { gal.innerHTML=''; actualizarHint(); return; }
-  gal.innerHTML = screenshots.map((ss,i) => `
-    <div class="screenshot-thumb">
-      <img src="${ss.dataURL}" alt="${ss.name}" onclick="abrirImgModal('${ss.dataURL}')">
-      <button class="del-btn" onclick="borrarCaptura(${i})">✕</button>
-      <div class="ss-label">Captura ${i+1}</div>
-    </div>`).join('');
-  actualizarHint();
+let _modalIdx = 0;
+function abrirImgModal(idx) {
+  _modalIdx = idx; _actualizarModal();
+  document.getElementById('imgModal').classList.add('open'); document.body.style.overflow='hidden';
 }
-
-function borrarCaptura(i) { screenshots.splice(i,1); renderGallery(); }
-function abrirImgModal(src) { document.getElementById('imgModalSrc').src=src; document.getElementById('imgModal').classList.add('open'); document.body.style.overflow='hidden'; }
+function navegarModal(dir) {
+  const all = getAllScreenshots();
+  _modalIdx = (_modalIdx + dir + all.length) % all.length; _actualizarModal();
+}
+function _actualizarModal() {
+  const all = getAllScreenshots();
+  document.getElementById('imgModalSrc').src = all[_modalIdx].dataURL;
+  const counter = document.getElementById('modalCounter');
+  if (counter) counter.textContent = (_modalIdx+1)+' / '+all.length;
+}
 function cerrarImgModal() { document.getElementById('imgModal').classList.remove('open'); document.body.style.overflow=''; }
 
 // ─── Analysis ───────────────────────────────────────────────────────────────
@@ -735,10 +818,11 @@ function analizarTikTok() {
   window.scrollTo(0,0);
 
   // Screenshots
-  if (screenshots.length > 0) {
+  const allSS = getAllScreenshots();
+  if (allSS.length > 0) {
     document.getElementById('ssBlock').style.display = 'block';
-    document.getElementById('ssResultsGallery').innerHTML = screenshots.map(ss =>
-      `<img src="${ss.dataURL}" alt="Captura" onclick="abrirImgModal('${ss.dataURL}')">`).join('');
+    document.getElementById('ssResultsGallery').innerHTML = allSS.map((ss, idx) =>
+      `<img src="${ss.dataURL}" alt="Captura" onclick="abrirImgModal(${idx})">`).join('');
   }
 
   // Context block
@@ -1260,9 +1344,10 @@ function mostrarEstadoIA() {
 
 // Init IA state on load
 mostrarEstadoIA();
+initCreativos();
 
 // ─── Extract with AI ──────────────────────────────────────────────────────────
-const PROMPT_TIKTOK = `Analiza estas capturas de pantalla de TikTok Analytics y extrae todos los números visibles.
+const PROMPT_TIKTOK = `Analiza estas capturas de pantalla de TikTok Analytics. Las imágenes están organizadas por video/creativo (cada grupo marcado con === NOMBRE ===). Extrae los números del video principal o promedia si hay varios.
 
 Devuelve SOLO un objeto JSON válido, sin texto antes ni después, con este formato exacto (usa 0 si no ves el dato):
 {
@@ -1292,7 +1377,7 @@ Notas:
 - traffic_source = fuente de tráfico principal (fyp, seguidores, busqueda, o perfil)`;
 
 async function extraerConIA() {
-  if (screenshots.length === 0) { alert('Primero sube tus capturas.'); return; }
+  if (getAllScreenshots().length === 0) { alert('Primero sube tus capturas.'); return; }
   const claudeKey = localStorage.getItem('kd_claude_key');
   if (!claudeKey) { mostrarPanel('claude'); return; }
 
@@ -1345,11 +1430,16 @@ function comprimirImagen(dataURL) {
 }
 
 async function extraerClaude(apiKey) {
-  const comprimidas = await Promise.all(screenshots.map(ss => comprimirImagen(ss.dataURL)));
-  const imageContent = comprimidas.map(dataURL => ({
-    type: 'image',
-    source: { type: 'base64', media_type: 'image/jpeg', data: dataURL.split(',')[1] }
-  }));
+  const content = [];
+  const activosCr = creativos.filter(c => c.imagenes.length > 0);
+  for (let ci = 0; ci < activosCr.length; ci++) {
+    const c = activosCr[ci];
+    const nombre = c.nombre.trim() || `Video ${ci + 1}`;
+    content.push({ type: 'text', text: `=== ${nombre.toUpperCase()} (grupo ${ci+1} de ${activosCr.length}) ===` });
+    const comprimidas = await Promise.all(c.imagenes.map(ss => comprimirImagen(ss.dataURL)));
+    comprimidas.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+  }
+  content.push({ type: 'text', text: PROMPT_TIKTOK });
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -1361,10 +1451,7 @@ async function extraerClaude(apiKey) {
     body: JSON.stringify({
       model: 'claude-haiku-4-5',
       max_tokens: 1024,
-      messages: [{
-        role: 'user',
-        content: [...imageContent, { type: 'text', text: PROMPT_TIKTOK }]
-      }]
+      messages: [{ role: 'user', content }]
     })
   });
   const data = await res.json();
