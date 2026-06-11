@@ -168,6 +168,50 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
 /* ERROR BANNER */
 .error-banner { background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 16px 20px; color: #991b1b; font-size: .88rem; margin-bottom: 20px; display: none; }
 
+/* GUIDE BUTTON */
+.guide-link-btn{display:block;width:100%;margin-top:16px;padding:12px 18px;background:linear-gradient(135deg,rgba(37,99,235,.07),rgba(147,51,234,.07));border:1.5px solid rgba(147,51,234,.22);border-radius:12px;text-align:center;font-size:.85rem;font-weight:800;color:var(--purple);cursor:pointer;font-family:inherit;transition:all .2s}
+.guide-link-btn:hover{background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(147,51,234,.12));border-color:var(--purple)}
+
+/* GUIDE STATE */
+#guiaState{display:none}
+.guide-wrap{max-width:720px;margin:0 auto;padding:28px 20px 40px}
+.guide-back{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;background:none;border:none;font-family:inherit;margin-bottom:20px;padding:0}
+.guide-back:hover{color:var(--purple)}
+.guide-hero{background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-radius:18px;padding:24px 22px;color:#fff;margin-bottom:24px}
+.guide-hero h1{font-size:1.4rem;font-weight:900;margin-bottom:6px}
+.guide-hero p{font-size:.85rem;opacity:.88;line-height:1.6}
+.guide-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.guide-tab{padding:8px 18px;border-radius:99px;font-size:.82rem;font-weight:800;cursor:pointer;border:2px solid var(--border);background:#fff;color:var(--muted);font-family:inherit;transition:all .2s}
+.guide-tab.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.guide-panel{display:none}
+.guide-panel.active{display:block}
+.guide-section-title{font-size:1.05rem;font-weight:900;color:var(--purple);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.guide-section-sub{font-size:.8rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.term-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.term-name{font-size:.92rem;font-weight:900;color:var(--text);margin-bottom:4px}
+.term-simple{font-size:.84rem;background:rgba(147,51,234,.07);border-left:3px solid var(--purple);padding:7px 11px;border-radius:0 8px 8px 0;margin-bottom:6px;line-height:1.5;font-weight:600}
+.term-tech{font-size:.78rem;color:var(--muted);line-height:1.5}
+.term-tip{font-size:.76rem;background:rgba(22,163,74,.07);border-left:3px solid #16a34a;padding:5px 10px;border-radius:0 6px 6px 0;color:#15803d;margin-top:6px;font-weight:600}
+.check-group-title{font-size:.88rem;font-weight:900;color:var(--text);margin:16px 0 8px;display:flex;align-items:center;gap:6px}
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;background:#fff;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:background .15s}
+.check-row:hover{background:rgba(147,51,234,.04)}
+.check-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--purple);flex-shrink:0;margin-top:2px}
+.check-row-text{font-size:.83rem;line-height:1.5}
+.check-row-text strong{display:block;font-weight:800;color:var(--text)}
+.check-row-text span{color:var(--muted);font-size:.76rem}
+.decision-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+.decision-ico{font-size:1.4rem;flex-shrink:0}
+.decision-if{font-size:.78rem;font-weight:800;color:#dc2626;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.decision-condition{font-size:.84rem;font-weight:700;color:var(--text);margin-bottom:5px}
+.decision-then{font-size:.8rem;color:var(--muted);line-height:1.5}
+.guide-info-box{background:rgba(37,99,235,.07);border:1.5px solid rgba(37,99,235,.2);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:.82rem;line-height:1.6;color:var(--text)}
+.source-badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.7rem;font-weight:800;margin-right:4px}
+.src-org{background:rgba(22,163,74,.12);color:#15803d}
+.src-paid{background:rgba(233,30,140,.12);color:#c0137b}
+.src-direct{background:rgba(37,99,235,.12);color:#1d4ed8}
+.src-social{background:rgba(234,88,12,.12);color:#c2410c}
+.src-ref{background:rgba(147,51,234,.12);color:#7c3aed}
+
 .footer { text-align: center; padding: 32px 24px; color: var(--muted); font-size: .8rem; border-top: 1px solid var(--border); margin-top: 24px; }
 .footer a { color: var(--accent); text-decoration: none; }
 
@@ -234,7 +278,255 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
         <div class="check-item" id="checkLanding" style="display:none">✅ Optimización de Landing Page</div>
         <div class="check-item">✅ Puntuación 0–100</div>
       </div>
+      <button class="guide-link-btn" onclick="mostrarGuia()">📊 ¿Tienes Google Analytics o Meta Pixel? Aprende a leer tus datos — Guía gratuita →</button>
     </div>
+  </div>
+</div>
+
+<!-- GUIDE: ANALYTICS & META PIXEL -->
+<div id="guiaState">
+  <div class="guide-wrap">
+    <button class="guide-back" onclick="ocultarGuia()">← Volver al auditor</button>
+
+    <div class="guide-hero">
+      <h1>📊 Google Analytics & Meta Pixel</h1>
+      <p>Guía práctica para entender tus datos, saber qué significan los términos técnicos y tomar mejores decisiones de marketing — sin necesitar ser experto.</p>
+    </div>
+
+    <div class="guide-tabs">
+      <button class="guide-tab active" onclick="cambiarTab('ga4',this)">📈 Google Analytics 4</button>
+      <button class="guide-tab" onclick="cambiarTab('pixel',this)">🎯 Meta Pixel</button>
+      <button class="guide-tab" onclick="cambiarTab('checklist',this)">✅ Checklist</button>
+      <button class="guide-tab" onclick="cambiarTab('decisiones',this)">💡 Tomar decisiones</button>
+    </div>
+
+    <!-- ── GA4 ── -->
+    <div class="guide-panel active" id="panel-ga4">
+      <div class="guide-section-title">📈 Google Analytics 4 (GA4)</div>
+      <div class="guide-section-sub">GA4 es la herramienta gratuita de Google que te dice quién visita tu sitio, de dónde viene, qué hace y si te compra. Se instala con un código en tu sitio web o con Google Tag Manager.</div>
+
+      <div class="guide-info-box">🔗 <strong>¿Cómo se instala?</strong> Ve a <strong>analytics.google.com</strong> → crea una cuenta → copia el código de seguimiento (empieza por G-XXXXXXX) → pégalo en el &lt;head&gt; de tu sitio o agrégalo con Google Tag Manager. Muchos constructores como Wix, Shopify y WordPress tienen campo directo para pegar el ID.</div>
+
+      <div class="term-card">
+        <div class="term-name">👤 Usuarios (Users)</div>
+        <div class="term-simple">Número de personas diferentes que visitaron tu sitio en el período seleccionado.</div>
+        <div class="term-tech">GA4 los identifica por un ID único en la cookie del navegador. Un usuario puede tener varias sesiones. Distingue entre <strong>Usuarios nuevos</strong> (primera vez que visitan) y <strong>Usuarios recurrentes</strong> (ya habían visitado antes).</div>
+        <div class="term-tip">✅ Si tienes muchos usuarios nuevos y pocos recurrentes → tu contenido no genera fidelización. Si tienes muchos recurrentes → tu audiencia te sigue, ahora conviértelos en clientes.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🔄 Sesiones (Sessions)</div>
+        <div class="term-simple">Una sesión = una visita al sitio. La misma persona puede generar varias sesiones en el mismo día si entra, sale y vuelve a entrar.</div>
+        <div class="term-tech">Una sesión termina cuando pasan 30 minutos de inactividad o a medianoche. Un usuario con 3 visitas en el mismo día cuenta como 1 usuario y 3 sesiones.</div>
+        <div class="term-tip">📊 Usuarios vs Sesiones: si tienes 100 usuarios y 180 sesiones, tus visitantes regresan en promedio 1.8 veces — buen indicador de interés.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">⚡ Tasa de Interacción (Engagement Rate)</div>
+        <div class="term-simple">Porcentaje de visitas donde la persona realmente interactuó: leyó por más de 10 segundos, navegó a otra página o realizó una acción.</div>
+        <div class="term-tech">GA4 reemplazó la antigua "Tasa de Rebote" con esta métrica. Una sesión "no interactiva" es cuando alguien entra y sale en menos de 10 segundos sin hacer nada. <strong>Meta:</strong> Engagement Rate &gt; 60% es bueno.</div>
+        <div class="term-tip">🎯 Engagement Rate bajo (&lt;40%): las personas llegan a tu sitio pero no encuentran lo que esperaban. Revisa que el anuncio que las trajo coincida con lo que ofrece la página.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">⏱️ Duración Media de Sesión</div>
+        <div class="term-simple">Cuánto tiempo pasan en promedio en tu sitio en cada visita.</div>
+        <div class="term-tech">Se calcula desde que llegan hasta la última interacción registrada (no hasta que cierran la pestaña). Para landing pages de venta, 2-3 minutos es bueno. Para blogs o sitios de contenido, 3-5 minutos.</div>
+        <div class="term-tip">⚠️ Menos de 30 segundos en una landing page de venta es señal de que algo no funciona: el tiempo de carga es lento, el diseño no engancha o la oferta no es clara.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🗺️ Fuentes de Tráfico (Traffic Sources)</div>
+        <div class="term-simple">De dónde vienen tus visitantes. GA4 clasifica el tráfico en canales para que sepas qué está funcionando.</div>
+        <div class="term-tech">
+          <span class="source-badge src-org">Orgánico</span> Google/Bing gratis — alguien buscó y encontró tu sitio.<br>
+          <span class="source-badge src-paid">Pagado</span> Tus anuncios de Google Ads o Meta Ads.<br>
+          <span class="source-badge src-direct">Directo</span> Escribieron tu URL directamente o no hay información de origen.<br>
+          <span class="source-badge src-social">Social</span> Llegaron desde Instagram, TikTok, Facebook u otra red.<br>
+          <span class="source-badge src-ref">Referido</span> Otro sitio web puso un link tuyo y alguien hizo clic.
+        </div>
+        <div class="term-tip">💡 Si el 90% de tu tráfico es de una sola fuente, eso es un riesgo. Diversifica para no depender de un solo canal.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🎯 Conversiones (Goals / Events)</div>
+        <div class="term-simple">Las acciones importantes que quieres que hagan en tu sitio: llenar un formulario, hacer clic en WhatsApp, comprar, llamar, ver un video.</div>
+        <div class="term-tech">En GA4 se configuran como "Eventos de conversión". Puedes marcar cualquier evento como conversión: un clic en un botón, llegar a la página de "gracias", enviar un formulario. La <strong>Tasa de Conversión</strong> = Conversiones ÷ Sesiones × 100.</div>
+        <div class="term-tip">✅ Una buena tasa de conversión para una landing page de venta es 2-5%. Para captura de leads (formularios gratis), 10-30% es razonable.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">📉 Tasa de Rebote (Bounce Rate) — GA4 vs Universal</div>
+        <div class="term-simple">En la versión anterior de Analytics (Universal) medía el % de personas que entraban y salían sin hacer nada. En GA4 fue reemplazada por la Tasa de Interacción.</div>
+        <div class="term-tech">GA4 considera que una sesión "rebotó" si duró menos de 10 segundos SIN ninguna interacción. La nueva "Bounce Rate" de GA4 = 100% - Engagement Rate. Por eso verás más la Tasa de Interacción ahora.</div>
+        <div class="term-tip">⚠️ Si alguien te habla de "bounce rate" en GA4, que sepas que es lo contrario del Engagement Rate. Bounce Rate 40% = Engagement Rate 60%.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🔽 Embudo de Conversión (Funnel)</div>
+        <div class="term-simple">El camino que sigue una persona desde que llega a tu sitio hasta que te compra. Cada paso es una etapa del embudo.</div>
+        <div class="term-tech">Ejemplo: <strong>Llega a la página (100%) → Ve el producto (60%) → Hace clic en comprar (20%) → Completa el pago (8%)</strong>. GA4 te permite crear embudos personalizados para ver en qué paso pierdes más personas.</div>
+        <div class="term-tip">💡 El paso donde más personas se van es tu mayor oportunidad de mejora. Si muchos ven el producto pero pocos hacen clic → el precio o la oferta no convencen.</div>
+      </div>
+    </div>
+
+    <!-- ── META PIXEL ── -->
+    <div class="guide-panel" id="panel-pixel">
+      <div class="guide-section-title">🎯 Meta Pixel (Facebook & Instagram)</div>
+      <div class="guide-section-sub">El Pixel de Meta es un código que instalas en tu sitio web y que conecta lo que hacen tus visitantes con tu cuenta de anuncios. Sin él, Meta no sabe si tus anuncios están generando ventas reales.</div>
+
+      <div class="guide-info-box">🔗 <strong>¿Cómo se instala?</strong> Ve a <strong>business.facebook.com</strong> → Administrador de eventos → Píxeles → Crear Pixel → Copiar el código base → Pegarlo en el &lt;head&gt; de todas las páginas de tu sitio. También puedes conectarlo directamente desde Shopify, Wix o WordPress con tu ID de Pixel (número largo de 15-16 dígitos).</div>
+
+      <div class="term-card">
+        <div class="term-name">🔷 ¿Qué es el Pixel de Meta?</div>
+        <div class="term-simple">Es un pequeño código JavaScript que va en tu sitio web y le reporta a Meta (Facebook/Instagram) qué páginas visitan las personas y qué acciones hacen.</div>
+        <div class="term-tech">Funciona como un espía invisible: cuando alguien visita tu sitio (aunque llegue por Google o directo), el Pixel lo registra. Si esa persona tiene Facebook o Instagram, Meta la puede identificar y mostrarle tus anuncios después. Sin el Pixel, Meta solo sabe que alguien hizo clic en tu anuncio — no sabe si compró.</div>
+        <div class="term-tip">🚨 Sin Pixel instalado: estás pagando anuncios sin poder medir resultados reales, sin poder hacer remarketing y sin poder crear audiencias similares a tus compradores.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">👁️ PageView (Vista de página)</div>
+        <div class="term-simple">Se dispara cada vez que alguien carga cualquier página de tu sitio donde está el Pixel instalado.</div>
+        <div class="term-tech">Es el evento más básico y se activa automáticamente al instalar el Pixel. Solo con PageView ya puedes crear una audiencia de "personas que visitaron mi sitio" para hacer remarketing.</div>
+        <div class="term-tip">✅ Si en el Administrador de Eventos de Meta ves PageViews activos → el Pixel está funcionando correctamente.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🛍️ ViewContent (Ver contenido)</div>
+        <div class="term-simple">Alguien vio la página de un producto o servicio específico.</div>
+        <div class="term-tech">Este evento requiere configuración adicional (no es automático). Se activa cuando alguien llega a la página de detalle de tu producto o servicio. Incluye parámetros como el nombre del producto y el precio.</div>
+        <div class="term-tip">💡 Usa ViewContent para hacer remarketing específico: "mostrar anuncios a personas que vieron el producto X pero no compraron".</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🛒 AddToCart (Agregar al carrito)</div>
+        <div class="term-simple">Alguien agregó un producto a su carrito de compras.</div>
+        <div class="term-tech">Aplica para tiendas online (e-commerce). Este evento es clave para identificar personas con alta intención de compra que no completaron el pago. Meta Ads puede optimizar campañas para conseguir más AddToCart.</div>
+        <div class="term-tip">🎯 Personas que hicieron AddToCart sin comprar = tu audiencia de remarketing más valiosa. Son clientes casi listos — un recordatorio o descuento los convierte.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">💳 Purchase (Compra)</div>
+        <div class="term-simple">Alguien completó una compra en tu tienda.</div>
+        <div class="term-tech">El evento más importante para e-commerce. Se activa en la página de confirmación de compra y debe incluir el valor de la transacción y la moneda. Con este evento Meta puede optimizar tus anuncios para conseguir más compras (no solo clics).</div>
+        <div class="term-tip">✅ Con 50+ eventos Purchase/mes, Meta puede crear audiencias Lookalike (similares) a tus compradores — la estrategia más poderosa para escalar ventas.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">📋 Lead (Prospecto)</div>
+        <div class="term-simple">Alguien dejó sus datos de contacto en tu sitio — llenó un formulario, se registró o te escribió por WhatsApp desde el sitio.</div>
+        <div class="term-tech">Para negocios de servicios (coaches, consultores, clínicas, inmobiliarias) este es el evento principal. Se configura para que se dispare cuando alguien envía el formulario de contacto o llega a la página de "gracias por contactarnos".</div>
+        <div class="term-tip">💡 Si tienes Lead configurado, puedes decirle a Meta: "consígueme más personas como las que ya me dejaron sus datos" → campaña de Lead Generation optimizada.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">👥 Audiencia Personalizada (Custom Audience)</div>
+        <div class="term-simple">Una lista de personas específicas a quienes puedes mostrarles tus anuncios porque ya interactuaron contigo de alguna forma.</div>
+        <div class="term-tech">Tipos principales: visitantes del sitio web (vía Pixel), personas que interactuaron con tu Instagram/Facebook, lista de emails de clientes, personas que vieron tus videos. Se crean en el Administrador de Anuncios → Audiencias.</div>
+        <div class="term-tip">🔥 Las audiencias personalizadas convierten 3-5x mejor que las audiencias frías porque ya te conocen. Siempre tenlas activas.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🔁 Remarketing / Retargeting</div>
+        <div class="term-simple">Mostrarle anuncios específicos a personas que ya visitaron tu sitio o vieron tus productos pero no compraron.</div>
+        <div class="term-tech">Funciona con el Pixel: Meta identifica a los visitantes de tu sitio (que tengan Facebook/Instagram) y puede mostrarles anuncios mientras navegan por otras plataformas. La ventana de remarketing estándar es 30, 60 o 180 días.</div>
+        <div class="term-tip">✅ El remarketing tiene un ROAS (retorno sobre inversión) promedio 2-3x mayor que las campañas a audiencias frías. Es obligatorio si ya tienes tráfico en tu sitio.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">🔮 Audiencia Similar (Lookalike)</div>
+        <div class="term-simple">Meta encuentra personas que se parecen a tus clientes actuales — mismo comportamiento, intereses y características — para mostrarles tus anuncios.</div>
+        <div class="term-tech">Se crea a partir de una audiencia personalizada (ej: tus compradores). Meta analiza el perfil de esas personas y encuentra millones de personas similares. El porcentaje (1%-10%) indica qué tan parecidas son: 1% = más similares pero menos personas; 10% = más personas pero menos precisas.</div>
+        <div class="term-tip">💡 Empieza con Lookalike 1-3% basada en tus compradores o leads. Es la forma más eficiente de escalar campañas sin perder precisión.</div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-name">📐 Atribución</div>
+        <div class="term-simple">El proceso de determinar qué anuncio, canal o acción fue el responsable de generar una venta o conversión.</div>
+        <div class="term-tech">El modelo de atribución define a quién se le da el "crédito" cuando alguien pasa por múltiples puntos de contacto antes de comprar. Meta usa por defecto 7 días clic / 1 día vista. GA4 usa atribución basada en datos. Cuando los números de Meta y GA4 no coinciden → es un problema de atribución.</div>
+        <div class="term-tip">⚠️ Normal que Meta y GA4 reporten números diferentes para la misma venta — cada herramienta la atribuye distinto. Usa ambas como complemento, no como verdad absoluta por separado.</div>
+      </div>
+    </div>
+
+    <!-- ── CHECKLIST ── -->
+    <div class="guide-panel" id="panel-checklist">
+      <div class="guide-section-title">✅ Checklist de implementación</div>
+      <div class="guide-section-sub">Verifica qué tienes instalado y configurado. Marca cada punto a medida que lo completes.</div>
+
+      <div class="check-group-title">📈 Google Analytics 4</div>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>GA4 instalado en el sitio</strong><span>Puedes verificar abriendo tu sitio y buscando en el código fuente (Ctrl+U) "G-" seguido de letras y números. Si aparece, está instalado.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Datos aparecen en Tiempo Real</strong><span>Ve a analytics.google.com → Tu propiedad → Informes → Tiempo real. Abre tu sitio en otra pestaña — deberías verte a ti mismo como 1 usuario activo.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Al menos una conversión configurada</strong><span>En GA4: Configurar → Eventos → marca como Conversión el evento de tu acción importante (formulario enviado, clic en WhatsApp, compra).</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Configuraste la fuente de tráfico de tus anuncios</strong><span>Cuando creas anuncios en Meta o Google, agrega los parámetros UTM a las URLs para que GA4 sepa de qué campaña específica viene cada visita.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Tienes al menos 30 días de datos acumulados</strong><span>GA4 muestra patrones reales después de varias semanas. Con menos de un mes, los datos son insuficientes para tomar decisiones.</span></div></label>
+
+      <div class="check-group-title">🎯 Meta Pixel</div>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Pixel instalado en todas las páginas del sitio</strong><span>Verifica en business.facebook.com → Administrador de eventos. Si aparece actividad en las últimas 24h → está funcionando.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>El evento PageView se está registrando</strong><span>En el Administrador de eventos deberías ver PageView cada vez que alguien visita cualquier página. Es automático al instalar bien el Pixel.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Tienes el evento Lead o Purchase configurado</strong><span>Este es el evento de conversión principal. Sin él, Meta no puede optimizar para resultados reales — solo para clics.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Creaste una audiencia personalizada de visitantes</strong><span>En Administrador de Anuncios → Audiencias → Crear → Sitio web → Todas las personas que visitaron tu sitio en los últimos 30-180 días.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Tienes campaña de remarketing activa</strong><span>Si tienes tráfico en tu sitio (100+ personas/semana), una campaña de remarketing permanente es obligatoria. Recupera personas que ya te conocen.</span></div></label>
+      <label class="check-row"><input type="checkbox"><div class="check-row-text"><strong>Creaste audiencia Lookalike basada en compradores o leads</strong><span>Necesitas al menos 100 personas en tu audiencia base para crear un Lookalike. Si tienes clientes, es hora de escalar.</span></div></label>
+
+      <div style="background:rgba(22,163,74,.07);border:1.5px solid rgba(22,163,74,.2);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:.82rem;line-height:1.6">
+        <strong style="color:#15803d">🏆 ¿Cuántos marcaste?</strong><br>
+        <strong>0-3:</strong> Estás en el inicio — prioriza instalar GA4 y el Pixel antes de cualquier otra cosa.<br>
+        <strong>4-7:</strong> Buena base — enfócate en configurar las conversiones y el remarketing.<br>
+        <strong>8-11:</strong> Tienes todo lo necesario para tomar decisiones basadas en datos reales. ¡Ahora a optimizar!
+      </div>
+    </div>
+
+    <!-- ── DECISIONES ── -->
+    <div class="guide-panel" id="panel-decisiones">
+      <div class="guide-section-title">💡 Cómo tomar decisiones con tus datos</div>
+      <div class="guide-section-sub">Guía práctica: qué significa cada señal y qué hacer. Sin tecnicismos — acción directa.</div>
+
+      <div class="decision-card">
+        <div class="decision-ico">📉</div>
+        <div><div class="decision-if">Si ves esto en GA4</div><div class="decision-condition">Tasa de Interacción menor al 40%</div><div class="decision-then">Las personas llegan y se van de inmediato. El problema puede ser: (1) el anuncio promete algo diferente a lo que ofrece la página, (2) la página carga lento, (3) el diseño no genera confianza en los primeros 3 segundos. Haz coincidir el mensaje del anuncio con el título de la página (mensaje unificado).</div></div>
+      </div>
+
+      <div class="decision-card">
+        <div class="decision-ico">⏱️</div>
+        <div><div class="decision-if">Si ves esto en GA4</div><div class="decision-condition">Duración media de sesión menor a 30 segundos</div><div class="decision-then">Las personas no están leyendo tu contenido. Posibles causas: tiempo de carga &gt;3 segundos, diseño confuso, texto demasiado largo sin jerarquía visual, o la página no responde bien en móvil. Prioriza velocidad y un titular claro que enganche en 5 segundos.</div></div>
+      </div>
+
+      <div class="decision-card">
+        <div class="decision-ico">🗺️</div>
+        <div><div class="decision-if">Si ves esto en GA4</div><div class="decision-condition">El 80%+ del tráfico viene de una sola fuente</div><div class="decision-then">Dependencia de un solo canal = riesgo. Si Meta sube los costos o Google cambia su algoritmo, pierdes todo tu tráfico. Invierte en al menos 2 canales: por ejemplo, pauta en Meta + contenido orgánico en Instagram o TikTok.</div></div>
+      </div>
+
+      <div class="decision-card">
+        <div class="decision-ico">🎯</div>
+        <div><div class="decision-if">Si ves esto en GA4</div><div class="decision-condition">Tasa de conversión menor al 1% en landing page de venta</div><div class="decision-then">Menos de 1 de cada 100 personas que llegan compran o contactan. Revisa en orden: (1) ¿la oferta es clara? (2) ¿hay prueba social (testimonios, clientes)? (3) ¿el CTA es visible y directo? (4) ¿el precio está justificado? Una landing bien optimizada convierte entre 2% y 8%.</div></div>
+      </div>
+
+      <div class="decision-card">
+        <div class="decision-ico">🛒</div>
+        <div><div class="decision-if">Si ves esto en Meta Pixel</div><div class="decision-condition">Muchos AddToCart pero pocos Purchase (compras)</div><div class="decision-then">Las personas quieren comprar pero algo las detiene en el proceso de pago. Las causas más comunes: (1) el proceso de pago tiene demasiados pasos, (2) no aceptan su método de pago favorito, (3) los costos de envío aparecen al final y son una sorpresa, (4) la página de pago no transmite seguridad. Activa una campaña de remarketing específica para AddToCart con un incentivo (descuento, envío gratis).</div></div>
+      </div>
+
+      <div class="decision-card">
+        <div class="decision-ico">📋</div>
+        <div><div class="decision-if">Si ves esto en Meta Pixel</div><div class="decision-condition">Tienes Leads pero las ventas no cierran</div><div class="decision-then">El problema no es la pauta — es el proceso de ventas post-lead. Cuando alguien llena el formulario: (1) ¿cuánto tardas en contactarlo? (menos de 5 minutos es lo ideal), (2) ¿tienes un guión de ventas definido?, (3) ¿el lead entendía exactamente qué estaba pidiendo? Revisa la calidad de los leads: si el formulario es muy fácil, atrae a curiosos, no a compradores.</div></div>
+      </div>
+
+      <div class="decision-card">
+        <div class="decision-ico">📊</div>
+        <div><div class="decision-if">Si ves esto en Meta Ads</div><div class="decision-condition">El ROAS baja semana a semana con el mismo creativo</div><div class="decision-then">Fatiga de creativo: tu audiencia ya vio el anuncio demasiadas veces. Señal: frecuencia &gt;3 y CTR cayendo. Solución: cambia el creativo (nuevo hook, nuevo formato, nuevo ángulo) pero mantén la misma audiencia si está funcionando. No toques la segmentación cuando el problema es el anuncio.</div></div>
+      </div>
+
+      <div class="decision-card">
+        <div class="decision-ico">🔮</div>
+        <div><div class="decision-if">Cuándo crear Lookalike</div><div class="decision-condition">Tienes 100+ compradores o 500+ leads registrados</div><div class="decision-then">Es el momento de escalar. Crea una audiencia Lookalike 1% basada en tus compradores (o leads si no tienes compras). Esta audiencia será 10-20x más grande que tu base y tendrá características similares a las personas que ya te compraron. Es la forma más eficiente de crecer sin perder calidad.</div></div>
+      </div>
+
+      <div style="background:rgba(147,51,234,.07);border:1.5px solid rgba(147,51,234,.2);border-radius:12px;padding:14px 16px;margin-top:6px;font-size:.82rem;line-height:1.6">
+        <strong style="color:var(--purple)">🧭 Regla de oro para tomar decisiones con datos:</strong><br>
+        Necesitas al menos <strong>100 eventos del mismo tipo</strong> antes de sacar conclusiones. Con menos datos, la variación es normal y puede llevarte a cambiar cosas que en realidad funcionan. Espera suficientes datos, luego decide con confianza.
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -889,6 +1181,25 @@ function resetAudit() {
 
 // Handle Enter key on URL input
 document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') startAudit(); });
+
+function mostrarGuia() {
+  document.getElementById('inputState').style.display = 'none';
+  document.getElementById('guiaState').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function ocultarGuia() {
+  document.getElementById('guiaState').style.display = 'none';
+  document.getElementById('inputState').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function cambiarTab(id, btn) {
+  document.querySelectorAll('.guide-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.guide-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
 </script>
 </body>
 </html>

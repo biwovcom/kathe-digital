@@ -240,52 +240,48 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="ia-banner-row">
         <div class="ia-icon">🤖</div>
         <div style="flex:1;min-width:200px">
-          <div class="ia-title">Conecta ChatGPT para leer tus capturas automáticamente</div>
-          <div class="ia-sub">Solo necesitas una clave de ChatGPT. La herramienta lee tus fotos y extrae todos los números sola — sin escribir nada a mano.</div>
+          <div class="ia-title">Conecta Gemini (Google) — gratis, sin tarjeta</div>
+          <div class="ia-sub">La IA de Google lee tus capturas y extrae todos los números sola. Es completamente gratis — solo necesitas una cuenta de Gmail.</div>
           <div id="iaStatusArea">
             <div id="iaNoKey">
-              <button class="ia-opt-btn primary" onclick="mostrarPanel('openai')" style="margin-top:8px">🔑 Conectar ChatGPT — ver instrucciones ▾</button>
+              <button class="ia-opt-btn primary" onclick="mostrarPanel('gemini')" style="margin-top:8px">🔑 Conectar Gemini gratis — ver instrucciones ▾</button>
             </div>
             <div id="iaHasKey" style="display:none">
-              <span class="ia-connected" id="iaConnectedLabel">✅ ChatGPT conectado</span>
+              <span class="ia-connected" id="iaConnectedLabel">✅ Gemini conectado</span>
               <button onclick="desconectarIA()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;margin-left:10px;text-decoration:underline">Cambiar clave / desconectar</button>
             </div>
           </div>
         </div>
       </div>
-      <!-- Panel ChatGPT -->
-      <div class="ia-panel" id="panelOpenai">
-        <div style="font-weight:800;font-size:.95rem;margin-bottom:6px">Cómo conectar ChatGPT — sigue estos pasos:</div>
+      <!-- Panel Gemini -->
+      <div class="ia-panel" id="panelGemini">
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:6px">Cómo conectar Gemini — sigue estos pasos:</div>
         <div style="background:rgba(16,163,127,.1);border:1px solid rgba(16,163,127,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.8rem;line-height:1.6">
-          💡 <strong>¿Cuánto cuesta?</strong> Con <strong>$5 USD</strong> tienes para más de <strong>5,000 análisis</strong> — es decir, años de uso normal. La clave se guarda en tu navegador y nadie más la puede ver.
+          🎉 <strong>100% gratis.</strong> Google da <strong>1,500 análisis por día</strong> sin cobrar nada. Solo necesitas tu cuenta de Gmail — sin tarjeta de crédito.
         </div>
         <div class="ia-step">
           <div class="ia-step-n">1</div>
-          <p>Abre <a href="https://platform.openai.com" target="_blank" style="color:var(--accent);font-weight:700">platform.openai.com</a> en el navegador e inicia sesión con tu cuenta de Gmail u otro correo.<br><span style="font-size:.78rem;color:var(--muted)">(Si no tienes cuenta, toca "Sign up" y créala gratis en 2 minutos)</span></p>
+          <p>Abre <a href="https://aistudio.google.com" target="_blank" style="color:var(--accent);font-weight:700">aistudio.google.com</a> en el navegador e inicia sesión con tu cuenta de <strong>Gmail</strong>.</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">2</div>
-          <p>Una vez adentro, busca en el <strong>menú de la izquierda</strong> la opción <strong>"API keys"</strong> y tócala.<br><span style="font-size:.78rem;color:var(--muted)">(Si no ves el menú, toca el ícono de las 3 líneas ☰ arriba a la izquierda)</span></p>
+          <p>Toca el botón <strong>"Get API key"</strong> (está en el menú de la izquierda o en la pantalla principal).</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">3</div>
-          <p>Toca el botón <strong>"Create new secret key"</strong> → ponle cualquier nombre (por ejemplo "Mi análisis") → toca <strong>"Create secret key"</strong>.</p>
+          <p>Toca <strong>"Create API key"</strong> → selecciona cualquier proyecto (o crea uno nuevo) → toca <strong>"Create API key in existing project"</strong>.</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">4</div>
-          <p>Aparece tu clave — es una cadena larga que empieza por <strong>sk-</strong>. Toca el botón de <strong>copiar</strong> (el ícono de dos cuadros al lado de la clave). <strong>¡No la cierres sin copiarla, solo se muestra una vez!</strong></p>
+          <p>Aparece tu clave — es una cadena que empieza por <strong>AIza</strong>. Toca el botón de <strong>copiar</strong> al lado de la clave.</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">5</div>
-          <p>Agrega créditos para que funcione: en el menú izquierdo toca <strong>"Billing"</strong> → <strong>"Add to credit balance"</strong> → ingresa tu tarjeta y agrega mínimo <strong>$5 USD</strong>.<br><span style="font-size:.78rem;color:var(--muted)">Con $5 tienes más de 5,000 análisis — suficiente para años de uso.</span></p>
-        </div>
-        <div class="ia-step">
-          <div class="ia-step-n">6</div>
-          <p>Vuelve a esta página, <strong>pega tu clave</strong> en el campo de abajo y toca <strong>"Guardar →"</strong>. ¡Listo!</p>
+          <p>Vuelve a esta página, <strong>pega tu clave</strong> en el campo de abajo y toca <strong>"Guardar →"</strong>. ¡Listo, sin pagar nada!</p>
         </div>
         <div class="ia-key-row">
-          <input type="password" class="ia-key-input" id="openaiKeyInput" placeholder="Pega tu clave aquí (sk-proj-... o sk-...)">
-          <button class="ia-save-btn" onclick="guardarClave('openai')">Guardar →</button>
+          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="Pega tu clave aquí (AIza...)">
+          <button class="ia-save-btn" onclick="guardarClave('gemini')">Guardar →</button>
         </div>
         <p class="ia-note">🔒 Tu clave se guarda únicamente en tu navegador. Kathe Digital nunca la ve ni la almacena en ningún servidor.</p>
       </div>
@@ -374,7 +370,7 @@ footer a{color:var(--accent);text-decoration:none}
         <div id="manualHint" style="background:rgba(233,30,140,.08);border:2px solid rgba(233,30,140,.3);border-radius:14px;padding:16px 18px;text-align:center">
           <div style="font-size:1.8rem;margin-bottom:4px">👇</div>
           <strong style="font-size:.95rem;color:#1a0a2e;display:block;margin-bottom:4px">¡Capturas guardadas! Ahora escribe los números en el formulario.</strong>
-          <p style="font-size:.8rem;color:#a07ab5;margin:6px 0 10px">Sin IA conectada debes ingresar los números manualmente. <button onclick="mostrarPanel('gemini')" style="background:none;border:none;color:var(--accent);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0">Conectar IA gratis →</button></p>
+          <p style="font-size:.8rem;color:#a07ab5;margin:6px 0 10px">Sin IA conectada debes ingresar los números manualmente. <button onclick="mostrarPanel('gemini')" style="background:none;border:none;color:var(--accent);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0">Conectar Gemini gratis →</button></p>
           <button onclick="document.getElementById('formPaso3').scrollIntoView({behavior:'smooth'})" style="background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;border:none;padding:9px 20px;border-radius:99px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit">Ir al formulario ↓</button>
         </div>
       </div>
@@ -639,7 +635,7 @@ function actualizarHint() {
   const hint = document.getElementById('galleryHint');
   if (!screenshots.length) { hint.style.display = 'none'; return; }
   hint.style.display = 'block';
-  const tieneIA = !!localStorage.getItem('kd_openai_key');
+  const tieneIA = !!localStorage.getItem('kd_gemini_key');
   document.getElementById('extractBox').style.display = tieneIA ? 'block' : 'none';
   document.getElementById('manualHint').style.display = tieneIA ? 'none' : 'block';
 }
@@ -1064,40 +1060,39 @@ function descargarReporte() {
 let _activePanel = null;
 
 function mostrarPanel(tipo) {
-  document.getElementById('panelOpenai').style.display = 'none';
+  document.getElementById('panelGemini').style.display = 'none';
   if (_activePanel === tipo) { _activePanel = null; return; }
-  document.getElementById('panelOpenai').style.display = 'block';
+  document.getElementById('panelGemini').style.display = 'block';
   _activePanel = tipo;
-  setTimeout(() => document.getElementById('panelOpenai').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  setTimeout(() => document.getElementById('panelGemini').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
 function guardarClave(tipo) {
-  const key = document.getElementById('openaiKeyInput').value.trim();
-  if (!key) { alert('Por favor pega tu clave de ChatGPT primero.'); return; }
-  if (!key.startsWith('sk-')) { alert('La clave de ChatGPT debe empezar por "sk-". Revisa que la copiaste completa desde platform.openai.com'); return; }
+  const key = document.getElementById('geminiKeyInput').value.trim();
+  if (!key) { alert('Por favor pega tu clave de Gemini primero.'); return; }
+  if (!key.startsWith('AIza')) { alert('La clave de Gemini debe empezar por "AIza". Revisa que la copiaste completa desde aistudio.google.com'); return; }
   if (key.length < 20) { alert('La clave parece incompleta. Asegúrate de copiarla completa.'); return; }
-  localStorage.setItem('kd_openai_key', key);
-  // Limpiar claves antiguas si las había
+  localStorage.setItem('kd_gemini_key', key);
+  localStorage.removeItem('kd_openai_key');
   localStorage.removeItem('kd_claude_key');
-  localStorage.removeItem('kd_gemini_key');
   mostrarEstadoIA();
-  document.getElementById('panelOpenai').style.display = 'none';
+  document.getElementById('panelGemini').style.display = 'none';
   _activePanel = null;
   actualizarHint();
 }
 
 function desconectarIA() {
+  localStorage.removeItem('kd_gemini_key');
   localStorage.removeItem('kd_openai_key');
   localStorage.removeItem('kd_claude_key');
-  localStorage.removeItem('kd_gemini_key');
   mostrarEstadoIA();
   actualizarHint();
 }
 
 function mostrarEstadoIA() {
-  const openaiKey = localStorage.getItem('kd_openai_key');
-  document.getElementById('iaNoKey').style.display = openaiKey ? 'none' : 'block';
-  document.getElementById('iaHasKey').style.display = openaiKey ? 'block' : 'none';
+  const geminiKey = localStorage.getItem('kd_gemini_key');
+  document.getElementById('iaNoKey').style.display = geminiKey ? 'none' : 'block';
+  document.getElementById('iaHasKey').style.display = geminiKey ? 'block' : 'none';
 }
 
 mostrarEstadoIA();
@@ -1133,17 +1128,17 @@ Notas:
 
 async function extraerConIA() {
   if (screenshots.length === 0) { alert('Primero sube tus capturas.'); return; }
-  const openaiKey = localStorage.getItem('kd_openai_key');
-  if (!openaiKey) { mostrarPanel('openai'); return; }
+  const geminiKey = localStorage.getItem('kd_gemini_key');
+  if (!geminiKey) { mostrarPanel('gemini'); return; }
 
   const btn = document.getElementById('btnExtract');
   const status = document.getElementById('extractStatus');
   btn.disabled = true;
-  btn.textContent = '⏳ ChatGPT está leyendo tus capturas...';
-  status.textContent = 'Analizando imágenes con ChatGPT. Puede tardar 10-20 segundos...';
+  btn.textContent = '⏳ Gemini está leyendo tus capturas...';
+  status.textContent = 'Analizando imágenes con Gemini (Google). Puede tardar 10-20 segundos...';
 
   try {
-    const metrics = await extraerOpenAI(openaiKey);
+    const metrics = await extraerGemini(geminiKey);
     autoRellenarFormulario(metrics);
     btn.textContent = '✅ ¡Datos extraídos con éxito!';
     btn.style.background = '#16a34a';
@@ -1156,12 +1151,10 @@ async function extraerConIA() {
     btn.style.background = '';
     const msg = err.message || '';
     let textoError = 'Ocurrió un error. Intenta de nuevo en unos segundos.';
-    if (msg.includes('401') || msg.includes('Incorrect API key') || msg.includes('invalid_api_key')) {
-      textoError = '🔑 La clave de ChatGPT no es válida. Toca "Cambiar clave / desconectar" arriba y pega la clave correcta desde platform.openai.com';
-    } else if (msg.includes('insufficient_quota') || msg.includes('quota') || msg.includes('billing')) {
-      textoError = '💳 Tu cuenta de ChatGPT no tiene créditos. Ve a platform.openai.com → Billing → Add to credit balance, y agrega mínimo $5 USD.';
-    } else if (msg.includes('rate_limit') || msg.includes('429')) {
-      textoError = '⏱️ ChatGPT está ocupado. Espera 30 segundos y vuelve a intentar.';
+    if (msg.includes('API_KEY_INVALID') || msg.includes('invalid') || msg.includes('403')) {
+      textoError = '🔑 La clave de Gemini no es válida. Toca "Cambiar clave / desconectar" arriba y pega la clave correcta desde aistudio.google.com';
+    } else if (msg.includes('RESOURCE_EXHAUSTED') || msg.includes('quota') || msg.includes('429')) {
+      textoError = '⏱️ Alcanzaste el límite gratuito por hoy (1,500 análisis/día). Espera hasta mañana o vuelve a intentar en unos minutos.';
     } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('Failed')) {
       textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
     }
@@ -1171,7 +1164,6 @@ async function extraerConIA() {
 }
 
 function comprimirImagen(dataURL) {
-  // Comprime al máximo: 512px ancho, calidad 40% — suficiente para que ChatGPT lea los números
   return new Promise(resolve => {
     const img = new Image();
     img.onload = () => {
@@ -1187,23 +1179,22 @@ function comprimirImagen(dataURL) {
   });
 }
 
-async function extraerOpenAI(apiKey) {
+async function extraerGemini(apiKey) {
   const comprimidas = await Promise.all(screenshots.map(ss => comprimirImagen(ss.dataURL)));
-  const content = [
-    { type: 'text', text: PROMPT_IG },
+  const parts = [
+    { text: PROMPT_IG },
     ...comprimidas.map(dataURL => ({
-      type: 'image_url',
-      image_url: { url: dataURL, detail: 'low' }
+      inline_data: { mime_type: 'image/jpeg', data: dataURL.split(',')[1] }
     }))
   ];
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-    body: JSON.stringify({ model: 'gpt-4o-mini', max_tokens: 512, messages: [{ role: 'user', content }] })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts }] })
   });
   const data = await res.json();
-  if (data.error) throw new Error(data.error.message || data.error.code || 'Error ChatGPT API');
-  return parseJSON(data.choices[0].message.content);
+  if (data.error) throw new Error(data.error.message || data.error.status || 'Error Gemini API');
+  return parseJSON(data.candidates[0].content.parts[0].text);
 }
 
 function parseJSON(text) {
