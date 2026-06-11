@@ -230,48 +230,48 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="ia-banner-row">
         <div class="ia-icon">🤖</div>
         <div style="flex:1;min-width:200px">
-          <div class="ia-title">Conecta Gemini (Google) — gratis, sin tarjeta</div>
-          <div class="ia-sub">La IA de Google lee tus capturas y extrae todos los números sola. Es completamente gratis — solo necesitas una cuenta de Gmail.</div>
+          <div class="ia-title">Conecta Claude — la IA que lee tus capturas</div>
+          <div class="ia-sub">Claude lee tus pantallazos de TikTok y extrae todos los números automáticamente. Funciona desde cualquier país.</div>
           <div id="iaStatusArea">
             <div id="iaNoKey">
-              <button class="ia-opt-btn primary" onclick="mostrarPanel('gemini')" style="margin-top:8px">🔑 Conectar Gemini gratis — ver instrucciones ▾</button>
+              <button class="ia-opt-btn primary" onclick="mostrarPanel('claude')" style="background:linear-gradient(135deg,#7c3aed,#9333ea);margin-top:8px">🔑 Conectar Claude — ver instrucciones ▾</button>
             </div>
             <div id="iaHasKey" style="display:none">
-              <span class="ia-connected" id="iaConnectedLabel">✅ Gemini conectado</span>
+              <span class="ia-connected" id="iaConnectedLabel">✅ Claude conectado</span>
               <button onclick="desconectarIA()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;margin-left:10px;text-decoration:underline">Cambiar clave / desconectar</button>
             </div>
           </div>
         </div>
       </div>
-      <!-- Panel Gemini -->
-      <div class="ia-panel" id="panelGemini">
-        <div style="font-weight:800;font-size:.95rem;margin-bottom:6px">Cómo conectar Gemini — sigue estos pasos:</div>
-        <div style="background:rgba(16,163,127,.1);border:1px solid rgba(16,163,127,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.8rem;line-height:1.6">
-          🎉 <strong>100% gratis.</strong> Google da <strong>1,500 análisis por día</strong> sin cobrar nada. Solo necesitas tu cuenta de Gmail — sin tarjeta de crédito.
+      <!-- Panel Claude -->
+      <div class="ia-panel" id="panelClaude" style="display:none">
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:6px">Cómo conectar Claude — sigue estos pasos:</div>
+        <div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.8rem;line-height:1.6">
+          🌎 <strong>Funciona desde cualquier país.</strong> Sin VPN. Solo necesitas crear una cuenta en Anthropic y agregar <strong>USD $5 de créditos</strong> — eso alcanza para más de 2.000 análisis.
         </div>
         <div class="ia-step">
           <div class="ia-step-n">1</div>
-          <p>Abre <a href="https://aistudio.google.com" target="_blank" style="color:var(--accent);font-weight:700">aistudio.google.com</a> en el navegador e inicia sesión con tu cuenta de <strong>Gmail</strong>.</p>
+          <p>Abre <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);font-weight:700">console.anthropic.com</a> y crea una cuenta (o inicia sesión si ya tienes una).</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">2</div>
-          <p>Toca el botón <strong>"Get API key"</strong> (está en el menú de la izquierda o en la pantalla principal).</p>
+          <p>Ve a <strong>Billing</strong> → <strong>Add credits</strong> y recarga <strong>USD $5</strong> con tu tarjeta. Es el mínimo para activar el API.</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">3</div>
-          <p>Toca <strong>"Create API key"</strong> → selecciona cualquier proyecto (o crea uno nuevo) → toca <strong>"Create API key in existing project"</strong>.</p>
+          <p>En el menú lateral busca <strong>"API Keys"</strong> y toca <strong>"Create Key"</strong>. Dale un nombre (por ejemplo: "TikTok Analyzer").</p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">4</div>
-          <p>Aparece tu clave — es una cadena larga (puede empezar por <strong>AIza</strong> o <strong>AQ.</strong> según el tipo de proyecto). Toca el botón <strong>"Copy key"</strong> o el ícono de copiar al lado.</p>
+          <p>Aparece tu clave — empieza por <strong>sk-ant-</strong>. Toca el botón de copiar al lado. <em>Solo aparece una vez, guárdala.</em></p>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">5</div>
-          <p>Vuelve a esta página, <strong>pega tu clave</strong> en el campo de abajo y toca <strong>"Guardar →"</strong>. ¡Listo, sin pagar nada!</p>
+          <p>Vuelve a esta página, <strong>pega tu clave</strong> en el campo de abajo y toca <strong>"Guardar →"</strong>. ¡Listo!</p>
         </div>
         <div class="ia-key-row">
-          <input type="password" class="ia-key-input" id="geminiKeyInput" placeholder="Pega tu clave aquí (AIza... o AQ...)">
-          <button class="ia-save-btn" onclick="guardarClave('gemini')">Guardar →</button>
+          <input type="password" class="ia-key-input" id="claudeKeyInput" placeholder="Pega tu clave aquí (sk-ant-...)">
+          <button class="ia-save-btn" onclick="guardarClave('claude')" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">Guardar →</button>
         </div>
         <p class="ia-note">🔒 Tu clave se guarda únicamente en tu navegador. Kathe Digital nunca la ve ni la almacena en ningún servidor.</p>
       </div>
@@ -363,7 +363,7 @@ footer a{color:var(--accent);text-decoration:none}
         <div id="manualHint" style="background:rgba(233,30,140,.08);border:2px solid rgba(233,30,140,.3);border-radius:14px;padding:16px 18px;text-align:center">
           <div style="font-size:1.8rem;margin-bottom:4px">👇</div>
           <strong style="font-size:.95rem;color:#1a0a2e;display:block;margin-bottom:4px">¡Capturas guardadas! Ahora escribe los números en el formulario.</strong>
-          <p style="font-size:.8rem;color:#a07ab5;margin:6px 0 10px">Sin IA conectada debes ingresar los números manualmente. <button onclick="mostrarPanel('gemini')" style="background:none;border:none;color:var(--accent);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0">Conectar IA gratis →</button></p>
+          <p style="font-size:.8rem;color:#a07ab5;margin:6px 0 10px">Sin IA conectada debes ingresar los números manualmente. <button onclick="mostrarPanel('claude')" style="background:none;border:none;color:var(--accent);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0">Conectar Claude →</button></p>
           <button onclick="document.getElementById('formPaso3').scrollIntoView({behavior:'smooth'})" style="background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;border:none;padding:9px 20px;border-radius:99px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit">Ir al formulario ↓</button>
         </div>
       </div>
@@ -633,7 +633,7 @@ function actualizarHint() {
   const hint = document.getElementById('galleryHint');
   if (!screenshots.length) { hint.style.display = 'none'; return; }
   hint.style.display = 'block';
-  const tieneIA = !!localStorage.getItem('kd_gemini_key');
+  const tieneIA = !!localStorage.getItem('kd_claude_key');
   document.getElementById('extractBox').style.display = tieneIA ? 'block' : 'none';
   document.getElementById('manualHint').style.display = tieneIA ? 'none' : 'block';
 }
@@ -1070,38 +1070,38 @@ function descargarReporte() {
 let _activePanel = null;
 
 function mostrarPanel(tipo) {
-  document.getElementById('panelGemini').style.display = 'none';
+  document.getElementById('panelClaude').style.display = 'none';
   if (_activePanel === tipo) { _activePanel = null; return; }
-  document.getElementById('panelGemini').style.display = 'block';
+  document.getElementById('panelClaude').style.display = 'block';
   _activePanel = tipo;
-  setTimeout(() => document.getElementById('panelGemini').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  setTimeout(() => document.getElementById('panelClaude').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
 function guardarClave(tipo) {
-  const key = document.getElementById('geminiKeyInput').value.trim();
-  if (!key) { alert('Por favor pega tu clave de Gemini primero.'); return; }
-  if (key.length < 20) { alert('La clave parece incompleta. Asegúrate de copiarla completa desde aistudio.google.com'); return; }
-  localStorage.setItem('kd_gemini_key', key);
+  const key = document.getElementById('claudeKeyInput').value.trim();
+  if (!key) { alert('Por favor pega tu clave de Claude primero.'); return; }
+  if (!key.startsWith('sk-ant-') || key.length < 30) { alert('La clave de Claude debe empezar por sk-ant- y tener al menos 30 caracteres. Cópiala completa desde console.anthropic.com'); return; }
+  localStorage.setItem('kd_claude_key', key);
+  localStorage.removeItem('kd_gemini_key');
   localStorage.removeItem('kd_openai_key');
-  localStorage.removeItem('kd_claude_key');
   mostrarEstadoIA();
-  document.getElementById('panelGemini').style.display = 'none';
+  document.getElementById('panelClaude').style.display = 'none';
   _activePanel = null;
   actualizarHint();
 }
 
 function desconectarIA() {
+  localStorage.removeItem('kd_claude_key');
   localStorage.removeItem('kd_gemini_key');
   localStorage.removeItem('kd_openai_key');
-  localStorage.removeItem('kd_claude_key');
   mostrarEstadoIA();
   actualizarHint();
 }
 
 function mostrarEstadoIA() {
-  const geminiKey = localStorage.getItem('kd_gemini_key');
-  document.getElementById('iaNoKey').style.display = geminiKey ? 'none' : 'block';
-  document.getElementById('iaHasKey').style.display = geminiKey ? 'block' : 'none';
+  const claudeKey = localStorage.getItem('kd_claude_key');
+  document.getElementById('iaNoKey').style.display = claudeKey ? 'none' : 'block';
+  document.getElementById('iaHasKey').style.display = claudeKey ? 'block' : 'none';
 }
 
 // Init IA state on load
@@ -1139,17 +1139,17 @@ Notas:
 
 async function extraerConIA() {
   if (screenshots.length === 0) { alert('Primero sube tus capturas.'); return; }
-  const geminiKey = localStorage.getItem('kd_gemini_key');
-  if (!geminiKey) { mostrarPanel('gemini'); return; }
+  const claudeKey = localStorage.getItem('kd_claude_key');
+  if (!claudeKey) { mostrarPanel('claude'); return; }
 
   const btn = document.getElementById('btnExtract');
   const status = document.getElementById('extractStatus');
   btn.disabled = true;
-  btn.textContent = '⏳ Gemini está leyendo tus capturas...';
-  status.textContent = 'Analizando imágenes con Gemini (Google). Puede tardar 10-20 segundos...';
+  btn.textContent = '⏳ Claude está leyendo tus capturas...';
+  status.textContent = 'Analizando imágenes con Claude. Puede tardar 10-20 segundos...';
 
   try {
-    const metrics = await extraerGemini(geminiKey);
+    const metrics = await extraerClaude(claudeKey);
     autoRellenarFormulario(metrics);
     btn.textContent = '✅ ¡Datos extraídos con éxito!';
     btn.style.background = '#16a34a';
@@ -1162,12 +1162,10 @@ async function extraerConIA() {
     btn.style.background = '';
     const msg = (err.message || '').toLowerCase();
     let textoError = 'Error: ' + (err.message || 'desconocido');
-    if (msg.includes('invalid') || msg.includes('api key') || msg.includes('403') || msg.includes('unauthorized') || msg.includes('permission')) {
-      textoError = '🔑 La clave de Gemini no es válida o no tiene permisos. Ve a aistudio.google.com → Claves de API → copia una clave activa y pégala de nuevo.';
-    } else if (msg.includes('exhausted') || msg.includes('quota') || msg.includes('429') || msg.includes('limit')) {
-      textoError = '⏱️ Todos los modelos de Gemini alcanzaron su límite. Espera unos minutos e intenta de nuevo, o crea una nueva clave en aistudio.google.com con un proyecto diferente.';
-    } else if (msg.includes('location') || msg.includes('region') || msg.includes('country') || msg.includes('not supported')) {
-      textoError = '🌍 Tu región no tiene acceso a este modelo de Gemini. Intenta con una VPN o contacta a Kathe Digital para una solución alternativa.';
+    if (msg.includes('invalid') || msg.includes('api key') || msg.includes('401') || msg.includes('authentication')) {
+      textoError = '🔑 La clave de Claude no es válida. Ve a console.anthropic.com → API Keys → copia una clave activa que empiece por sk-ant- y pégala de nuevo.';
+    } else if (msg.includes('credit') || msg.includes('billing') || msg.includes('quota') || msg.includes('429') || msg.includes('limit')) {
+      textoError = '💳 Tu cuenta de Claude se quedó sin créditos. Ve a console.anthropic.com → Billing para recargar.';
     } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed to fetch')) {
       textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
     }
@@ -1192,29 +1190,32 @@ function comprimirImagen(dataURL) {
   });
 }
 
-async function extraerGemini(apiKey) {
+async function extraerClaude(apiKey) {
   const comprimidas = await Promise.all(screenshots.map(ss => comprimirImagen(ss.dataURL)));
-  const parts = [
-    { text: PROMPT_TIKTOK },
-    ...comprimidas.map(dataURL => ({
-      inline_data: { mime_type: 'image/jpeg', data: dataURL.split(',')[1] }
-    }))
-  ];
-  const modelos = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-flash-8b'];
-  let ultimoError = '';
-  for (const modelo of modelos) {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts }] })
-    });
-    const data = await res.json();
-    if (!data.error) return parseJSON(data.candidates[0].content.parts[0].text);
-    ultimoError = data.error.message || data.error.status || '';
-    const esQuota = ultimoError.includes('quota') || ultimoError.includes('RESOURCE_EXHAUSTED') || ultimoError.includes('limit: 0') || ultimoError.includes('limit:0');
-    if (!esQuota) throw new Error(ultimoError);
-  }
-  throw new Error('RESOURCE_EXHAUSTED: ' + ultimoError);
+  const imageContent = comprimidas.map(dataURL => ({
+    type: 'image',
+    source: { type: 'base64', media_type: 'image/jpeg', data: dataURL.split(',')[1] }
+  }));
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5',
+      max_tokens: 1024,
+      messages: [{
+        role: 'user',
+        content: [...imageContent, { type: 'text', text: PROMPT_TIKTOK }]
+      }]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message || data.error.type || JSON.stringify(data.error));
+  return parseJSON(data.content[0].text);
 }
 
 function parseJSON(text) {
