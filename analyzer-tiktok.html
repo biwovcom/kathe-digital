@@ -336,20 +336,35 @@ footer a{color:var(--accent);text-decoration:none}
 
     <!-- PASO 2 -->
     <div class="step-section">
-      <div class="step-header"><span class="step-num-badge">2</span> Sube tus 4 capturas <span style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">(máximo 4 imágenes)</span></div>
+      <div class="step-header"><span class="step-num-badge">2</span> Sube tus capturas <span style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">(hasta 16 imágenes — puedes subir varios videos)</span></div>
       <div class="upload-area" id="dropZone" onclick="document.getElementById('imgInput').click()">
         <div class="upload-icon">📲</div>
         <div class="upload-main">Arrastra tus capturas aquí o toca para seleccionar</div>
-        <div class="upload-sub">Máximo 4 imágenes · JPG, PNG, HEIC, WEBP</div>
+        <div class="upload-sub">Hasta 16 imágenes — 4 capturas por video · JPG, PNG, HEIC, WEBP</div>
         <div class="upload-types">
-          <span class="upload-type">Captura 1 · Resumen</span>
-          <span class="upload-type">Captura 2 · Espectadores</span>
-          <span class="upload-type">Captura 3 · Tráfico</span>
-          <span class="upload-type">Captura 4 · Participación</span>
+          <span class="upload-type">Resumen</span>
+          <span class="upload-type">Espectadores</span>
+          <span class="upload-type">Tráfico</span>
+          <span class="upload-type">Participación</span>
         </div>
       </div>
       <input type="file" id="imgInput" accept="image/*" multiple style="display:none">
       <div class="screenshots-gallery" id="gallery"></div>
+
+      <!-- Bio upload -->
+      <div style="margin-top:18px;border:1.5px dashed rgba(147,51,234,.35);border-radius:14px;padding:18px 20px;background:rgba(147,51,234,.03)">
+        <div style="font-weight:800;font-size:.88rem;margin-bottom:4px;color:var(--purple)">📸 Captura de tu Perfil de TikTok <span style="font-weight:500;color:var(--muted);font-size:.78rem">(opcional — para análisis de biografía)</span></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px">Toma una captura de tu perfil completo mostrando: foto, nombre, bio y link</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button onclick="document.getElementById('bioInput').click()" style="background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;padding:9px 18px;border-radius:99px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit">+ Subir captura de bio</button>
+          <input type="file" id="bioInput" accept="image/*" style="display:none" onchange="cargarBio(this)">
+          <div id="bioPreview" style="display:none;align-items:center;gap:8px">
+            <img id="bioThumb" style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:1.5px solid rgba(147,51,234,.3)" src="" alt="bio">
+            <span style="font-size:.78rem;color:var(--purple);font-weight:700">Bio cargada ✓</span>
+            <button onclick="quitarBio()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;text-decoration:underline">Quitar</button>
+          </div>
+        </div>
+      </div>
       <div id="galleryHint" style="display:none;margin-top:14px">
         <!-- Extract with AI box (shown when IA is configured) -->
         <div id="extractBox" class="extract-box" style="display:none">
@@ -378,7 +393,7 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="form-grid">
           <div class="field"><label>Nombre del negocio / marca</label><input type="text" id="f_brand" placeholder="ej. Mi Marca"></div>
           <div class="field"><label>Nicho</label>
-            <select id="f_niche">
+            <select id="f_niche" onchange="toggleOtroNicho()">
               <option value="">Selecciona...</option>
               <option value="moda">Moda y ropa</option>
               <option value="belleza">Belleza y skincare</option>
@@ -391,6 +406,9 @@ footer a{color:var(--accent);text-decoration:none}
               <option value="servicios">Servicios profesionales</option>
               <option value="otro">Otro</option>
             </select>
+            <div id="f_niche_otro_wrap" style="display:none;margin-top:8px">
+              <input type="text" id="f_niche_otro" placeholder="Escribe tu nicho (ej. Mascotas, Tecnología...)">
+            </div>
           </div>
           <div class="field"><label>Objetivo principal</label>
             <select id="f_goal">
@@ -402,6 +420,7 @@ footer a{color:var(--accent);text-decoration:none}
           </div>
           <div class="field"><label>Seguidores totales de la cuenta</label><input type="number" id="f_followers" placeholder="ej. 8 000" min="0"></div>
           <div class="field"><label>Videos publicados por semana</label><input type="number" id="f_freq" placeholder="ej. 5" min="0" max="30"></div>
+          <div class="field"><label>Antigüedad de la cuenta</label><input type="text" id="f_age" placeholder="ej. 8 meses, 1 año y medio, 3 años"></div>
         </div>
       </div>
 
@@ -512,6 +531,11 @@ footer a{color:var(--accent);text-decoration:none}
       <p style="font-size:.78rem;color:var(--muted);margin-top:10px;text-align:center">Toca una para ampliarla</p>
     </div>
 
+    <div class="sec-block" id="bioBlock" style="display:none">
+      <div class="sec-title">📸 Análisis de tu Perfil de TikTok</div>
+      <div id="bioContent"></div>
+    </div>
+
     <div class="sec-block" id="contextBlock" style="display:none">
       <div class="sec-title">💬 Contexto de tu negocio</div>
       <p id="contextText" style="font-size:.88rem;line-height:1.6;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px"></p>
@@ -612,8 +636,8 @@ dz.addEventListener('dragleave', () => dz.classList.remove('over'));
 dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); addFiles(e.dataTransfer.files); });
 
 function addFiles(files) {
-  const allowed = 4 - screenshots.length;
-  if (allowed <= 0) { alert('Máximo 4 capturas. Elimina alguna para agregar más.'); return; }
+  const allowed = 16 - screenshots.length;
+  if (allowed <= 0) { alert('Máximo 16 capturas. Elimina alguna para agregar más.'); return; }
   Array.from(files).slice(0, allowed).forEach(file => {
     if (!file.type.startsWith('image/')) return;
     const reader = new FileReader();
@@ -657,7 +681,8 @@ function cerrarImgModal() { document.getElementById('imgModal').classList.remove
 // ─── Analysis ───────────────────────────────────────────────────────────────
 function analizarTikTok() {
   const brand        = document.getElementById('f_brand').value.trim() || 'Tu marca';
-  const niche        = document.getElementById('f_niche').value || 'default';
+  const nicheRaw     = document.getElementById('f_niche').value || 'default';
+  const niche        = nicheRaw === 'otro' ? (document.getElementById('f_niche_otro').value.trim() || 'otro') : nicheRaw;
   const goal         = document.getElementById('f_goal').value;
   const bio          = document.getElementById('f_bio')?.value.trim() || '';
   const business     = document.getElementById('f_business')?.value.trim() || '';
@@ -705,6 +730,8 @@ function analizarTikTok() {
   document.getElementById('rBrand').textContent = brand;
   document.getElementById('formSection').style.display = 'none';
   document.getElementById('resultsSection').style.display = 'block';
+  const claudeKeyForBio = localStorage.getItem('kd_claude_key');
+  if (bioShot && claudeKeyForBio) analizarBio(claudeKeyForBio);
   window.scrollTo(0,0);
 
   // Screenshots
@@ -1067,6 +1094,133 @@ function descargarReporte() {
 }
 
 // ─── IA Setup ────────────────────────────────────────────────────────────────
+// ─── Bio screenshot ───────────────────────────────────────────────────────────
+let bioShot = null;
+
+function cargarBio(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    bioShot = e.target.result;
+    document.getElementById('bioThumb').src = bioShot;
+    document.getElementById('bioPreview').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function quitarBio() {
+  bioShot = null;
+  document.getElementById('bioInput').value = '';
+  document.getElementById('bioPreview').style.display = 'none';
+}
+
+const PROMPT_BIO_TT = `Analiza esta captura de pantalla del perfil de TikTok y evalúa cada elemento visible.
+
+Devuelve SOLO un objeto JSON válido, sin texto antes ni después:
+{
+  "overall_score": 70,
+  "elements": [
+    {"nombre": "Foto de perfil", "icono": "📷", "status": "bueno", "score": 8, "que_es": "Tu imagen principal — primera impresión. En TikTok debe ser llamativa y reconocible en miniatura.", "feedback": "Clara y reconocible"},
+    {"nombre": "Nombre de usuario", "icono": "🔍", "status": "mejorar", "score": 5, "que_es": "Aparece en búsquedas y en los videos. Debe ser fácil de recordar y buscar.", "feedback": "Difícil de recordar o buscar"},
+    {"nombre": "Bio / Descripción", "icono": "✍️", "status": "malo", "score": 3, "que_es": "80 caracteres para capturar nuevos seguidores. Debe decir qué haces, para quién y qué van a ganar siguiéndote.", "feedback": "No tiene propuesta de valor ni CTA"},
+    {"nombre": "Link en Bio", "icono": "🔗", "status": "bueno", "score": 9, "que_es": "Disponible con 1,000+ seguidores. Tu única salida de tráfico de TikTok hacia tu negocio.", "feedback": "Tiene link activo"},
+    {"nombre": "Foto de portada / feed", "icono": "🎬", "status": "mejorar", "score": 5, "que_es": "La cuadrícula de videos es la primera impresión de tu contenido. Las miniaturas deben ser cohesivas y atractivas.", "feedback": "Las miniaturas no tienen consistencia visual"},
+    {"nombre": "Redes sociales vinculadas", "icono": "🔗", "status": "malo", "score": 2, "que_es": "TikTok permite vincular Instagram y YouTube. Aprovéchalo para redirigir tráfico a otras plataformas.", "feedback": "No tiene otras redes vinculadas"}
+  ],
+  "fortalezas": ["Fortaleza específica 1", "Fortaleza específica 2"],
+  "mejoras": [
+    "Mejora muy específica 1 con ejemplo concreto",
+    "Mejora muy específica 2 con ejemplo concreto",
+    "Mejora muy específica 3 con ejemplo concreto"
+  ],
+  "bio_sugerida": "Bio optimizada de máximo 80 caracteres basada en lo que ves en el perfil"
+}
+
+Reglas:
+- status: "bueno" si score 7-10, "mejorar" si score 4-6, "malo" si score 1-3
+- Evalúa SOLO lo que ves. Si no ves un elemento, márcalo como malo.
+- Las mejoras deben ser MUY específicas con ejemplos reales
+- La bio_sugerida debe ser máximo 80 caracteres (límite de TikTok)`;
+
+async function analizarBio(claudeKey) {
+  if (!bioShot || !claudeKey) return;
+  document.getElementById('bioBlock').style.display = 'block';
+  document.getElementById('bioContent').innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:.88rem">⏳ Claude está analizando tu perfil...</div>';
+  try {
+    const comprimida = await comprimirImagen(bioShot);
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': claudeKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 1500,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: comprimida.split(',')[1] } },
+          { type: 'text', text: PROMPT_BIO_TT }
+        ]}]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const bio = parseJSON(data.content[0].text);
+    renderBio(bio);
+  } catch(e) {
+    document.getElementById('bioContent').innerHTML = `<p style="color:#dc2626;font-size:.85rem">Error analizando perfil: ${e.message}</p>`;
+  }
+}
+
+function renderBio(b) {
+  const col = s => s==='bueno'?'#16a34a':s==='mejorar'?'#ea580c':'#dc2626';
+  const bg  = s => s==='bueno'?'rgba(22,163,74,.08)':s==='mejorar'?'rgba(234,88,12,.08)':'rgba(220,38,38,.08)';
+  const ico = s => s==='bueno'?'✅':s==='mejorar'?'⚠️':'❌';
+  const scoreColor = b.overall_score>=70?'#16a34a':b.overall_score>=45?'#ea580c':'#dc2626';
+  document.getElementById('bioContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding:16px;background:var(--bg);border-radius:12px;border:1px solid var(--border)">
+      <svg width="72" height="72" viewBox="0 0 72 72" style="flex-shrink:0">
+        <circle cx="36" cy="36" r="30" fill="none" stroke="#f0ccea" stroke-width="6"/>
+        <circle cx="36" cy="36" r="30" fill="none" stroke="${scoreColor}" stroke-width="6" stroke-linecap="round"
+          stroke-dasharray="${2*Math.PI*30}" stroke-dashoffset="${2*Math.PI*30*(1-b.overall_score/100)}"
+          transform="rotate(-90 36 36)"/>
+        <text x="36" y="40" text-anchor="middle" font-size="16" font-weight="900" fill="${scoreColor}">${b.overall_score}</text>
+      </svg>
+      <div>
+        <div style="font-weight:900;font-size:1.1rem">Puntuación de tu Perfil</div>
+        <div style="font-size:.83rem;color:var(--muted);margin-top:2px">${b.overall_score>=70?'Buena base — hay oportunidades de mejora':b.overall_score>=45?'Necesita trabajo — varios elementos clave faltan':'Urgente — el perfil no comunica tu valor'}</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:20px">
+      ${b.elements.map(el=>`
+        <div style="background:${bg(el.status)};border:1.5px solid ${col(el.status)}33;border-radius:12px;padding:13px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+            <span style="font-weight:800;font-size:.88rem">${el.icono} ${el.nombre}</span>
+            <span style="font-size:.72rem;font-weight:800;color:${col(el.status)};background:${bg(el.status)};border:1px solid ${col(el.status)}44;padding:2px 8px;border-radius:99px;white-space:nowrap">${ico(el.status)} ${el.status==='bueno'?'Bien':el.status==='mejorar'?'Mejorar':'Falta'}</span>
+          </div>
+          <p style="font-size:.75rem;color:#666;line-height:1.45;margin-bottom:6px;font-style:italic">${el.que_es}</p>
+          <p style="font-size:.8rem;color:${col(el.status)};font-weight:600;line-height:1.4">${el.feedback}</p>
+        </div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+      <div style="background:rgba(22,163,74,.06);border:1.5px solid rgba(22,163,74,.2);border-radius:12px;padding:14px">
+        <div style="font-weight:800;font-size:.82rem;color:#15803d;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">✅ Lo que funciona</div>
+        ${b.fortalezas.map(f=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#16a34a;flex-shrink:0">→</span>${f}</div>`).join('')}
+      </div>
+      <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:12px;padding:14px">
+        <div style="font-weight:800;font-size:.82rem;color:#dc2626;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">🔧 Qué mejorar</div>
+        ${b.mejoras.map((m,i)=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#dc2626;font-weight:800;flex-shrink:0">${i+1}.</span>${m}</div>`).join('')}
+      </div>
+    </div>
+    ${b.bio_sugerida?`
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(233,30,140,.06));border:1.5px solid rgba(124,58,237,.25);border-radius:12px;padding:16px">
+      <div style="font-weight:800;font-size:.82rem;color:var(--purple);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">✨ Bio sugerida por Claude</div>
+      <p style="font-size:.9rem;line-height:1.6;font-weight:600;color:var(--text)">${b.bio_sugerida}</p>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:6px">${b.bio_sugerida.length}/80 caracteres</div>
+    </div>`:''}`;
+}
+
+function toggleOtroNicho() {
+  const sel = document.getElementById('f_niche');
+  document.getElementById('f_niche_otro_wrap').style.display = sel.value === 'otro' ? 'block' : 'none';
+}
+
 let _activePanel = null;
 
 function mostrarPanel(tipo) {

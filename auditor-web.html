@@ -598,6 +598,35 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
       <div class="sec-title">Recomendaciones Prioritarias</div>
       <div class="recs" id="recsEl"></div>
     </div>
+
+    <!-- VISUAL CLAUDE ANALYSIS SECTION -->
+    <div class="section-block" id="visualBlock">
+      <div class="sec-title">🤖 Análisis Visual con IA (Claude)</div>
+      <p style="font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.5">Sube capturas de pantalla de tu sitio o landing page. Claude analizará visualmente la experiencia del usuario, diseño, conversión y aspectos de la página que el análisis de código no puede detectar.</p>
+
+      <div id="vaKeyArea" style="margin-bottom:14px">
+        <div id="vaNoKey" style="display:none;background:rgba(124,58,237,.06);border:1.5px solid rgba(124,58,237,.25);border-radius:12px;padding:14px 16px;font-size:.85rem">
+          ⚠️ Necesitas conectar Claude para usar el análisis visual.
+          <a href="analyzer-instagram.html" style="color:var(--purple);font-weight:700">Configura tu clave aquí →</a>
+        </div>
+        <div id="vaHasKey" style="display:none;font-size:.82rem;color:#15803d;font-weight:700">✅ Claude conectado — listo para analizar visualmente</div>
+      </div>
+
+      <div id="vaDrop" onclick="document.getElementById('vaInput').click()" style="border:2px dashed rgba(37,99,235,.3);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;background:#fff;transition:all .2s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='rgba(37,99,235,.3)'">
+        <div style="font-size:1.8rem;margin-bottom:8px">📸</div>
+        <div style="font-weight:800;font-size:.92rem;margin-bottom:4px">Sube capturas de pantalla de tu sitio</div>
+        <div style="font-size:.8rem;color:var(--muted)">Pantalla completa, sección hero, formulario, diseño mobile — hasta 4 capturas</div>
+      </div>
+      <input type="file" id="vaInput" accept="image/*" multiple style="display:none" onchange="vaAddFiles(this.files)">
+      <div id="vaThumbs" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div>
+
+      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button id="vaBtn" onclick="analizarVisual()" style="display:none;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;padding:11px 24px;border-radius:99px;font-weight:800;font-size:.88rem;cursor:pointer;font-family:inherit">🔍 Analizar visualmente</button>
+        <div id="vaStatus" style="font-size:.82rem;color:var(--muted)"></div>
+      </div>
+
+      <div id="vaResults" style="margin-top:20px;display:none"></div>
+    </div>
   </div>
 
   <footer class="footer">
@@ -915,6 +944,7 @@ function renderResults(url, html, mlData) {
 
   document.getElementById('resultsState').style.display = 'block';
   window.scrollTo(0, 0);
+  vaInitOnResults();
 }
 
 function runChecks(doc, url, rawHtml, ml) {
@@ -1200,6 +1230,244 @@ function cambiarTab(id, btn) {
   btn.classList.add('active');
   document.getElementById('panel-' + id).classList.add('active');
 }
+
+// ===================== VISUAL CLAUDE ANALYZER =====================
+let vaFiles = [];
+
+function vaInit() {
+  const key = localStorage.getItem('kd_claude_key') || '';
+  const noKey = document.getElementById('vaNoKey');
+  const hasKey = document.getElementById('vaHasKey');
+  if (!noKey || !hasKey) return;
+  if (key) { noKey.style.display = 'none'; hasKey.style.display = 'block'; }
+  else { noKey.style.display = 'block'; hasKey.style.display = 'none'; }
+}
+
+function vaAddFiles(fileList) {
+  const rem = 4 - vaFiles.length;
+  const toAdd = Array.from(fileList).slice(0, rem);
+  Promise.all(toAdd.map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = e => res({ name: f.name, dataURL: e.target.result });
+    r.readAsDataURL(f);
+  }))).then(results => {
+    vaFiles.push(...results);
+    vaRenderThumbs();
+    document.getElementById('vaInput').value = '';
+  });
+}
+
+function vaRemove(i) { vaFiles.splice(i, 1); vaRenderThumbs(); }
+
+function vaRenderThumbs() {
+  const wrap = document.getElementById('vaThumbs');
+  const btn = document.getElementById('vaBtn');
+  wrap.innerHTML = vaFiles.map((f, i) => `
+    <div style="position:relative;display:inline-block">
+      <img src="${f.dataURL}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1.5px solid var(--border)">
+      <button onclick="vaRemove(${i})" style="position:absolute;top:-6px;right:-6px;background:#dc2626;color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;line-height:20px;text-align:center;padding:0">✕</button>
+    </div>
+  `).join('');
+  if (btn) btn.style.display = vaFiles.length > 0 ? 'inline-block' : 'none';
+}
+
+const PROMPT_VISUAL_WEB = (type) => `Eres un experto en UX, diseño web y optimización de conversión (CRO).
+Analiza visualmente estas capturas de pantalla de un ${type === 'landing' ? 'landing page' : 'sitio web'} y devuelve SOLO un JSON con esta estructura:
+{
+  "puntaje_visual": 0-100,
+  "resumen": "Diagnóstico general del sitio en 2 frases",
+  "categorias": [
+    {
+      "nombre": "Diseño y Jerarquía Visual",
+      "puntaje": 0-10,
+      "estado": "bien" | "mejorar" | "critico",
+      "hallazgos": ["...", "..."]
+    },
+    {
+      "nombre": "Llamados a la Acción (CTA)",
+      "puntaje": 0-10,
+      "estado": "bien" | "mejorar" | "critico",
+      "hallazgos": ["...", "..."]
+    },
+    {
+      "nombre": "Experiencia Mobile",
+      "puntaje": 0-10,
+      "estado": "bien" | "mejorar" | "critico",
+      "hallazgos": ["...", "..."]
+    },
+    {
+      "nombre": "Confianza y Credibilidad",
+      "puntaje": 0-10,
+      "estado": "bien" | "mejorar" | "critico",
+      "hallazgos": ["...", "..."]
+    },
+    {
+      "nombre": "Velocidad Percibida y UX",
+      "puntaje": 0-10,
+      "estado": "bien" | "mejorar" | "critico",
+      "hallazgos": ["...", "..."]
+    }
+  ],
+  "oportunidades_cro": [
+    { "prioridad": "alta" | "media" | "baja", "titulo": "...", "descripcion": "..." }
+  ],
+  "aspectos_positivos": ["...", "..."],
+  "siguiente_paso": "La acción más importante que debería tomar el dueño del sitio hoy"
+}
+Sé específico con lo que ves en las imágenes. No inventes elementos que no se vean. Responde SOLO con el JSON.`;
+
+async function analizarVisual() {
+  const apiKey = localStorage.getItem('kd_claude_key');
+  if (!apiKey) { alert('Conecta tu clave Claude primero'); return; }
+  if (vaFiles.length === 0) { alert('Sube al menos una captura de pantalla'); return; }
+
+  const btn = document.getElementById('vaBtn');
+  const status = document.getElementById('vaStatus');
+  const results = document.getElementById('vaResults');
+  btn.disabled = true; btn.textContent = '⏳ Analizando…';
+  status.textContent = 'Claude está analizando visualmente tu sitio…';
+  results.style.display = 'none';
+
+  try {
+    const comprimidas = await Promise.all(vaFiles.map(f => vaComprimir(f.dataURL)));
+    const imageContent = comprimidas.map(d => ({
+      type: 'image',
+      source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] }
+    }));
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 1800,
+        messages: [{ role: 'user', content: [...imageContent, { type: 'text', text: PROMPT_VISUAL_WEB(currentType) }] }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    const match = data.content[0].text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Respuesta inválida de Claude');
+    vaRenderResults(JSON.parse(match[0]));
+    status.textContent = '✅ Análisis visual completado';
+  } catch(e) {
+    status.textContent = '❌ Error: ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = '🔍 Analizar visualmente';
+  }
+}
+
+function vaComprimir(dataURL) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 700;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(c.toDataURL('image/jpeg', 0.55));
+    };
+    img.src = dataURL;
+  });
+}
+
+function vaScoreColor(score) {
+  if (score >= 70) return '#15803d';
+  if (score >= 50) return '#ca8a04';
+  return '#dc2626';
+}
+
+function vaEstadoConfig(estado) {
+  const m = {
+    'bien': { bg: 'rgba(21,128,61,.07)', border: '#15803d', label: '✅ Bien', col: '#15803d' },
+    'mejorar': { bg: 'rgba(202,138,4,.07)', border: '#ca8a04', label: '⚠️ Mejorar', col: '#92400e' },
+    'critico': { bg: 'rgba(220,38,38,.07)', border: '#dc2626', label: '🚨 Crítico', col: '#991b1b' }
+  };
+  return m[estado] || m['mejorar'];
+}
+
+function vaRenderResults(d) {
+  const el = document.getElementById('vaResults');
+  const pct = d.puntaje_visual || 0;
+  const col = vaScoreColor(pct);
+  const circ = 289;
+  const offset = circ - (pct / 100) * circ;
+
+  let html = `
+    <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:14px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center">
+      <svg width="100" height="100" viewBox="0 0 110 110">
+        <circle cx="55" cy="55" r="46" fill="none" stroke="var(--border)" stroke-width="8"/>
+        <circle cx="55" cy="55" r="46" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"
+          stroke-dasharray="${circ}" stroke-dashoffset="${offset}"
+          transform="rotate(-90 55 55)" style="transition:stroke-dashoffset .8s ease"/>
+        <text x="55" y="50" text-anchor="middle" dominant-baseline="middle" font-size="22" font-weight="800" fill="${col}">${pct}</text>
+        <text x="55" y="67" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="700" fill="var(--muted)" text-transform="uppercase">VISUAL</text>
+      </svg>
+      <div>
+        <div style="font-size:1.1rem;font-weight:900;margin-bottom:6px">Análisis Visual IA</div>
+        <div style="font-size:.85rem;color:var(--muted);line-height:1.5">${d.resumen || ''}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px">
+      ${(d.categorias || []).map(cat => {
+        const cfg = vaEstadoConfig(cat.estado);
+        const pctCat = (cat.puntaje / 10) * 100;
+        return `<div style="background:${cfg.bg};border:1.5px solid ${cfg.border};border-radius:12px;padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:800;font-size:.82rem;color:${cfg.col}">${cat.nombre}</span>
+            <span style="font-size:.75rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(0,0,0,.06);color:${cfg.col}">${cat.puntaje}/10</span>
+          </div>
+          <div style="height:5px;background:rgba(0,0,0,.07);border-radius:3px;overflow:hidden;margin-bottom:8px">
+            <div style="width:${pctCat}%;height:100%;background:${cfg.col};border-radius:3px"></div>
+          </div>
+          <ul style="margin:0;padding-left:14px">${(cat.hallazgos || []).map(h => `<li style="font-size:.76rem;color:#5a3a6e;line-height:1.4;margin-bottom:3px">${h}</li>`).join('')}</ul>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  if (d.oportunidades_cro && d.oportunidades_cro.length) {
+    const priConfig = { alta: { bg:'rgba(220,38,38,.06)', border:'#dc2626', label:'PRIORIDAD ALTA' }, media: { bg:'rgba(234,88,12,.06)', border:'#ea580c', label:'PRIORIDAD MEDIA' }, baja: { bg:'rgba(37,99,235,.06)', border:'#2563eb', label:'PRIORIDAD BAJA' } };
+    html += `<div style="font-weight:900;font-size:.9rem;margin-bottom:10px">⚡ Oportunidades de Mejora (CRO)</div>`;
+    html += d.oportunidades_cro.map(op => {
+      const pc = priConfig[op.prioridad] || priConfig.media;
+      return `<div style="background:${pc.bg};border-left:4px solid ${pc.border};border-radius:0 10px 10px 0;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:.65rem;font-weight:800;color:${pc.border};letter-spacing:.06em;margin-bottom:3px">${pc.label}</div>
+        <div style="font-weight:800;font-size:.87rem;margin-bottom:3px">${op.titulo}</div>
+        <div style="font-size:.8rem;color:#5a3a6e;line-height:1.4">${op.descripcion}</div>
+      </div>`;
+    }).join('');
+  }
+
+  if (d.aspectos_positivos && d.aspectos_positivos.length) {
+    html += `<div style="background:rgba(21,128,61,.06);border:1px solid rgba(21,128,61,.2);border-radius:12px;padding:14px 16px;margin-top:8px">
+      <div style="font-weight:800;font-size:.85rem;color:#15803d;margin-bottom:8px">✅ Lo que está bien</div>
+      <ul style="margin:0;padding-left:18px">${d.aspectos_positivos.map(p => `<li style="font-size:.82rem;color:#15803d;margin-bottom:3px;line-height:1.4">${p}</li>`).join('')}</ul>
+    </div>`;
+  }
+
+  if (d.siguiente_paso) {
+    html += `<div style="background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(147,51,234,.08));border:1.5px solid rgba(147,51,234,.2);border-radius:12px;padding:16px;margin-top:10px">
+      <div style="font-weight:800;font-size:.85rem;color:var(--purple);margin-bottom:5px">🎯 Siguiente acción prioritaria</div>
+      <div style="font-size:.85rem;color:var(--text);line-height:1.5">${d.siguiente_paso}</div>
+    </div>`;
+  }
+
+  el.innerHTML = html;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Initialize visual analyzer key state after results are shown
+const _origRender = typeof renderResults !== 'undefined' ? renderResults : null;
+document.addEventListener('DOMContentLoaded', () => {});
+// Called when results render
+function vaInitOnResults() { vaFiles = []; vaRenderThumbs(); vaInit(); }
 </script>
 </body>
 </html>

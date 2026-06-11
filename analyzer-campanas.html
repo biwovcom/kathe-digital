@@ -127,11 +127,31 @@ tr:hover td { background: rgba(233,30,140,.02); }
 .footer { text-align: center; padding: 32px 24px; color: var(--muted); font-size: .8rem; border-top: 1px solid var(--border); margin-top: 24px; }
 .footer a { color: var(--accent); text-decoration: none; }
 
+/* CREATIVE CHECKER */
+.cc-wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 0; }
+.cc-upload-area { border: 2px dashed rgba(233,30,140,.35); border-radius:16px; padding:28px 20px; text-align:center; cursor:pointer; background:#fff; transition:all .2s; }
+.cc-upload-area:hover { border-color:var(--accent); background:rgba(233,30,140,.02); }
+.cc-thumbs { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+.cc-thumb { position:relative; width:80px; height:80px; border-radius:10px; overflow:hidden; border:1.5px solid var(--border); }
+.cc-thumb img { width:100%; height:100%; object-fit:cover; }
+.cc-thumb .cc-del { position:absolute; top:3px; right:3px; background:rgba(0,0,0,.55); color:#fff; border:none; border-radius:50%; width:18px; height:18px; font-size:.7rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.cc-result-item { display:flex; gap:12px; padding:13px 14px; border-radius:12px; margin-bottom:10px; align-items:flex-start; }
+.cc-result-item.alta { background:rgba(220,38,38,.06); border-left:4px solid #dc2626; }
+.cc-result-item.media { background:rgba(234,88,12,.06); border-left:4px solid #ea580c; }
+.cc-result-item.baja { background:rgba(234,179,8,.06); border-left:4px solid #ca8a04; }
+.cc-result-item.positivo { background:rgba(22,163,74,.06); border-left:4px solid #16a34a; }
+.cc-badge { font-size:.65rem; font-weight:800; text-transform:uppercase; padding:2px 7px; border-radius:99px; display:inline-block; margin-bottom:4px; white-space:nowrap; }
+.cc-badge.alta { background:rgba(220,38,38,.15); color:#dc2626; }
+.cc-badge.media { background:rgba(234,88,12,.15); color:#ea580c; }
+.cc-badge.baja { background:rgba(234,179,8,.15); color:#92400e; }
+.cc-badge.positivo { background:rgba(22,163,74,.15); color:#15803d; }
+
 @media (max-width: 640px) {
   .upload-title { font-size: 1.6rem; }
   .charts-grid { grid-template-columns: 1fr; }
   .kpis { grid-template-columns: repeat(2, 1fr); }
   .container { padding: 20px 16px; }
+  .cc-wrap { padding: 20px 14px 0; }
 }
 </style>
 </head>
@@ -142,6 +162,46 @@ tr:hover td { background: rgba(233,30,140,.02); }
   <span class="header-tag">Analizador de Campañas</span>
   <a class="back-link" href="kathe-digital.html">← Inicio</a>
 </header>
+
+<!-- CREATIVE CHECKER (siempre visible) -->
+<div class="cc-wrap">
+  <div style="margin-bottom:28px">
+    <h2 style="font-size:1.5rem;font-weight:900;margin-bottom:6px">🚨 Verificador de Políticas Meta + Análisis de Creativo</h2>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.5">Sube capturas de tus anuncios y Claude revisará si hay violaciones a las <strong>Políticas Publicitarias de Meta</strong>, qué puede causar rechazo o restricción, y cómo está el creativo.</p>
+  </div>
+
+  <!-- Claude key setup -->
+  <div id="ccKeyArea" style="margin-bottom:16px">
+    <div id="ccNoKey" style="display:none;background:rgba(124,58,237,.06);border:1.5px solid rgba(124,58,237,.25);border-radius:12px;padding:14px 16px">
+      <span style="font-size:.85rem">⚠️ Necesitas conectar Claude para usar el verificador. </span>
+      <a href="analyzer-instagram.html" style="color:var(--purple);font-weight:700;font-size:.85rem">Configura tu clave aquí →</a>
+    </div>
+    <div id="ccHasKey" style="display:none;font-size:.82rem;color:#15803d;font-weight:700">✅ Claude conectado — listo para verificar</div>
+  </div>
+
+  <!-- Upload creative -->
+  <div class="cc-upload-area" id="ccDrop" onclick="document.getElementById('ccInput').click()">
+    <div style="font-size:1.8rem;margin-bottom:8px">🖼️</div>
+    <div style="font-weight:800;font-size:.95rem;margin-bottom:4px">Sube capturas de tus anuncios</div>
+    <div style="font-size:.8rem;color:var(--muted)">Imagen del creativo, copy del anuncio, pantallazos del Administrador de Anuncios — hasta 4 imágenes</div>
+  </div>
+  <input type="file" id="ccInput" accept="image/*" multiple style="display:none" onchange="ccAddFiles(this.files)">
+  <div class="cc-thumbs" id="ccThumbs"></div>
+
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <button id="ccBtn" onclick="verificarCreativo()" style="background:linear-gradient(135deg,#dc2626,#ea580c);color:#fff;border:none;padding:11px 24px;border-radius:99px;font-weight:800;font-size:.88rem;cursor:pointer;font-family:inherit;display:none">🔍 Verificar políticas Meta</button>
+    <div id="ccStatus" style="font-size:.82rem;color:var(--muted)"></div>
+  </div>
+
+  <div id="ccResults" style="margin-top:20px;display:none">
+    <div style="font-weight:900;font-size:1rem;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border)">Resultado del análisis</div>
+    <div id="ccStatusBanner" style="border-radius:12px;padding:14px 16px;margin-bottom:16px;font-weight:800;font-size:.95rem"></div>
+    <div id="ccViolations"></div>
+    <div id="ccCreativeFeedback" style="margin-top:16px"></div>
+  </div>
+
+  <hr style="margin:32px 0;border:none;border-top:1.5px solid var(--border)">
+</div>
 
 <!-- UPLOAD -->
 <div id="uploadState">
@@ -578,6 +638,238 @@ function resetApp() {
 }
 
 setup();
+
+// ===================== CREATIVE CHECKER + META POLICIES =====================
+let ccFiles = [];
+
+function ccInit() {
+  const key = localStorage.getItem('kd_claude_key') || '';
+  const noKey = document.getElementById('ccNoKey');
+  const hasKey = document.getElementById('ccHasKey');
+  if (!noKey || !hasKey) return;
+  if (key) { noKey.style.display = 'none'; hasKey.style.display = 'block'; }
+  else { noKey.style.display = 'block'; hasKey.style.display = 'none'; }
+}
+
+function ccAddFiles(fileList) {
+  const remaining = 4 - ccFiles.length;
+  const toAdd = Array.from(fileList).slice(0, remaining);
+  const readers = toAdd.map(f => new Promise(resolve => {
+    const r = new FileReader();
+    r.onload = e => resolve({ name: f.name, dataURL: e.target.result });
+    r.readAsDataURL(f);
+  }));
+  Promise.all(readers).then(results => {
+    ccFiles.push(...results);
+    ccRenderThumbs();
+    document.getElementById('ccInput').value = '';
+  });
+}
+
+function ccRemove(idx) {
+  ccFiles.splice(idx, 1);
+  ccRenderThumbs();
+}
+
+function ccRenderThumbs() {
+  const wrap = document.getElementById('ccThumbs');
+  const btn = document.getElementById('ccBtn');
+  wrap.innerHTML = ccFiles.map((f, i) => `
+    <div class="cc-thumb">
+      <img src="${f.dataURL}" alt="${f.name}">
+      <button class="cc-del" onclick="ccRemove(${i})">✕</button>
+    </div>
+  `).join('');
+  if (btn) btn.style.display = ccFiles.length > 0 ? 'inline-block' : 'none';
+}
+
+const PROMPT_META = `Eres un experto en Políticas Publicitarias de Meta (Facebook/Instagram Ads).
+Analiza las imágenes de este anuncio y devuelve SOLO un JSON con esta estructura:
+{
+  "estado": "aprobado" | "riesgo_bajo" | "riesgo_medio" | "riesgo_alto",
+  "resumen": "Una frase de diagnóstico general del anuncio",
+  "violaciones": [
+    {
+      "politica": "Nombre de la política",
+      "severidad": "alta" | "media" | "baja",
+      "descripcion": "Qué problema específico se detectó en el anuncio",
+      "solucion": "Cómo corregirlo"
+    }
+  ],
+  "creativo": {
+    "hook_score": 0-10,
+    "hook_comentario": "...",
+    "cta_score": 0-10,
+    "cta_comentario": "...",
+    "visual_score": 0-10,
+    "visual_comentario": "...",
+    "copy_score": 0-10,
+    "copy_comentario": "..."
+  },
+  "recomendaciones": ["...", "..."]
+}
+
+Políticas Meta a verificar:
+1. Atributos personales: No usar "tú tienes X problema", "si sufres de...", "para personas con..."
+2. Antes/después: Prohibido en salud, pérdida de peso, estética
+3. Resultados garantizados: "100% garantizado", "perderás X kilos" están prohibidos
+4. Lenguaje sensacionalista engañoso: promesas imposibles o exageradas
+5. Información falsa o engañosa sobre el producto/servicio
+6. Contenido restringido: alcohol, cigarrillos, juegos de azar, servicios financieros de alto riesgo
+7. Imágenes perturbadoras: miedo excesivo, violencia, contenido perturbador
+8. Derechos de autor: logos de terceros, marcas ajenas sin permiso
+9. Contenido para adultos o sexualmente sugestivo
+10. Privacidad y datos: si recolectan datos, debe mencionarse política de privacidad
+Si no hay violaciones, "violaciones" debe ser un arreglo vacío [].
+Responde SOLO con el JSON, sin texto adicional.`;
+
+async function verificarCreativo() {
+  const apiKey = localStorage.getItem('kd_claude_key');
+  if (!apiKey) { alert('Conecta tu clave Claude primero'); return; }
+  if (ccFiles.length === 0) { alert('Sube al menos una imagen del anuncio'); return; }
+
+  const btn = document.getElementById('ccBtn');
+  const status = document.getElementById('ccStatus');
+  const results = document.getElementById('ccResults');
+  btn.disabled = true;
+  btn.textContent = '⏳ Analizando…';
+  status.textContent = 'Claude está revisando las políticas Meta…';
+  results.style.display = 'none';
+
+  try {
+    const comprimidas = await Promise.all(ccFiles.map(f => ccComprimir(f.dataURL)));
+    const imageContent = comprimidas.map(dataURL => ({
+      type: 'image',
+      source: { type: 'base64', media_type: 'image/jpeg', data: dataURL.split(',')[1] }
+    }));
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 1500,
+        messages: [{ role: 'user', content: [...imageContent, { type: 'text', text: PROMPT_META }] }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    const text = data.content[0].text;
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Respuesta inválida de Claude');
+    const parsed = JSON.parse(match[0]);
+    ccRenderResults(parsed);
+    status.textContent = '✅ Análisis completado';
+  } catch (e) {
+    status.textContent = '❌ Error: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔍 Verificar políticas Meta';
+  }
+}
+
+function ccComprimir(dataURL) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 600;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(c.toDataURL('image/jpeg', 0.5));
+    };
+    img.src = dataURL;
+  });
+}
+
+function ccEstadoConfig(estado) {
+  const map = {
+    'aprobado': { bg: 'rgba(21,128,61,.1)', border: '#15803d', color: '#15803d', emoji: '✅', label: 'Sin violaciones detectadas — listo para publicar' },
+    'riesgo_bajo': { bg: 'rgba(202,138,4,.08)', border: '#ca8a04', color: '#92400e', emoji: '⚠️', label: 'Riesgo bajo — revisa los puntos menores antes de publicar' },
+    'riesgo_medio': { bg: 'rgba(234,88,12,.1)', border: '#ea580c', color: '#9a3412', emoji: '🟡', label: 'Riesgo medio — correcciones recomendadas para evitar rechazo' },
+    'riesgo_alto': { bg: 'rgba(220,38,38,.1)', border: '#dc2626', color: '#991b1b', emoji: '🚨', label: 'Riesgo alto — probable rechazo o restricción de cuenta' }
+  };
+  return map[estado] || map['riesgo_bajo'];
+}
+
+function ccRenderResults(data) {
+  const results = document.getElementById('ccResults');
+  const banner = document.getElementById('ccStatusBanner');
+  const violations = document.getElementById('ccViolations');
+  const creative = document.getElementById('ccCreativeFeedback');
+
+  const cfg = ccEstadoConfig(data.estado);
+  banner.style.background = cfg.bg;
+  banner.style.border = `1.5px solid ${cfg.border}`;
+  banner.style.color = cfg.color;
+  banner.innerHTML = `${cfg.emoji} <strong>${cfg.label}</strong><br><span style="font-weight:400;font-size:.85rem">${data.resumen || ''}</span>`;
+
+  if (data.violaciones && data.violaciones.length > 0) {
+    violations.innerHTML = `<div style="font-weight:800;font-size:.9rem;margin-bottom:10px;color:#dc2626">⚡ Violaciones de Políticas Detectadas (${data.violaciones.length})</div>` +
+      data.violaciones.map(v => `
+        <div class="cc-result-item ${v.severidad}">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span class="cc-badge ${v.severidad}">${v.severidad.toUpperCase()}</span>
+            <div style="flex:1">
+              <div style="font-weight:800;font-size:.88rem;margin-bottom:4px">${v.politica}</div>
+              <div style="font-size:.82rem;margin-bottom:6px;opacity:.9">${v.descripcion}</div>
+              <div style="font-size:.8rem;background:rgba(255,255,255,.6);border-radius:6px;padding:6px 10px"><strong>Solución:</strong> ${v.solucion}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+  } else {
+    violations.innerHTML = `<div style="font-size:.85rem;color:#15803d;padding:10px 0">✅ No se detectaron violaciones a las políticas de Meta.</div>`;
+  }
+
+  if (data.creativo) {
+    const c = data.creativo;
+    const scoreBar = (score) => {
+      const pct = (score / 10) * 100;
+      const col = score >= 7 ? '#15803d' : score >= 5 ? '#ca8a04' : '#dc2626';
+      return `<div style="display:flex;align-items:center;gap:8px">
+        <div style="flex:1;height:6px;background:rgba(0,0,0,.08);border-radius:4px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${col};border-radius:4px;transition:width .4s"></div>
+        </div>
+        <span style="font-size:.82rem;font-weight:800;color:${col};min-width:24px">${score}/10</span>
+      </div>`;
+    };
+    creative.innerHTML = `
+      <div style="font-weight:800;font-size:.9rem;margin-bottom:12px;margin-top:4px">🎨 Análisis del Creativo</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+        ${[
+          { key: 'Hook', score: c.hook_score, comment: c.hook_comentario },
+          { key: 'CTA', score: c.cta_score, comment: c.cta_comentario },
+          { key: 'Visual', score: c.visual_score, comment: c.visual_comentario },
+          { key: 'Copy', score: c.copy_score, comment: c.copy_comentario }
+        ].map(item => `
+          <div style="background:rgba(147,51,234,.04);border:1px solid rgba(147,51,234,.12);border-radius:10px;padding:12px">
+            <div style="font-weight:800;font-size:.82rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;color:#7c3aed">${item.key}</div>
+            ${scoreBar(item.score)}
+            <div style="font-size:.78rem;color:var(--muted);margin-top:6px;line-height:1.4">${item.comment || ''}</div>
+          </div>
+        `).join('')}
+      </div>
+      ${data.recomendaciones && data.recomendaciones.length > 0 ? `
+        <div style="margin-top:14px;background:rgba(147,51,234,.04);border:1px solid rgba(147,51,234,.12);border-radius:10px;padding:14px">
+          <div style="font-weight:800;font-size:.85rem;margin-bottom:8px">💡 Recomendaciones</div>
+          <ul style="margin:0;padding-left:18px">${data.recomendaciones.map(r => `<li style="font-size:.82rem;color:var(--muted);margin-bottom:4px;line-height:1.4">${r}</li>`).join('')}</ul>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  results.style.display = 'block';
+  results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+ccInit();
 </script>
 </body>
 </html>

@@ -69,7 +69,12 @@ body{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:var(--bg);
 .img-modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:16px}
 .img-modal.open{display:flex}
 .img-modal img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain}
-.img-modal-close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.2rem;cursor:pointer}
+.img-modal-close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.2rem;cursor:pointer;z-index:10}
+.img-modal-nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:1.4rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.img-modal-nav:hover{background:rgba(255,255,255,.35)}
+.img-modal-nav.prev{left:16px}
+.img-modal-nav.next{right:16px}
+.img-modal-counter{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:.82rem;font-weight:700;background:rgba(0,0,0,.4);padding:4px 14px;border-radius:99px;z-index:10}
 
 /* Step 3: Form */
 .form-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
@@ -343,20 +348,35 @@ footer a{color:var(--accent);text-decoration:none}
 
     <!-- PASO 2: Subir capturas -->
     <div class="step-section">
-      <div class="step-header"><span class="step-num-badge">2</span> Sube tus 4 capturas <span style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">(máximo 4 imágenes)</span></div>
+      <div class="step-header"><span class="step-num-badge">2</span> Sube tus capturas <span style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">(hasta 16 imágenes — puedes subir varios Reels)</span></div>
       <div class="upload-area" id="dropZone" onclick="document.getElementById('imgInput').click()">
         <div class="upload-icon">📲</div>
         <div class="upload-main">Arrastra tus capturas aquí o toca para seleccionar</div>
-        <div class="upload-sub">Máximo 4 imágenes · JPG, PNG, HEIC, WEBP</div>
+        <div class="upload-sub">Hasta 16 imágenes — sube 4 capturas por cada Reel · JPG, PNG, HEIC, WEBP</div>
         <div class="upload-types">
-          <span class="upload-type">Captura 1 · Métricas</span>
-          <span class="upload-type">Captura 2 · Audiencia Reel</span>
-          <span class="upload-type">Captura 3 · Cuenta</span>
-          <span class="upload-type">Captura 4 · Audiencia</span>
+          <span class="upload-type">Métricas del Reel</span>
+          <span class="upload-type">Audiencia del Reel</span>
+          <span class="upload-type">Estadísticas cuenta</span>
+          <span class="upload-type">Audiencia general</span>
         </div>
       </div>
       <input type="file" id="imgInput" accept="image/*" multiple style="display:none">
       <div class="screenshots-gallery" id="gallery"></div>
+
+      <!-- Bio upload -->
+      <div style="margin-top:18px;border:1.5px dashed rgba(147,51,234,.35);border-radius:14px;padding:18px 20px;background:rgba(147,51,234,.03)">
+        <div style="font-weight:800;font-size:.88rem;margin-bottom:4px;color:var(--purple)">📸 Captura de tu Perfil / Bio <span style="font-weight:500;color:var(--muted);font-size:.78rem">(opcional — para análisis de biografía)</span></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px">Toma una captura de tu perfil completo mostrando: foto, nombre, bio, link y highlights</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button onclick="document.getElementById('bioInput').click()" style="background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;padding:9px 18px;border-radius:99px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit">+ Subir captura de bio</button>
+          <input type="file" id="bioInput" accept="image/*" style="display:none" onchange="cargarBio(this)">
+          <div id="bioPreview" style="display:none;align-items:center;gap:8px">
+            <img id="bioThumb" style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:1.5px solid rgba(147,51,234,.3)" src="" alt="bio">
+            <span style="font-size:.78rem;color:var(--purple);font-weight:700">Bio cargada ✓</span>
+            <button onclick="quitarBio()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;text-decoration:underline">Quitar</button>
+          </div>
+        </div>
+      </div>
 
       <div id="galleryHint" style="display:none;margin-top:14px">
         <!-- Extract with AI box -->
@@ -385,7 +405,7 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="form-grid">
           <div class="field"><label>Nombre del negocio / marca</label><input type="text" id="f_brand" placeholder="ej. Tienda Mía"></div>
           <div class="field"><label>Nicho</label>
-            <select id="f_niche">
+            <select id="f_niche" onchange="toggleOtroNicho()">
               <option value="">Selecciona...</option>
               <option value="moda">Moda y ropa</option>
               <option value="belleza">Belleza y cuidado personal</option>
@@ -398,6 +418,9 @@ footer a{color:var(--accent);text-decoration:none}
               <option value="servicios">Servicios profesionales</option>
               <option value="otro">Otro</option>
             </select>
+            <div id="f_niche_otro_wrap" style="display:none;margin-top:8px">
+              <input type="text" id="f_niche_otro" placeholder="Escribe tu nicho (ej. Mascotas, Tecnología...)">
+            </div>
           </div>
           <div class="field"><label>Objetivo principal</label>
             <select id="f_goal">
@@ -408,11 +431,7 @@ footer a{color:var(--accent);text-decoration:none}
             </select>
           </div>
           <div class="field"><label>Antigüedad de la cuenta</label>
-            <select id="f_age">
-              <option value="nuevo">Menos de 6 meses</option>
-              <option value="medio">6 meses – 2 años</option>
-              <option value="maduro">Más de 2 años</option>
-            </select>
+            <input type="text" id="f_age" placeholder="ej. 8 meses, 1 año y medio, 3 años">
           </div>
         </div>
       </div>
@@ -512,6 +531,11 @@ footer a{color:var(--accent);text-decoration:none}
       <p style="font-size:.78rem;color:var(--muted);margin-top:10px;text-align:center">Toca una captura para ampliarla</p>
     </div>
 
+    <div class="sec-block" id="bioBlock" style="display:none">
+      <div class="sec-title">📸 Análisis de tu Biografía de Instagram</div>
+      <div id="bioContent"></div>
+    </div>
+
     <div class="sec-block" id="contextBlock" style="display:none">
       <div class="sec-title">💬 Contexto de tu negocio</div>
       <p id="contextText" style="font-size:.88rem;line-height:1.6;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px"></p>
@@ -595,8 +619,11 @@ footer a{color:var(--accent);text-decoration:none}
 
 <!-- Modal imagen ampliada -->
 <div class="img-modal" id="imgModal" onclick="cerrarImgModal()">
-  <button class="img-modal-close">✕</button>
-  <img id="imgModalSrc" src="" alt="Captura de pantalla">
+  <button class="img-modal-close" onclick="cerrarImgModal()">✕</button>
+  <button class="img-modal-nav prev" id="modalPrev" onclick="event.stopPropagation();navegarModal(-1)">‹</button>
+  <img id="imgModalSrc" src="" alt="Captura de pantalla" onclick="event.stopPropagation()">
+  <button class="img-modal-nav next" id="modalNext" onclick="event.stopPropagation();navegarModal(1)">›</button>
+  <div class="img-modal-counter" id="modalCounter"></div>
 </div>
 
 <script>
@@ -614,8 +641,8 @@ dz.addEventListener('drop', e => {
 });
 
 function addFiles(files) {
-  const allowed = 4 - screenshots.length;
-  if (allowed <= 0) { alert('Máximo 4 capturas. Elimina alguna para agregar más.'); return; }
+  const allowed = 16 - screenshots.length;
+  if (allowed <= 0) { alert('Máximo 16 capturas. Elimina alguna para agregar más.'); return; }
   Array.from(files).slice(0, allowed).forEach(file => {
     if (!file.type.startsWith('image/')) return;
     const reader = new FileReader();
@@ -645,7 +672,7 @@ function renderGallery() {
   if (!screenshots.length) { gal.innerHTML = ''; actualizarHint(); return; }
   gal.innerHTML = screenshots.map((ss, i) => `
     <div class="screenshot-thumb">
-      <img src="${ss.dataURL}" alt="${ss.name}" onclick="abrirImgModal('${ss.dataURL}')">
+      <img src="${ss.dataURL}" alt="${ss.name}" onclick="abrirImgModal(${i})">
       <button class="del-btn" onclick="borrarCaptura(${i})" title="Eliminar">✕</button>
       <div class="ss-label">Captura ${i+1}</div>
     </div>`).join('');
@@ -657,20 +684,40 @@ function borrarCaptura(i) {
   renderGallery();
 }
 
-function abrirImgModal(src) {
-  document.getElementById('imgModalSrc').src = src;
+let _modalIdx = 0;
+
+function abrirImgModal(idx) {
+  _modalIdx = idx;
+  _actualizarModal();
   document.getElementById('imgModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+function navegarModal(dir) {
+  _modalIdx = (_modalIdx + dir + screenshots.length) % screenshots.length;
+  _actualizarModal();
+}
+function _actualizarModal() {
+  document.getElementById('imgModalSrc').src = screenshots[_modalIdx].dataURL;
+  document.getElementById('modalCounter').textContent = (_modalIdx + 1) + ' / ' + screenshots.length;
+  document.getElementById('modalPrev').style.display = screenshots.length > 1 ? 'flex' : 'none';
+  document.getElementById('modalNext').style.display = screenshots.length > 1 ? 'flex' : 'none';
 }
 function cerrarImgModal() {
   document.getElementById('imgModal').classList.remove('open');
   document.body.style.overflow = '';
 }
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('imgModal').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') navegarModal(1);
+  else if (e.key === 'ArrowLeft') navegarModal(-1);
+  else if (e.key === 'Escape') cerrarImgModal();
+});
 
 // ─── Analysis ──────────────────────────────────────────────────────────────
 function analizarInstagram() {
   const brand        = document.getElementById('f_brand').value.trim() || 'Tu marca';
-  const niche        = document.getElementById('f_niche').value || 'default';
+  const nicheRaw     = document.getElementById('f_niche').value || 'default';
+  const niche        = nicheRaw === 'otro' ? (document.getElementById('f_niche_otro').value.trim() || 'otro') : nicheRaw;
   const goal         = document.getElementById('f_goal').value;
   const bio          = document.getElementById('f_bio')?.value.trim() || '';
   const business     = document.getElementById('f_business')?.value.trim() || '';
@@ -710,6 +757,9 @@ function analizarInstagram() {
   let catContent = (freq>=5?20:freq>=3?14:freq>=1?8:2);
   if (contentType === 'reels' || contentType === 'mixto') catContent = Math.min(catContent+5,20);
   const score = catEng + catAlgo + catGrowth + catContent;
+  const reelPct = contentType==='reels'?80:contentType==='mixto'?50:contentType==='carruseles'?10:0;
+  const profVisit = 0;
+  const convRate = 0;
 
   let funnelStage = 'awareness';
   if (followers>=5000 && engRate>=2) funnelStage = 'consideracion';
@@ -719,12 +769,14 @@ function analizarInstagram() {
   document.getElementById('formSection').style.display = 'none';
   document.getElementById('resultsSection').style.display = 'block';
   window.scrollTo(0,0);
+  const claudeKeyForBio = localStorage.getItem('kd_claude_key');
+  if (bioShot && claudeKeyForBio) analizarBio(claudeKeyForBio);
 
   // Screenshots in results
   if (screenshots.length > 0) {
     document.getElementById('ssBlock').style.display = 'block';
     document.getElementById('ssResultsGallery').innerHTML = screenshots.map(ss =>
-      `<img src="${ss.dataURL}" alt="Captura" onclick="abrirImgModal('${ss.dataURL}')" title="Toca para ampliar">`
+      `<img src="${ss.dataURL}" alt="Captura" onclick="abrirImgModal(${screenshots.indexOf(ss)})" title="Toca para ampliar">`
     ).join('');
   }
 
@@ -1057,6 +1109,137 @@ function descargarReporte() {
 }
 
 // ─── IA Setup ────────────────────────────────────────────────────────────────
+// ─── Bio screenshot ───────────────────────────────────────────────────────────
+let bioShot = null;
+
+function cargarBio(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    bioShot = e.target.result;
+    document.getElementById('bioThumb').src = bioShot;
+    document.getElementById('bioPreview').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function quitarBio() {
+  bioShot = null;
+  document.getElementById('bioInput').value = '';
+  document.getElementById('bioPreview').style.display = 'none';
+}
+
+const PROMPT_BIO_IG = `Analiza esta captura de pantalla del perfil de Instagram y evalúa cada elemento visible.
+
+Devuelve SOLO un objeto JSON válido, sin texto antes ni después:
+{
+  "overall_score": 70,
+  "elements": [
+    {"nombre": "Foto de perfil", "icono": "📷", "status": "bueno", "score": 8, "que_es": "Tu imagen principal — primera impresión visual. Debe ser reconocible en miniatura.", "feedback": "Clara y reconocible"},
+    {"nombre": "Campo Nombre", "icono": "🔍", "status": "mejorar", "score": 5, "que_es": "Aparece en búsquedas de Instagram. Incluir palabras clave aquí multiplica tu visibilidad orgánica.", "feedback": "No tiene palabras clave de búsqueda"},
+    {"nombre": "Bio / Descripción", "icono": "✍️", "status": "malo", "score": 3, "que_es": "150 caracteres para explicar qué haces, a quién ayudas y por qué seguirte. El CTA aquí convierte visitantes en seguidores.", "feedback": "No tiene propuesta de valor ni CTA claro"},
+    {"nombre": "Link en Bio", "icono": "🔗", "status": "bueno", "score": 9, "que_es": "El único enlace clickeable de Instagram. Es tu puerta de entrada a ventas, leads o contenido extra.", "feedback": "Tiene link activo"},
+    {"nombre": "Categoría de negocio", "icono": "🏷️", "status": "malo", "score": 2, "que_es": "Etiqueta visible bajo tu nombre que muestra tu tipo de negocio. Le dice al algoritmo quién eres y te da credibilidad.", "feedback": "No tiene categoría configurada"},
+    {"nombre": "Highlights", "icono": "⭕", "status": "mejorar", "score": 5, "que_es": "Historias fijadas que actúan como menú de tu perfil. Los nuevos visitantes los ven primero — deben comunicar tus servicios.", "feedback": "Existen pero sin portadas de marca"}
+  ],
+  "fortalezas": ["Fortaleza específica 1", "Fortaleza específica 2"],
+  "mejoras": [
+    "Mejora muy específica 1 con ejemplo concreto de cómo hacerlo",
+    "Mejora muy específica 2 con ejemplo concreto",
+    "Mejora muy específica 3 con ejemplo concreto"
+  ],
+  "bio_sugerida": "Bio optimizada de máximo 150 caracteres basada en lo que ves en el perfil"
+}
+
+Reglas:
+- status: "bueno" si score 7-10, "mejorar" si score 4-6, "malo" si score 1-3
+- Evalúa SOLO lo que ves en la imagen. Si no ves un elemento, márcalo como malo.
+- Las mejoras deben ser MUY específicas con ejemplos reales (ej: "Cambia el nombre a 'María | Coach de Vida Colombia' para aparecer en búsquedas")
+- La bio_sugerida debe ser una bio real y completa de máximo 150 caracteres`;
+
+async function analizarBio(claudeKey) {
+  if (!bioShot || !claudeKey) return;
+  document.getElementById('bioBlock').style.display = 'block';
+  document.getElementById('bioContent').innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:.88rem">⏳ Claude está analizando tu bio...</div>';
+  try {
+    const comprimida = await comprimirImagen(bioShot);
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': claudeKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 1500,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: comprimida.split(',')[1] } },
+          { type: 'text', text: PROMPT_BIO_IG }
+        ]}]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const bio = parseJSON(data.content[0].text);
+    renderBio(bio);
+  } catch(e) {
+    document.getElementById('bioContent').innerHTML = `<p style="color:var(--red);font-size:.85rem">Error analizando bio: ${e.message}</p>`;
+  }
+}
+
+function renderBio(b) {
+  const col = s => s==='bueno'?'#16a34a':s==='mejorar'?'#ea580c':'#dc2626';
+  const bg  = s => s==='bueno'?'rgba(22,163,74,.08)':s==='mejorar'?'rgba(234,88,12,.08)':'rgba(220,38,38,.08)';
+  const ico = s => s==='bueno'?'✅':s==='mejorar'?'⚠️':'❌';
+  const scoreColor = b.overall_score>=70?'#16a34a':b.overall_score>=45?'#ea580c':'#dc2626';
+
+  document.getElementById('bioContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding:16px;background:var(--bg);border-radius:12px;border:1px solid var(--border)">
+      <svg width="72" height="72" viewBox="0 0 72 72" style="flex-shrink:0">
+        <circle cx="36" cy="36" r="30" fill="none" stroke="#f0ccea" stroke-width="6"/>
+        <circle cx="36" cy="36" r="30" fill="none" stroke="${scoreColor}" stroke-width="6" stroke-linecap="round"
+          stroke-dasharray="${2*Math.PI*30}" stroke-dashoffset="${2*Math.PI*30*(1-b.overall_score/100)}"
+          transform="rotate(-90 36 36)"/>
+        <text x="36" y="40" text-anchor="middle" font-size="16" font-weight="900" fill="${scoreColor}">${b.overall_score}</text>
+      </svg>
+      <div>
+        <div style="font-weight:900;font-size:1.1rem">Puntuación de tu Bio</div>
+        <div style="font-size:.83rem;color:var(--muted);margin-top:2px">${b.overall_score>=70?'Buena base — hay oportunidades de mejora':b.overall_score>=45?'Necesita trabajo — varios elementos clave faltan':'Urgente — la bio no comunica tu valor correctamente'}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:20px">
+      ${b.elements.map(el=>`
+        <div style="background:${bg(el.status)};border:1.5px solid ${col(el.status)}33;border-radius:12px;padding:13px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+            <span style="font-weight:800;font-size:.88rem">${el.icono} ${el.nombre}</span>
+            <span style="font-size:.72rem;font-weight:800;color:${col(el.status)};background:${bg(el.status)};border:1px solid ${col(el.status)}44;padding:2px 8px;border-radius:99px;white-space:nowrap">${ico(el.status)} ${el.status==='bueno'?'Bien':el.status==='mejorar'?'Mejorar':'Falta'}</span>
+          </div>
+          <p style="font-size:.75rem;color:#666;line-height:1.45;margin-bottom:6px;font-style:italic">${el.que_es}</p>
+          <p style="font-size:.8rem;color:${col(el.status)};font-weight:600;line-height:1.4">${el.feedback}</p>
+        </div>`).join('')}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+      <div style="background:rgba(22,163,74,.06);border:1.5px solid rgba(22,163,74,.2);border-radius:12px;padding:14px">
+        <div style="font-weight:800;font-size:.82rem;color:#15803d;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">✅ Lo que funciona</div>
+        ${b.fortalezas.map(f=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#16a34a;flex-shrink:0">→</span>${f}</div>`).join('')}
+      </div>
+      <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:12px;padding:14px">
+        <div style="font-weight:800;font-size:.82rem;color:#dc2626;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">🔧 Qué mejorar</div>
+        ${b.mejoras.map((m,i)=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#dc2626;font-weight:800;flex-shrink:0">${i+1}.</span>${m}</div>`).join('')}
+      </div>
+    </div>
+
+    ${b.bio_sugerida?`
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(233,30,140,.06));border:1.5px solid rgba(124,58,237,.25);border-radius:12px;padding:16px">
+      <div style="font-weight:800;font-size:.82rem;color:var(--purple);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">✨ Bio sugerida por Claude</div>
+      <p style="font-size:.9rem;line-height:1.6;font-weight:600;color:var(--text)">${b.bio_sugerida}</p>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:6px">${b.bio_sugerida.length}/150 caracteres</div>
+    </div>`:''}`;
+}
+
+function toggleOtroNicho() {
+  const sel = document.getElementById('f_niche');
+  document.getElementById('f_niche_otro_wrap').style.display = sel.value === 'otro' ? 'block' : 'none';
+}
+
 let _activePanel = null;
 
 function mostrarPanel(tipo) {
