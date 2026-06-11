@@ -240,24 +240,55 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="ia-banner-row">
         <div class="ia-icon">🤖</div>
         <div style="flex:1;min-width:200px">
-          <div class="ia-title">Conecta Gemini (Google) — gratis, sin tarjeta</div>
-          <div class="ia-sub">La IA de Google lee tus capturas y extrae todos los números sola. Es completamente gratis — solo necesitas una cuenta de Gmail.</div>
+          <div class="ia-title">Conecta tu IA para leer capturas</div>
+          <div class="ia-sub">La IA lee tus pantallazos y extrae todos los números automáticamente. Elige la opción que mejor funcione desde Colombia.</div>
           <div id="iaStatusArea">
             <div id="iaNoKey">
-              <button class="ia-opt-btn primary" onclick="mostrarPanel('gemini')" style="margin-top:8px">🔑 Conectar Gemini gratis — ver instrucciones ▾</button>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+                <button class="ia-opt-btn primary" onclick="mostrarPanel('claude')" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">🔑 Claude (Anthropic) — funciona en Colombia ▾</button>
+                <button class="ia-opt-btn" onclick="mostrarPanel('gemini')" style="background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);color:var(--text)">Gemini (Google) — requiere VPN ▾</button>
+              </div>
             </div>
             <div id="iaHasKey" style="display:none">
-              <span class="ia-connected" id="iaConnectedLabel">✅ Gemini conectado</span>
+              <span class="ia-connected" id="iaConnectedLabel">✅ IA conectada</span>
               <button onclick="desconectarIA()" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;margin-left:10px;text-decoration:underline">Cambiar clave / desconectar</button>
             </div>
           </div>
         </div>
       </div>
+      <!-- Panel Claude -->
+      <div class="ia-panel" id="panelClaude" style="display:none">
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:6px">Cómo conectar Claude (Anthropic) — funciona en Colombia:</div>
+        <div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.8rem;line-height:1.6">
+          🇨🇴 <strong>Sin VPN.</strong> Claude de Anthropic funciona directamente desde Colombia. Las cuentas nuevas reciben <strong>créditos de prueba gratis</strong> para comenzar.
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">1</div>
+          <p>Abre <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);font-weight:700">console.anthropic.com</a> y crea una cuenta (o inicia sesión si ya tienes una).</p>
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">2</div>
+          <p>En el menú lateral busca <strong>"API Keys"</strong> y toca <strong>"Create Key"</strong>. Dale un nombre (por ejemplo: "Instagram Analyzer").</p>
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">3</div>
+          <p>Aparece tu clave — empieza por <strong>sk-ant-</strong>. Toca el botón de copiar al lado. <em>Solo aparece una vez, guárdala.</em></p>
+        </div>
+        <div class="ia-step">
+          <div class="ia-step-n">4</div>
+          <p>Vuelve a esta página, <strong>pega tu clave</strong> en el campo de abajo y toca <strong>"Guardar →"</strong>.</p>
+        </div>
+        <div class="ia-key-row">
+          <input type="password" class="ia-key-input" id="claudeKeyInput" placeholder="Pega tu clave aquí (sk-ant-...)">
+          <button class="ia-save-btn" onclick="guardarClave('claude')" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">Guardar →</button>
+        </div>
+        <p class="ia-note">🔒 Tu clave se guarda únicamente en tu navegador. Kathe Digital nunca la ve ni la almacena en ningún servidor.</p>
+      </div>
       <!-- Panel Gemini -->
-      <div class="ia-panel" id="panelGemini">
+      <div class="ia-panel" id="panelGemini" style="display:none">
         <div style="font-weight:800;font-size:.95rem;margin-bottom:6px">Cómo conectar Gemini — sigue estos pasos:</div>
         <div style="background:rgba(16,163,127,.1);border:1px solid rgba(16,163,127,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.8rem;line-height:1.6">
-          🎉 <strong>100% gratis.</strong> Google da <strong>1,500 análisis por día</strong> sin cobrar nada. Solo necesitas tu cuenta de Gmail — sin tarjeta de crédito.
+          🎉 <strong>100% gratis.</strong> Google da <strong>1,500 análisis por día</strong> sin cobrar nada. Solo necesitas tu cuenta de Gmail — sin tarjeta de crédito. <strong>⚠️ Requiere VPN en Colombia.</strong>
         </div>
         <div class="ia-step">
           <div class="ia-step-n">1</div>
@@ -370,7 +401,7 @@ footer a{color:var(--accent);text-decoration:none}
         <div id="manualHint" style="background:rgba(233,30,140,.08);border:2px solid rgba(233,30,140,.3);border-radius:14px;padding:16px 18px;text-align:center">
           <div style="font-size:1.8rem;margin-bottom:4px">👇</div>
           <strong style="font-size:.95rem;color:#1a0a2e;display:block;margin-bottom:4px">¡Capturas guardadas! Ahora escribe los números en el formulario.</strong>
-          <p style="font-size:.8rem;color:#a07ab5;margin:6px 0 10px">Sin IA conectada debes ingresar los números manualmente. <button onclick="mostrarPanel('gemini')" style="background:none;border:none;color:var(--accent);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0">Conectar Gemini gratis →</button></p>
+          <p style="font-size:.8rem;color:#a07ab5;margin:6px 0 10px">Sin IA conectada debes ingresar los números manualmente. <button onclick="mostrarPanel('claude')" style="background:none;border:none;color:var(--accent);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0">Conectar Claude (funciona en Colombia) →</button></p>
           <button onclick="document.getElementById('formPaso3').scrollIntoView({behavior:'smooth'})" style="background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;border:none;padding:9px 20px;border-radius:99px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit">Ir al formulario ↓</button>
         </div>
       </div>
@@ -1061,21 +1092,32 @@ let _activePanel = null;
 
 function mostrarPanel(tipo) {
   document.getElementById('panelGemini').style.display = 'none';
+  document.getElementById('panelClaude').style.display = 'none';
   if (_activePanel === tipo) { _activePanel = null; return; }
-  document.getElementById('panelGemini').style.display = 'block';
+  const panelId = tipo === 'claude' ? 'panelClaude' : 'panelGemini';
+  document.getElementById(panelId).style.display = 'block';
   _activePanel = tipo;
-  setTimeout(() => document.getElementById('panelGemini').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  setTimeout(() => document.getElementById(panelId).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
 function guardarClave(tipo) {
-  const key = document.getElementById('geminiKeyInput').value.trim();
-  if (!key) { alert('Por favor pega tu clave de Gemini primero.'); return; }
-  if (key.length < 20) { alert('La clave parece incompleta. Asegúrate de copiarla completa desde aistudio.google.com'); return; }
-  localStorage.setItem('kd_gemini_key', key);
+  const inputId = tipo === 'claude' ? 'claudeKeyInput' : 'geminiKeyInput';
+  const key = document.getElementById(inputId).value.trim();
+  if (tipo === 'claude') {
+    if (!key) { alert('Por favor pega tu clave de Claude primero.'); return; }
+    if (!key.startsWith('sk-ant-') || key.length < 30) { alert('La clave de Claude debe empezar por sk-ant- y tener al menos 30 caracteres. Cópiala completa desde console.anthropic.com'); return; }
+    localStorage.setItem('kd_claude_key', key);
+    localStorage.removeItem('kd_gemini_key');
+  } else {
+    if (!key) { alert('Por favor pega tu clave de Gemini primero.'); return; }
+    if (key.length < 20) { alert('La clave parece incompleta. Asegúrate de copiarla completa desde aistudio.google.com'); return; }
+    localStorage.setItem('kd_gemini_key', key);
+    localStorage.removeItem('kd_claude_key');
+  }
   localStorage.removeItem('kd_openai_key');
-  localStorage.removeItem('kd_claude_key');
   mostrarEstadoIA();
   document.getElementById('panelGemini').style.display = 'none';
+  document.getElementById('panelClaude').style.display = 'none';
   _activePanel = null;
   actualizarHint();
 }
@@ -1089,9 +1131,15 @@ function desconectarIA() {
 }
 
 function mostrarEstadoIA() {
+  const claudeKey = localStorage.getItem('kd_claude_key');
   const geminiKey = localStorage.getItem('kd_gemini_key');
-  document.getElementById('iaNoKey').style.display = geminiKey ? 'none' : 'block';
-  document.getElementById('iaHasKey').style.display = geminiKey ? 'block' : 'none';
+  const hasKey = !!(claudeKey || geminiKey);
+  document.getElementById('iaNoKey').style.display = hasKey ? 'none' : 'block';
+  document.getElementById('iaHasKey').style.display = hasKey ? 'block' : 'none';
+  if (hasKey) {
+    const label = claudeKey ? '✅ Claude (Anthropic) conectado' : '✅ Gemini (Google) conectado';
+    document.getElementById('iaConnectedLabel').textContent = label;
+  }
 }
 
 mostrarEstadoIA();
@@ -1127,17 +1175,21 @@ Notas:
 
 async function extraerConIA() {
   if (screenshots.length === 0) { alert('Primero sube tus capturas.'); return; }
+  const claudeKey = localStorage.getItem('kd_claude_key');
   const geminiKey = localStorage.getItem('kd_gemini_key');
-  if (!geminiKey) { mostrarPanel('gemini'); return; }
+  if (!claudeKey && !geminiKey) { mostrarPanel('claude'); return; }
 
+  const usandoClaude = !!claudeKey;
   const btn = document.getElementById('btnExtract');
   const status = document.getElementById('extractStatus');
   btn.disabled = true;
-  btn.textContent = '⏳ Gemini está leyendo tus capturas...';
-  status.textContent = 'Analizando imágenes con Gemini (Google). Puede tardar 10-20 segundos...';
+  btn.textContent = usandoClaude ? '⏳ Claude está leyendo tus capturas...' : '⏳ Gemini está leyendo tus capturas...';
+  status.textContent = usandoClaude
+    ? 'Analizando imágenes con Claude (Anthropic). Puede tardar 10-20 segundos...'
+    : 'Analizando imágenes con Gemini (Google). Puede tardar 10-20 segundos...';
 
   try {
-    const metrics = await extraerGemini(geminiKey);
+    const metrics = usandoClaude ? await extraerClaude(claudeKey) : await extraerGemini(geminiKey);
     autoRellenarFormulario(metrics);
     btn.textContent = '✅ ¡Datos extraídos con éxito!';
     btn.style.background = '#16a34a';
@@ -1150,14 +1202,24 @@ async function extraerConIA() {
     btn.style.background = '';
     const msg = (err.message || '').toLowerCase();
     let textoError = 'Error: ' + (err.message || 'desconocido');
-    if (msg.includes('invalid') || msg.includes('api key') || msg.includes('403') || msg.includes('unauthorized') || msg.includes('permission')) {
-      textoError = '🔑 La clave de Gemini no es válida o no tiene permisos. Ve a aistudio.google.com → Claves de API → copia una clave activa y pégala de nuevo.';
-    } else if (msg.includes('exhausted') || msg.includes('quota') || msg.includes('429') || msg.includes('limit')) {
-      textoError = '⏱️ Todos los modelos de Gemini alcanzaron su límite. Espera unos minutos e intenta de nuevo, o crea una nueva clave en aistudio.google.com con un proyecto diferente.';
-    } else if (msg.includes('location') || msg.includes('region') || msg.includes('country') || msg.includes('not supported')) {
-      textoError = '🌍 Tu región no tiene acceso a este modelo de Gemini. Intenta con una VPN o contacta a Kathe Digital para una solución alternativa.';
-    } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed to fetch')) {
-      textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
+    if (usandoClaude) {
+      if (msg.includes('invalid') || msg.includes('api key') || msg.includes('401') || msg.includes('authentication') || msg.includes('x-api-key')) {
+        textoError = '🔑 La clave de Claude no es válida. Ve a console.anthropic.com → API Keys → copia una clave activa que empiece por sk-ant- y pégala de nuevo.';
+      } else if (msg.includes('credit') || msg.includes('billing') || msg.includes('quota') || msg.includes('429') || msg.includes('limit')) {
+        textoError = '💳 Tu cuenta de Claude se quedó sin créditos. Ve a console.anthropic.com → Billing para recargar.';
+      } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed to fetch')) {
+        textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
+      }
+    } else {
+      if (msg.includes('invalid') || msg.includes('api key') || msg.includes('403') || msg.includes('unauthorized') || msg.includes('permission')) {
+        textoError = '🔑 La clave de Gemini no es válida o no tiene permisos. Ve a aistudio.google.com → Claves de API → copia una clave activa y pégala de nuevo.';
+      } else if (msg.includes('exhausted') || msg.includes('quota') || msg.includes('429') || msg.includes('limit')) {
+        textoError = '⏱️ Todos los modelos de Gemini alcanzaron su límite. Espera unos minutos e intenta de nuevo, o crea una nueva clave en aistudio.google.com con un proyecto diferente.';
+      } else if (msg.includes('location') || msg.includes('region') || msg.includes('country') || msg.includes('not supported')) {
+        textoError = '🌍 Tu región no tiene acceso a Gemini. Usa Claude (Anthropic) que sí funciona en Colombia — toca "Cambiar clave / desconectar" y conéctate con Claude.';
+      } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed to fetch')) {
+        textoError = '🌐 Sin conexión a internet. Verifica tu red e intenta de nuevo.';
+      }
     }
     status.innerHTML = textoError;
     console.error('IA extract error:', err.message);
@@ -1203,6 +1265,34 @@ async function extraerGemini(apiKey) {
     if (!esQuota) throw new Error(ultimoError);
   }
   throw new Error('RESOURCE_EXHAUSTED: ' + ultimoError);
+}
+
+async function extraerClaude(apiKey) {
+  const comprimidas = await Promise.all(screenshots.map(ss => comprimirImagen(ss.dataURL)));
+  const imageContent = comprimidas.map(dataURL => ({
+    type: 'image',
+    source: { type: 'base64', media_type: 'image/jpeg', data: dataURL.split(',')[1] }
+  }));
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5',
+      max_tokens: 1024,
+      messages: [{
+        role: 'user',
+        content: [...imageContent, { type: 'text', text: PROMPT_IG }]
+      }]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message || data.error.type || JSON.stringify(data.error));
+  return parseJSON(data.content[0].text);
 }
 
 function parseJSON(text) {
