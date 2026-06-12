@@ -1084,16 +1084,16 @@ function runChecks(doc, url, rawHtml, ml) {
   cats.push({
     name: 'SEO', icon: '🔍', score: Math.min(seoScore, 30), max: 30,
     checks: [
-      { pass: !!titleText, label: titleText ? `Título: "${titleText.substring(0,55)}..." (${titleLen} car.)${titleSrc}` : 'Falta la etiqueta <title>' },
-      { pass: titleOk, label: titleOk ? 'Longitud de título óptima (30–65 caracteres)' : `Título ${titleLen < 30 ? 'muy corto' : 'muy largo'} (${titleLen} caracteres)` },
-      { pass: !!metaDescTxt, label: metaDescTxt ? `Meta descripción: "${metaDescTxt.substring(0,60)}..." (${metaDescLen} car.)${metaSrc}` : 'Falta meta descripción — Google muestra texto aleatorio' },
-      { pass: metaDescOk, label: metaDescOk ? 'Longitud de meta descripción óptima' : metaDescLen < 80 ? 'Meta descripción muy corta (menos de 80 car.)' : 'Meta descripción muy larga (más de 200 car.)' },
+      { pass: !!titleText, label: titleText ? `Título de la página: "${titleText.substring(0,55)}..." (${titleLen} car.)${titleSrc}` : 'Falta el título de la página en Google' },
+      { pass: titleOk, label: titleOk ? 'Longitud del título perfecta (30–65 caracteres)' : `Título ${titleLen < 30 ? 'muy corto' : 'muy largo'} (${titleLen} caracteres)` },
+      { pass: !!metaDescTxt, label: metaDescTxt ? `Descripción en Google: "${metaDescTxt.substring(0,60)}..." (${metaDescLen} car.)${metaSrc}` : 'Falta la descripción en Google — elige texto aleatorio de tu página' },
+      { pass: metaDescOk, label: metaDescOk ? 'Longitud de la descripción en Google perfecta' : metaDescLen < 80 ? 'Descripción en Google muy corta (menos de 80 car.)' : 'Descripción en Google muy larga (más de 200 car.)' },
       h1Ok === null
-        ? { pass: null, label: `${NA} H1 — no verificable sin código fuente del sitio` }
-        : { pass: h1Ok, label: h1Ok ? 'Un solo H1 — correcto' : h1Els.length === 0 ? 'No hay etiqueta H1 — crítico para SEO' : `${h1Els.length} etiquetas H1 — solo debe haber una` },
+        ? { pass: null, label: `${NA} Título principal de la página — no verificable sin código fuente` }
+        : { pass: h1Ok, label: h1Ok ? 'Título principal único — correcto' : h1Els.length === 0 ? 'Sin título principal — afecta SEO y confunde al visitante' : `${h1Els.length} títulos principales — solo debe haber uno` },
       altOk === null
-        ? { pass: null, label: `${NA} Alt text en imágenes — no verificable sin código fuente` }
-        : { pass: altOk, label: altOk ? `Imágenes con alt text (${imgsWithAlt.length}/${imgs.length})` : `Imágenes sin alt text (${imgsWithAlt.length}/${imgs.length})` },
+        ? { pass: null, label: `${NA} Descripción de imágenes para Google — no verificable sin código fuente` }
+        : { pass: altOk, label: altOk ? `Imágenes con descripción para Google (${imgsWithAlt.length}/${imgs.length})` : `Imágenes sin descripción para Google (${imgsWithAlt.length}/${imgs.length})` },
     ]
   });
 
@@ -1114,17 +1114,17 @@ function runChecks(doc, url, rawHtml, ml) {
   cats.push({
     name: 'Técnico', icon: '⚙️', score: Math.min(techScore, 25), max: 25,
     checks: [
-      { pass: isHttps, label: isHttps ? 'HTTPS habilitado — conexión segura' : '⚠️ Sin HTTPS — penalizado por Google y genera desconfianza' },
+      { pass: isHttps, label: isHttps ? 'Conexión segura (HTTPS) activa' : '⚠️ Sin conexión segura (HTTPS) — Google lo penaliza y asusta a los visitantes' },
       viewportOk === null
-        ? { pass: null, label: `${NA} Meta viewport — no verificable sin código fuente` }
-        : { pass: viewportOk, label: viewportOk ? 'Meta viewport presente — diseño responsive' : 'Falta meta viewport — el sitio puede verse mal en móvil' },
-      { pass: langOk, label: langOk ? `Idioma declarado: "${langAttr}"` : 'Falta atributo lang — Google no puede identificar el idioma' },
+        ? { pass: null, label: `${NA} Diseño adaptado al celular — no verificable sin código fuente` }
+        : { pass: viewportOk, label: viewportOk ? 'Diseño adaptado al celular — correcto' : 'No adaptado al celular — puede verse desconfigurado en móvil' },
+      { pass: langOk, label: langOk ? `Idioma del sitio configurado: "${langAttr}"` : 'Idioma del sitio no configurado — Google no sabe en qué idioma está' },
       charsetOk === null
-        ? { pass: null, label: `${NA} Codificación de caracteres — no verificable sin código fuente` }
-        : { pass: charsetOk, label: charsetOk ? 'Codificación de caracteres declarada' : 'Falta declaración de charset' },
+        ? { pass: null, label: `${NA} Tildes y caracteres especiales (ñ, á...) — no verificable sin código fuente` }
+        : { pass: charsetOk, label: charsetOk ? 'Tildes y caracteres especiales configurados correctamente' : 'Tildes y caracteres especiales no configurados — pueden aparecer como símbolos raros' },
       schemaJson === null
-        ? { pass: null, label: `${NA} Schema.org — no verificable sin código fuente` }
-        : { pass: schemaJson, label: schemaJson ? 'Datos estructurados Schema.org detectados' : 'Sin Schema.org (recomendado para rich snippets en Google)' },
+        ? { pass: null, label: `${NA} Datos extra en Google (estrellas, precios) — no verificable sin código fuente` }
+        : { pass: schemaJson, label: schemaJson ? 'Datos extra para Google detectados — puede aparecer con estrellas o info destacada' : 'Sin datos extra para Google — oportunidad de aparecer con estrellas o info destacada' },
     ]
   });
 
@@ -1146,19 +1146,19 @@ function runChecks(doc, url, rawHtml, ml) {
   cats.push({
     name: 'Conversión', icon: '💰', score: Math.min(convScore, 25), max: 25,
     checks: [
-      doc ? { pass: buttons.length > 0, label: buttons.length > 0 ? `${buttons.length} botón(es) CTA detectados` : 'Sin botones CTA visibles — crítico para conversión' }
-           : { pass: null, label: `${NA} Botones CTA — no verificable sin código fuente` },
-      doc ? { pass: forms.length > 0, label: forms.length > 0 ? `${forms.length} formulario(s) de captura detectado(s)` : 'Sin formulario — dificulta la captura de leads' }
-           : { pass: null, label: `${NA} Formulario de captura — no verificable sin código fuente` },
+      doc ? { pass: buttons.length > 0, label: buttons.length > 0 ? `${buttons.length} botón(es) de acción detectados` : 'Sin botones de acción visibles — crítico para conversión' }
+           : { pass: null, label: `${NA} Botones de acción — no verificable sin código fuente` },
+      doc ? { pass: forms.length > 0, label: forms.length > 0 ? `${forms.length} formulario(s) detectado(s)` : 'Sin formulario de contacto — dificulta conseguir clientes' }
+           : { pass: null, label: `${NA} Formulario de contacto — no verificable sin código fuente` },
       heroH1 === null
-        ? { pass: null, label: `${NA} Propuesta de valor (H1) — no verificable sin código fuente` }
-        : { pass: heroH1, label: heroH1 ? `H1 presente: "${h1Els[0]?.textContent?.trim()?.substring(0,55)}..."` : 'Sin H1 — el visitante no sabe qué ofreces' },
+        ? { pass: null, label: `${NA} Mensaje principal de la página — no verificable sin código fuente` }
+        : { pass: heroH1, label: heroH1 ? `Título principal: "${h1Els[0]?.textContent?.trim()?.substring(0,55)}..."` : 'Sin título principal — el visitante no entiende qué ofreces' },
       (hasPhone === null && hasEmail === null)
         ? { pass: null, label: `${NA} Información de contacto — no verificable sin código fuente` }
         : { pass: hasPhone || hasEmail, label: (hasPhone || hasEmail) ? 'Información de contacto detectada' : 'Sin email ni teléfono visible — genera desconfianza' },
       socialProof === null
-        ? { pass: null, label: `${NA} Testimonios/prueba social — no verificable sin código fuente` }
-        : { pass: socialProof, label: socialProof ? 'Prueba social o testimonios detectados' : 'Sin testimonios — añadirlos puede aumentar la conversión un 34%' },
+        ? { pass: null, label: `${NA} Testimonios de clientes — no verificable sin código fuente` }
+        : { pass: socialProof, label: socialProof ? 'Testimonios o clientes detectados' : 'Sin testimonios — añadirlos puede aumentar la conversión un 34%' },
     ]
   });
 
@@ -1186,18 +1186,18 @@ function runChecks(doc, url, rawHtml, ml) {
 
   const mlNote = !doc ? ' (confirmado vía Microlink)' : '';
   cats.push({
-    name: 'Redes Sociales', icon: '📱', score: Math.min(socialScore, 20), max: 20,
+    name: 'Vista previa al compartir', icon: '🔗', score: Math.min(socialScore, 20), max: 20,
     checks: [
-      ogTitleOk === null ? { pass: null, label: `${NA} og:title — no verificable` }
-        : { pass: ogTitleOk, label: ogTitleOk ? `og:title presente${mlNote}` : 'Falta og:title — sin título al compartir en redes' },
-      ogDescOk === null ? { pass: null, label: `${NA} og:description — no verificable` }
-        : { pass: ogDescOk, label: ogDescOk ? `og:description presente${mlNote}` : 'Falta og:description — sin descripción al compartir en redes' },
-      ogImgOk === null ? { pass: null, label: `${NA} og:image — no verificable` }
-        : { pass: ogImgOk, label: ogImgOk ? `og:image detectada${mlNote}${ml?.image?.url ? ': ' + ml.image.url.substring(0,50) + '...' : ''}` : 'Falta og:image — sin imagen al compartir en redes' },
-      twCardOk === null ? { pass: null, label: `${NA} Twitter/X Card — no verificable sin código fuente` }
-        : { pass: twCardOk, label: twCardOk ? `Twitter Card detectada` : 'Sin Twitter Card — agrega para mejor rendimiento en X/Twitter' },
-      ogUrlOk === null ? { pass: null, label: `${NA} og:url — no verificable sin código fuente` }
-        : { pass: ogUrlOk, label: ogUrlOk ? 'og:url definida' : 'Falta og:url — puede causar URLs incorrectas al compartir' },
+      ogTitleOk === null ? { pass: null, label: `${NA} Título al compartir el link — no verificable` }
+        : { pass: ogTitleOk, label: ogTitleOk ? `Título al compartir el link: configurado${mlNote}` : 'Sin título al compartir — el link se verá sin título en WhatsApp y Facebook' },
+      ogDescOk === null ? { pass: null, label: `${NA} Descripción al compartir el link — no verificable` }
+        : { pass: ogDescOk, label: ogDescOk ? `Descripción al compartir el link: configurada${mlNote}` : 'Sin descripción al compartir — nadie sabe de qué trata el link' },
+      ogImgOk === null ? { pass: null, label: `${NA} Imagen al compartir el link — no verificable` }
+        : { pass: ogImgOk, label: ogImgOk ? `Imagen al compartir el link: configurada${mlNote}${ml?.image?.url ? ' — ' + ml.image.url.substring(0,50) + '...' : ''}` : 'Sin imagen al compartir — el link se ve sin foto en WhatsApp y Facebook' },
+      twCardOk === null ? { pass: null, label: `${NA} Vista previa en X (Twitter) — no verificable sin código fuente` }
+        : { pass: twCardOk, label: twCardOk ? `Vista previa en X (Twitter): configurada` : 'Sin vista previa en X (Twitter) — agrega para que el link se vea mejor ahí' },
+      ogUrlOk === null ? { pass: null, label: `${NA} URL oficial del sitio — no verificable sin código fuente` }
+        : { pass: ogUrlOk, label: ogUrlOk ? 'URL oficial del sitio: configurada' : 'Sin URL oficial configurada — puede mostrar la URL incorrecta al compartir' },
     ]
   });
 
@@ -1205,20 +1205,20 @@ function runChecks(doc, url, rawHtml, ml) {
   const totalScore = cats.reduce((sum, c) => sum + c.score, 0);
 
   // ── Recommendations ────────────────────────────────────────────
-  if (!isHttps) recs.push({ level: 'critical', icon: '🔒', title: 'Activa HTTPS de inmediato', desc: 'Google penaliza sitios sin HTTPS en el ranking orgánico. Además genera un aviso de "no seguro" en Chrome que ahuyenta a los visitantes. La mayoría de hostings lo activan gratis con Let\'s Encrypt.' });
-  if (!titleText) recs.push({ level: 'critical', icon: '📝', title: 'Agrega una etiqueta <title>', desc: 'Sin título el sitio no aparece correctamente en Google ni cuando alguien lo guarda como favorito. El título debe describir tu oferta principal en 50–60 caracteres.' });
-  if (doc && h1Els.length === 0) recs.push({ level: 'critical', icon: '🎯', title: 'Agrega una propuesta de valor clara (H1)', desc: 'El H1 es lo primero que lee Google y tu visitante. Debe responder en 10 palabras: ¿qué ofreces y para quién? Ejemplo: "Aprende a crear embudos de venta con IA en 7 días".' });
-  if (doc && buttons.length === 0) recs.push({ level: 'critical', icon: '⚡', title: 'Agrega un botón de llamada a la acción (CTA)', desc: 'Sin un CTA visible tu visitante no sabe qué hacer. El botón principal debe estar en el hero y repetirse cada 2-3 secciones. Usa verbos de acción: "Empieza ahora", "Quiero mi guía gratis", "Agéndame".' });
-  if (!metaDescTxt) recs.push({ level: 'important', icon: '📋', title: 'Crea una meta descripción', desc: 'La meta descripción aparece en Google bajo el título. Sin ella Google elige aleatoriamente texto de tu página. Escribe 150–160 caracteres describiendo tu propuesta de valor con una palabra clave.' });
-  if (viewportOk === false) recs.push({ level: 'important', icon: '📱', title: 'Agrega meta viewport para móvil', desc: 'Más del 70% de usuarios navegan desde el celular. Sin el meta viewport tu sitio no se adapta a pantallas pequeñas. Agrega: <meta name="viewport" content="width=device-width, initial-scale=1.0">.' });
-  if (ogImgOk === false) recs.push({ level: 'important', icon: '🖼️', title: 'Configura la imagen para compartir en redes', desc: 'Sin og:image cuando alguien comparte tu link en WhatsApp, Facebook o Instagram aparece sin imagen. Agrega una imagen de 1200×630px y el meta tag og:image para aumentar el CTR al compartir.' });
-  if (socialProof === false) recs.push({ level: 'normal', icon: '⭐', title: 'Agrega testimonios o prueba social', desc: 'El 92% de los compradores leen testimonios antes de comprar. Agrega 2-3 testimonios reales con foto, nombre y resultado específico. "Aumenté mis ventas un 40% en 30 días" es mejor que "Excelente servicio".' });
-  if (doc && forms.length === 0) recs.push({ level: 'normal', icon: '📨', title: 'Agrega un formulario de captura', desc: 'Sin formulario estás perdiendo leads que no compran hoy pero podrían hacerlo mañana. Ofrece algo de valor a cambio del email: guía gratuita, descuento, webinar, auditoría.' });
-  if (schemaJson === false) recs.push({ level: 'normal', icon: '🗂️', title: 'Implementa datos estructurados (Schema.org)', desc: 'Los datos estructurados ayudan a Google a entender tu negocio y pueden mostrar estrellas, precios o eventos en los resultados de búsqueda (rich snippets). Usa el tipo Organization o LocalBusiness.' });
+  if (!isHttps) recs.push({ level: 'critical', icon: '🔒', title: 'Activa la conexión segura (HTTPS) de inmediato', desc: 'Google penaliza sitios sin conexión segura en el ranking. Además muestra un aviso de "no seguro" en Chrome que ahuyenta a los visitantes. La mayoría de hostings lo activan gratis — pregúntale a quien te hizo la página.' });
+  if (!titleText) recs.push({ level: 'critical', icon: '📝', title: 'Agrega el título de tu página', desc: 'Es el nombre que aparece en la pestaña del navegador y en Google. Sin él tu página no aparece correctamente en búsquedas. Debe describir tu oferta principal en 50–60 caracteres.' });
+  if (doc && h1Els.length === 0) recs.push({ level: 'critical', icon: '🎯', title: 'Agrega un título principal claro en tu página', desc: 'El título principal es lo primero que Google y tu visitante leen. Debe responder en 10 palabras: ¿qué ofreces y para quién? Ejemplo: "Aprende a crear embudos de venta con IA en 7 días".' });
+  if (doc && buttons.length === 0) recs.push({ level: 'critical', icon: '⚡', title: 'Agrega un botón de llamada a la acción', desc: 'Sin un botón visible tu visitante no sabe qué hacer. El botón principal debe estar al inicio y repetirse cada 2-3 secciones. Usa verbos de acción: "Empieza ahora", "Quiero mi guía gratis", "Agéndame".' });
+  if (!metaDescTxt) recs.push({ level: 'important', icon: '📋', title: 'Agrega la descripción que aparece en Google', desc: 'Es el texto que aparece debajo del título cuando alguien te busca en Google. Sin ella Google elige aleatoriamente un texto de tu página. Escribe 150–160 caracteres describiendo tu propuesta de valor.' });
+  if (viewportOk === false) recs.push({ level: 'important', icon: '📱', title: 'Configura el diseño para que se vea bien en celular', desc: 'Más del 70% de personas navegan desde el celular. Sin esta configuración tu sitio puede verse desconfigurado o muy pequeño en móvil. Díselo a tu desarrollador — es un ajuste rápido.' });
+  if (ogImgOk === false) recs.push({ level: 'important', icon: '🖼️', title: 'Configura la imagen que aparece al compartir el link', desc: 'Cuando alguien comparte tu link en WhatsApp o Facebook, sin imagen configurada aparece un cuadro vacío o en blanco. Agrega una imagen de 1200×630px — aumenta hasta 3x la probabilidad de que hagan clic.' });
+  if (socialProof === false) recs.push({ level: 'normal', icon: '⭐', title: 'Agrega testimonios de clientes reales', desc: 'El 92% de los compradores leen testimonios antes de comprar. Agrega 2-3 testimonios con foto, nombre y resultado específico. "Aumenté mis ventas un 40% en 30 días" es mejor que "Excelente servicio".' });
+  if (doc && forms.length === 0) recs.push({ level: 'normal', icon: '📨', title: 'Agrega un formulario de contacto', desc: 'Sin formulario estás perdiendo clientes que no compran hoy pero podrían hacerlo mañana. Ofrece algo de valor a cambio del email: guía gratuita, descuento, webinar, auditoría.' });
+  if (schemaJson === false) recs.push({ level: 'normal', icon: '🗂️', title: 'Activa los datos extra que muestra Google', desc: 'Es una configuración técnica que le dice a Google exactamente qué es tu negocio. Con esto puedes aparecer en Google con estrellas de calificación, precios, horarios — destacándote sobre la competencia.' });
 
   // Add "good" items
-  if (isHttps) recs.push({ level: 'good', icon: '✅', title: 'HTTPS habilitado — conexión segura', desc: 'Tu sitio usa HTTPS. Esto es fundamental para el SEO y genera confianza en los visitantes.' });
-  if (socialScore >= 15) recs.push({ level: 'good', icon: '✅', title: 'Buen manejo de meta tags para redes', desc: 'Tienes los principales meta tags de Open Graph configurados. Tu contenido se verá bien al compartir en redes sociales.' });
+  if (isHttps) recs.push({ level: 'good', icon: '✅', title: 'Conexión segura activa', desc: 'Tu sitio usa conexión segura (HTTPS). Esto es fundamental para el SEO y genera confianza en los visitantes.' });
+  if (socialScore >= 15) recs.push({ level: 'good', icon: '✅', title: 'El link se ve bien al compartirlo', desc: 'Tienes configurado el título, descripción e imagen que aparecen cuando alguien comparte tu link en WhatsApp, Facebook o Instagram.' });
 
   if (!recs.length) recs.push({ level: 'good', icon: '🏆', title: 'Análisis completado', desc: 'No se encontraron problemas críticos en este análisis. Continúa con las optimizaciones menores para alcanzar el máximo puntaje.' });
 
