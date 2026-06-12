@@ -78,10 +78,25 @@ nav{position:sticky;top:0;z-index:100;background:rgba(253,242,252,.96);backdrop-
 .testi-text{font-size:.85rem;color:var(--text);line-height:1.55;margin-bottom:12px;font-style:italic}
 .testi-author{font-size:.78rem;font-weight:700;color:var(--accent)}
 
+/* SOCIAL PILLS */
+.hero-social{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.social-pill{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:99px;font-size:.8rem;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 2px 10px rgba(0,0,0,.14);letter-spacing:.01em}
+.social-pill:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.social-pill.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d 55%,#fcb045);color:#fff}
+.social-pill.tt{background:#111;color:#fff}
+.social-pill.yt{background:#FF0000;color:#fff}
+.social-pill svg{flex-shrink:0;width:16px;height:16px}
+
 /* FOOTER */
 footer{padding:32px 24px;text-align:center;color:var(--muted);font-size:.88rem;border-top:1px solid var(--border)}
 footer a{color:var(--accent);text-decoration:none}
 footer strong{color:var(--text)}
+.footer-social{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.footer-social-link{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:99px;font-size:.76rem;font-weight:700;text-decoration:none;transition:opacity .2s}
+.footer-social-link:hover{opacity:.82}
+.footer-social-link.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d 55%,#fcb045);color:#fff}
+.footer-social-link.tt{background:#111;color:#fff}
+.footer-social-link.yt{background:#FF0000;color:#fff}
 
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px}
@@ -130,7 +145,22 @@ footer strong{color:var(--text)}
   <div class="hero-stats">
     <div class="hero-stat"><span class="num">4</span><span class="lbl">Herramientas gratuitas</span></div>
     <div class="hero-stat"><span class="num">100%</span><span class="lbl">Local y privado</span></div>
-    <div class="hero-stat"><span class="num">0</span><span class="lbl">APIs ni contraseñas</span></div>
+    <div class="hero-stat"><span class="num" style="font-size:1.15rem;line-height:1.1">Tu API</span><span class="lbl">Claude · datos 100% tuyos</span></div>
+  </div>
+
+  <div class="hero-social">
+    <a href="https://www.instagram.com/kathedigital__" target="_blank" rel="noopener" class="social-pill ig">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      @kathedigital__
+    </a>
+    <a href="https://www.tiktok.com/@kathedigital_" target="_blank" rel="noopener" class="social-pill tt">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.87a8.18 8.18 0 004.79 1.52V6.94a4.85 4.85 0 01-1.03-.25z"/></svg>
+      @kathedigital_
+    </a>
+    <a href="https://www.youtube.com/@Kathe_Digital" target="_blank" rel="noopener" class="social-pill yt">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+      @Kathe_Digital
+    </a>
   </div>
 </section>
 
@@ -236,7 +266,21 @@ footer strong{color:var(--text)}
 <!-- FOOTER -->
 <footer>
   <p>✦ <strong>Kathe Digital</strong> — Estrategia digital para emprendedores</p>
-  <p style="margin-top:8px"><a href="mailto:kathearistizabald@gmail.com">kathearistizabald@gmail.com</a> · <a href="https://instagram.com/kathedigital__" target="_blank">@kathedigital__</a></p>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/kathedigital__" target="_blank" rel="noopener" class="footer-social-link ig">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      @kathedigital__
+    </a>
+    <a href="https://www.tiktok.com/@kathedigital_" target="_blank" rel="noopener" class="footer-social-link tt">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.87a8.18 8.18 0 004.79 1.52V6.94a4.85 4.85 0 01-1.03-.25z"/></svg>
+      @kathedigital_
+    </a>
+    <a href="https://www.youtube.com/@Kathe_Digital" target="_blank" rel="noopener" class="footer-social-link yt">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+      @Kathe_Digital
+    </a>
+  </div>
+  <p><a href="mailto:kathearistizabald@gmail.com">kathearistizabald@gmail.com</a></p>
   <p style="margin-top:10px;font-size:.75rem">Todo el análisis es local · Tus datos no se comparten con terceros · Sin cookies de rastreo</p>
 </footer>
 

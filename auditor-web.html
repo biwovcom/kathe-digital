@@ -292,9 +292,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
       </div>
       <div id="urlFixBanner" style="display:none;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.3);border-radius:10px;padding:9px 13px;font-size:.8rem;color:#15803d;margin-bottom:10px"></div>
 
+      <div style="text-align:center;margin-bottom:8px">
+        <button onclick="togglePasteSection(this)" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;text-decoration:underline;font-family:inherit;padding:4px 8px">
+          ¿Tienes acceso al código fuente del sitio? Agrégalo para análisis más preciso →
+        </button>
+      </div>
+
       <div id="pasteSection" style="display:none">
-        <div class="divider"><div class="divider-line"></div><div class="divider-text">El sitio bloqueó el acceso automático — opción manual</div><div class="divider-line"></div></div>
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">En Chrome: abre el sitio → menú ⋮ → <strong>Ver código fuente</strong> (o Ctrl+U) → Ctrl+A → Ctrl+C → pega aquí</p>
+        <div class="divider"><div class="divider-line"></div><div class="divider-text" id="pasteDividerText">Opción avanzada — análisis con código fuente</div><div class="divider-line"></div></div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">En Chrome: abre el sitio → menú ⋮ → <strong>Ver código fuente</strong> (Ctrl+U) → Ctrl+A → Ctrl+C → pega aquí. <em>No todos lo tienen — es opcional.</em></p>
         <textarea class="html-textarea" id="htmlInput" placeholder="Pega aquí el código fuente del sitio..."></textarea>
         <button class="paste-btn" onclick="analyzeFromPaste()">Analizar código fuente →</button>
       </div>
@@ -651,7 +657,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
       <div id="vaDrop" onclick="document.getElementById('vaInput').click()" style="border:2px dashed rgba(37,99,235,.3);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;background:#fff;transition:all .2s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='rgba(37,99,235,.3)'">
         <div style="font-size:1.8rem;margin-bottom:8px">📸</div>
         <div style="font-weight:800;font-size:.92rem;margin-bottom:4px">Sube capturas de pantalla de tu sitio</div>
-        <div style="font-size:.8rem;color:var(--muted)">Pantalla completa, sección hero, formulario, diseño mobile — hasta 4 capturas</div>
+        <div style="font-size:.8rem;color:var(--muted)">Pantalla completa, sección hero, formulario, diseño mobile — hasta 10 capturas</div>
       </div>
       <input type="file" id="vaInput" accept="image/*" multiple style="display:none" onchange="vaAddFiles(this.files)">
       <div id="vaThumbs" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div>
@@ -816,6 +822,16 @@ async function startAudit() {
       document.getElementById('pasteSection').style.display = 'block';
     }
   }
+}
+
+function togglePasteSection(btn) {
+  const sec = document.getElementById('pasteSection');
+  const shown = sec.style.display !== 'none';
+  sec.style.display = shown ? 'none' : 'block';
+  btn.textContent = shown
+    ? '¿Tienes acceso al código fuente del sitio? Agrégalo para análisis más preciso →'
+    : '▲ Ocultar sección de código fuente';
+  document.getElementById('pasteDividerText').textContent = 'Opción avanzada — análisis con código fuente';
 }
 
 function analyzeFromPaste() {
@@ -1191,14 +1207,14 @@ function runChecks(doc, url, rawHtml, ml) {
   // ── Recommendations ────────────────────────────────────────────
   if (!isHttps) recs.push({ level: 'critical', icon: '🔒', title: 'Activa HTTPS de inmediato', desc: 'Google penaliza sitios sin HTTPS en el ranking orgánico. Además genera un aviso de "no seguro" en Chrome que ahuyenta a los visitantes. La mayoría de hostings lo activan gratis con Let\'s Encrypt.' });
   if (!titleText) recs.push({ level: 'critical', icon: '📝', title: 'Agrega una etiqueta <title>', desc: 'Sin título el sitio no aparece correctamente en Google ni cuando alguien lo guarda como favorito. El título debe describir tu oferta principal en 50–60 caracteres.' });
-  if (h1Els.length === 0) recs.push({ level: 'critical', icon: '🎯', title: 'Agrega una propuesta de valor clara (H1)', desc: 'El H1 es lo primero que lee Google y tu visitante. Debe responder en 10 palabras: ¿qué ofreces y para quién? Ejemplo: "Aprende a crear embudos de venta con IA en 7 días".' });
-  if (buttons.length === 0) recs.push({ level: 'critical', icon: '⚡', title: 'Agrega un botón de llamada a la acción (CTA)', desc: 'Sin un CTA visible tu visitante no sabe qué hacer. El botón principal debe estar en el hero y repetirse cada 2-3 secciones. Usa verbos de acción: "Empieza ahora", "Quiero mi guía gratis", "Agéndame".' });
+  if (doc && h1Els.length === 0) recs.push({ level: 'critical', icon: '🎯', title: 'Agrega una propuesta de valor clara (H1)', desc: 'El H1 es lo primero que lee Google y tu visitante. Debe responder en 10 palabras: ¿qué ofreces y para quién? Ejemplo: "Aprende a crear embudos de venta con IA en 7 días".' });
+  if (doc && buttons.length === 0) recs.push({ level: 'critical', icon: '⚡', title: 'Agrega un botón de llamada a la acción (CTA)', desc: 'Sin un CTA visible tu visitante no sabe qué hacer. El botón principal debe estar en el hero y repetirse cada 2-3 secciones. Usa verbos de acción: "Empieza ahora", "Quiero mi guía gratis", "Agéndame".' });
   if (!metaDescTxt) recs.push({ level: 'important', icon: '📋', title: 'Crea una meta descripción', desc: 'La meta descripción aparece en Google bajo el título. Sin ella Google elige aleatoriamente texto de tu página. Escribe 150–160 caracteres describiendo tu propuesta de valor con una palabra clave.' });
-  if (!viewportOk) recs.push({ level: 'important', icon: '📱', title: 'Agrega meta viewport para móvil', desc: 'Más del 70% de usuarios navegan desde el celular. Sin el meta viewport tu sitio no se adapta a pantallas pequeñas. Agrega: <meta name="viewport" content="width=device-width, initial-scale=1.0">.' });
-  if (!ogImg) recs.push({ level: 'important', icon: '🖼️', title: 'Configura la imagen para compartir en redes', desc: 'Sin og:image cuando alguien comparte tu link en WhatsApp, Facebook o Instagram aparece sin imagen. Agrega una imagen de 1200×630px y el meta tag og:image para aumentar el CTR al compartir.' });
-  if (!hasSocialProof) recs.push({ level: 'normal', icon: '⭐', title: 'Agrega testimonios o prueba social', desc: 'El 92% de los compradores leen testimonios antes de comprar. Agrega 2-3 testimonios reales con foto, nombre y resultado específico. "Aumenté mis ventas un 40% en 30 días" es mejor que "Excelente servicio".' });
-  if (forms.length === 0) recs.push({ level: 'normal', icon: '📨', title: 'Agrega un formulario de captura', desc: 'Sin formulario estás perdiendo leads que no compran hoy pero podrían hacerlo mañana. Ofrece algo de valor a cambio del email: guía gratuita, descuento, webinar, auditoría.' });
-  if (!schemaJson) recs.push({ level: 'normal', icon: '🗂️', title: 'Implementa datos estructurados (Schema.org)', desc: 'Los datos estructurados ayudan a Google a entender tu negocio y pueden mostrar estrellas, precios o eventos en los resultados de búsqueda (rich snippets). Usa el tipo Organization o LocalBusiness.' });
+  if (viewportOk === false) recs.push({ level: 'important', icon: '📱', title: 'Agrega meta viewport para móvil', desc: 'Más del 70% de usuarios navegan desde el celular. Sin el meta viewport tu sitio no se adapta a pantallas pequeñas. Agrega: <meta name="viewport" content="width=device-width, initial-scale=1.0">.' });
+  if (ogImgOk === false) recs.push({ level: 'important', icon: '🖼️', title: 'Configura la imagen para compartir en redes', desc: 'Sin og:image cuando alguien comparte tu link en WhatsApp, Facebook o Instagram aparece sin imagen. Agrega una imagen de 1200×630px y el meta tag og:image para aumentar el CTR al compartir.' });
+  if (socialProof === false) recs.push({ level: 'normal', icon: '⭐', title: 'Agrega testimonios o prueba social', desc: 'El 92% de los compradores leen testimonios antes de comprar. Agrega 2-3 testimonios reales con foto, nombre y resultado específico. "Aumenté mis ventas un 40% en 30 días" es mejor que "Excelente servicio".' });
+  if (doc && forms.length === 0) recs.push({ level: 'normal', icon: '📨', title: 'Agrega un formulario de captura', desc: 'Sin formulario estás perdiendo leads que no compran hoy pero podrían hacerlo mañana. Ofrece algo de valor a cambio del email: guía gratuita, descuento, webinar, auditoría.' });
+  if (schemaJson === false) recs.push({ level: 'normal', icon: '🗂️', title: 'Implementa datos estructurados (Schema.org)', desc: 'Los datos estructurados ayudan a Google a entender tu negocio y pueden mostrar estrellas, precios o eventos en los resultados de búsqueda (rich snippets). Usa el tipo Organization o LocalBusiness.' });
 
   // Add "good" items
   if (isHttps) recs.push({ level: 'good', icon: '✅', title: 'HTTPS habilitado — conexión segura', desc: 'Tu sitio usa HTTPS. Esto es fundamental para el SEO y genera confianza en los visitantes.' });
@@ -1407,7 +1423,7 @@ function vaInit() {
 }
 
 function vaAddFiles(fileList) {
-  const rem = 4 - vaFiles.length;
+  const rem = 10 - vaFiles.length;
   const toAdd = Array.from(fileList).slice(0, rem);
   Promise.all(toAdd.map(f => new Promise(res => {
     const r = new FileReader();

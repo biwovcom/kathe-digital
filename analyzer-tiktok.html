@@ -226,6 +226,42 @@ footer a{color:var(--accent);text-decoration:none}
 .extract-btn:disabled{opacity:.5;cursor:not-allowed}
 .extract-btn:not(:disabled):hover{opacity:.88}
 .extract-status{font-size:.8rem;color:var(--muted);margin-top:8px}
+
+/* ALGORITHM GUIDE */
+.algo-guide-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#010101,#fe2c55);color:#fff;border:none;padding:8px 18px;border-radius:99px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:18px;transition:opacity .2s;letter-spacing:.01em}
+.algo-guide-btn:hover{opacity:.88}
+#guiaAlgoState{display:none;max-width:780px;margin:0 auto;padding:24px 24px 60px}
+.algo-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.82rem;font-family:inherit;padding:0;margin-bottom:20px;display:flex;align-items:center;gap:5px}
+.algo-back:hover{color:var(--accent)}
+.algo-hero{background:linear-gradient(135deg,#010101,#fe2c55);border-radius:20px;padding:28px;text-align:center;margin-bottom:24px}
+.algo-hero h1{color:#fff;font-size:1.5rem;font-weight:900;margin-bottom:6px}
+.algo-hero p{color:rgba(255,255,255,.85);font-size:.88rem}
+.algo-tabs{display:flex;gap:0;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;margin-bottom:20px;flex-wrap:wrap}
+.algo-tab{flex:1;min-width:80px;padding:10px 6px;text-align:center;font-size:.73rem;font-weight:700;color:var(--muted);border-right:1px solid var(--border);cursor:pointer;transition:all .2s}
+.algo-tab:last-child{border-right:none}
+.algo-tab.active{background:linear-gradient(135deg,#010101,#fe2c55);color:#fff}
+.algo-panel{display:none}.algo-panel.active{display:block}
+.algo-section{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.algo-section-title{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.algo-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.algo-tag{background:rgba(233,30,140,.08);color:var(--accent);border:1px solid rgba(233,30,140,.2);border-radius:99px;padding:4px 12px;font-size:.74rem;font-weight:700}
+.algo-tag.green{background:rgba(22,163,74,.08);color:#16a34a;border-color:rgba(22,163,74,.2)}
+.algo-tag.red{background:rgba(220,38,38,.08);color:#dc2626;border-color:rgba(220,38,38,.2)}
+.algo-tag.blue{background:rgba(37,99,235,.08);color:#2563eb;border-color:rgba(37,99,235,.2)}
+.algo-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
+.algo-list li{font-size:.82rem;color:var(--text);line-height:1.5;padding-left:20px;position:relative}
+.algo-list li::before{content:attr(data-icon);position:absolute;left:0}
+.algo-num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.algo-num-card{background:rgba(254,44,85,.05);border:1px solid rgba(254,44,85,.15);border-radius:10px;padding:12px;text-align:center}
+.algo-num-card .an-val{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#010101,#fe2c55);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.algo-num-card .an-lbl{font-size:.7rem;color:var(--muted);font-weight:600;margin-top:2px}
+.algo-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.algo-compare-col{border-radius:10px;padding:12px}
+.algo-compare-col.ig{background:linear-gradient(135deg,rgba(233,30,140,.06),rgba(147,51,234,.06));border:1.5px solid rgba(147,51,234,.2)}
+.algo-compare-col.tt{background:linear-gradient(135deg,rgba(1,1,1,.03),rgba(254,44,85,.05));border:1.5px solid rgba(254,44,85,.2)}
+.algo-compare-col h4{font-size:.76rem;font-weight:800;margin-bottom:8px}
+.algo-compare-col.ig h4{color:var(--purple)}
+.algo-compare-col.tt h4{color:#fe2c55}
 </style>
 </head>
 <body>
@@ -240,6 +276,9 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="wrap">
     <h1 class="page-title">Analiza tu <span>TikTok</span></h1>
     <p class="page-sub">Sin iniciar sesión · Sin riesgo de baneo · Tu cuenta siempre segura</p>
+    <div style="text-align:center;margin-bottom:8px">
+      <button class="algo-guide-btn" onclick="mostrarGuiaAlgo()">🧠 Guía del Algoritmo de TikTok 2026 →</button>
+    </div>
     <div style="background:linear-gradient(135deg,rgba(22,163,74,.07),rgba(22,163,74,.03));border:1.5px solid rgba(22,163,74,.25);border-radius:12px;padding:12px 16px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start">
       <div style="font-size:1.4rem;flex-shrink:0">🔒</div>
       <div>
@@ -635,6 +674,237 @@ footer a{color:var(--accent);text-decoration:none}
   <footer>Herramienta de <a href="kathe-digital.html">Kathe Digital</a> · Datos procesados localmente · Sin conexión a TikTok</footer>
 </div>
 
+<!-- GUÍA DEL ALGORITMO TIKTOK -->
+<div id="guiaAlgoState">
+  <button class="algo-back" onclick="ocultarGuiaAlgo()">← Volver al analizador</button>
+  <div class="algo-hero">
+    <h1>🧠 Algoritmo de TikTok 2026</h1>
+    <p>Cómo funciona el FYP · Basado en políticas oficiales de TikTok y sus actualizaciones</p>
+  </div>
+  <div class="algo-tabs">
+    <div class="algo-tab active" onclick="algoTab('fyp',this)">🌍 FYP</div>
+    <div class="algo-tab" onclick="algoTab('hook',this)">🎣 Hook</div>
+    <div class="algo-tab" onclick="algoTab('duracion',this)">⏱️ Duración</div>
+    <div class="algo-tab" onclick="algoTab('hashtags',this)">🏷️ Hashtags</div>
+    <div class="algo-tab" onclick="algoTab('penaliza',this)">🚫 Evitar</div>
+    <div class="algo-tab" onclick="algoTab('vsig',this)">⚔️ TK vs IG</div>
+  </div>
+
+  <!-- FYP -->
+  <div class="algo-panel active" id="ap-fyp">
+    <div class="algo-section">
+      <div class="algo-section-title">📊 Señales de ranking del FYP (orden de importancia)</div>
+      <ul class="algo-list">
+        <li data-icon="1️⃣"><strong>Completion rate (tasa de finalización):</strong> la señal #1. Cuántos ven el video completo o lo ven varias veces</li>
+        <li data-icon="2️⃣"><strong>Watch time total:</strong> segundos totales acumulados. Un video corto con alta retención vale más que uno largo con baja retención</li>
+        <li data-icon="3️⃣"><strong>Shares (compartidos):</strong> especialmente si alguien lo manda por DM o lo sube a otra plataforma. La señal más fuerte de calidad</li>
+        <li data-icon="4️⃣"><strong>Comments:</strong> volumen y velocidad. TikTok valora que la gente debata o reaccione en comentarios</li>
+        <li data-icon="5️⃣"><strong>Likes:</strong> importantes pero pesados menos que shares y comments</li>
+        <li data-icon="6️⃣"><strong>Saves:</strong> señal de contenido útil a largo plazo</li>
+        <li data-icon="7️⃣"><strong>Replays (rereproducciones):</strong> si alguien ve el video 2+ veces, es señal muy positiva</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🌍 Cómo distribuye TikTok (interest graph)</div>
+      <ul class="algo-list">
+        <li data-icon="📦">Batch 1: TikTok muestra tu video a ~100-500 usuarios del nicho más afín</li>
+        <li data-icon="📊">Si el engagement supera el umbral de ese nicho → Batch 2 (miles de usuarios)</li>
+        <li data-icon="🚀">Si sigue performando → Batch 3 y más. Así se viraliza paso a paso</li>
+        <li data-icon="🌱">TikTok es interest graph: te muestra a no-seguidores desde el día 1. Puedes viralizarte con 0 seguidores</li>
+        <li data-icon="⏰">Un video NUNCA "muere" en TikTok — puede viralizarse semanas o meses después</li>
+        <li data-icon="🎯">El contenido de nicho específico funciona MEJOR que el contenido genérico</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🆕 Actualizaciones TikTok 2026</div>
+      <ul class="algo-list">
+        <li data-icon="✅">Mayor peso a "Originality Score" — contenido 100% original recibe más distribución</li>
+        <li data-icon="✅">Caption keywords indexadas — TikTok funciona cada vez más como buscador</li>
+        <li data-icon="✅">Series de videos: el algoritmo premia la continuidad y los viewers que regresan</li>
+        <li data-icon="✅">TikTok Shop integration: videos con productos tienen canal adicional de distribución</li>
+        <li data-icon="⚠️">Penalización a contenido batch-posted (subir 5+ videos en 1 hora)</li>
+        <li data-icon="⚠️">Contenido generado por IA detectado y con menor distribución si es genérico</li>
+        <li data-icon="⚠️">Mayor moderación de claims de salud, finanzas y temas sensibles</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HOOK TIKTOK -->
+  <div class="algo-panel" id="ap-hook">
+    <div class="algo-section">
+      <div class="algo-section-title">🎣 Los primeros 3 segundos deciden todo</div>
+      <ul class="algo-list">
+        <li data-icon="⚡">El primer frame es el "thumbnail" en el FYP. Si no captura la atención visualmente, no importa qué dices después</li>
+        <li data-icon="🧠">Tienes 0.3 segundos antes de que el usuario haga scroll. El movimiento, el texto en pantalla y la expresión facial son clave</li>
+        <li data-icon="📝">Texto en pantalla desde el segundo 0 mejora la retención significativamente (también para sordos)</li>
+        <li data-icon="🔊">El audio del hook debe ser claro e inmediato — evita intros musicales largas sin voz</li>
+        <li data-icon="❓">Los hooks en forma de pregunta generan más watch time porque crean un "loop abierto" en la mente</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🏆 Fórmulas de hook que funcionan en TikTok</div>
+      <ul class="algo-list">
+        <li data-icon="✅"><strong>La pregunta que duele:</strong> "¿Por qué tu negocio no vende aunque tienes seguidores?" (directo al dolor)</li>
+        <li data-icon="✅"><strong>El secreto prohibido:</strong> "Lo que las marcas grandes NO quieren que sepas sobre el algoritmo"</li>
+        <li data-icon="✅"><strong>El número específico:</strong> "3 palabras que aumentaron mis ventas un 300% en 30 días"</li>
+        <li data-icon="✅"><strong>La afirmación controversial:</strong> "Publicar todos los días está destruyendo tu cuenta" (genera comentarios que debaten)</li>
+        <li data-icon="✅"><strong>El resultado imposible:</strong> Empieza mostrando el resultado sorprendente, luego explicas cómo</li>
+        <li data-icon="✅"><strong>La advertencia:</strong> "Deja de hacer esto si quieres crecer en TikTok" (activa el miedo a perder algo)</li>
+        <li data-icon="❌"><strong>No hacer:</strong> "Hola! Hoy les voy a enseñar cómo..." — el cerebro ya hizo scroll antes de que termines</li>
+        <li data-icon="❌"><strong>No hacer:</strong> Comenzar con el logo o la intro musical de tu marca</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">📐 Estructura de video que retiene en TikTok</div>
+      <ul class="algo-list">
+        <li data-icon="0-3s"><strong>Seg 0-3:</strong> Hook — la promesa o pregunta que hace que se queden</li>
+        <li data-icon="3-8s"><strong>Seg 3-8:</strong> Amplificación — "si te ha pasado X, sigue viendo"</li>
+        <li data-icon="8-25s"><strong>Seg 8-25:</strong> Cuerpo — el valor real, datos, pasos, historia</li>
+        <li data-icon="25-30s"><strong>Últimos 5s:</strong> CTA — acción clara: "sígueme", "guarda esto", "comenta X"</li>
+        <li data-icon="💡">Añade "micro-loops" cada 5-8 segundos para mantener la atención (nueva info, cambio de ángulo)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DURACIÓN -->
+  <div class="algo-panel" id="ap-duracion">
+    <div class="algo-section">
+      <div class="algo-section-title">⏱️ Duración óptima en TikTok</div>
+      <div class="algo-num-grid">
+        <div class="algo-num-card"><div class="an-val">7-15s</div><div class="an-lbl">Máxima tasa de finalización — clips, memes, impacto rápido</div></div>
+        <div class="algo-num-card"><div class="an-val">15-30s</div><div class="an-lbl">✨ Sweet spot viral — tips, consejos, resultados</div></div>
+        <div class="algo-num-card"><div class="an-val">30-60s</div><div class="an-lbl">Tutoriales cortos, storytelling, educación</div></div>
+        <div class="algo-num-card"><div class="an-val">60-3min</div><div class="an-lbl">Contenido profundo, solo si retención &gt;50%</div></div>
+        <div class="algo-num-card"><div class="an-val">3-10min</div><div class="an-lbl">Solo creadores establecidos con audiencia fiel</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">⚠️ Regla de oro de TikTok: prefiere un video de 15 seg con 90% de completion a uno de 60 seg con 30%. La tasa de finalización es la métrica #1 del algoritmo.</p>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">📈 La trampa de los videos largos</div>
+      <ul class="algo-list">
+        <li data-icon="❌">Un video de 3 minutos con 20% de completion → el algoritmo NO lo distribuye (pocos terminaron)</li>
+        <li data-icon="✅">Un video de 20 segundos con 85% de completion → el algoritmo lo AMPLIFICA masivamente</li>
+        <li data-icon="🔄">Los replays (ver el video 2+ veces) son señal de video muy corto y muy bueno — TikTok los premia</li>
+        <li data-icon="💡">Técnica del cliffhanger: termina el video justo cuando van a dar el dato más importante → generan replays</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">⏰ Frecuencia de publicación</div>
+      <div class="algo-num-grid">
+        <div class="algo-num-card"><div class="an-val">1-3x</div><div class="an-lbl">Videos por día (máximo recomendado)</div></div>
+        <div class="algo-num-card"><div class="an-val">5-7x</div><div class="an-lbl">Videos por semana (mínimo para crecer)</div></div>
+        <div class="algo-num-card"><div class="an-val">3h</div><div class="an-lbl">Mínimo entre videos del mismo día</div></div>
+        <div class="algo-num-card"><div class="an-val">6-10pm</div><div class="an-lbl">Horario pico Colombia / LATAM</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">💡 En TikTok el horario importa MENOS que en Instagram porque el FYP distribuye cuando hay más audiencia disponible para ese nicho, no necesariamente cuando publicas.</p>
+    </div>
+  </div>
+
+  <!-- HASHTAGS TIKTOK -->
+  <div class="algo-panel" id="ap-hashtags">
+    <div class="algo-section">
+      <div class="algo-section-title">🏷️ Hashtags en TikTok 2026</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:12px">TikTok ha reducido el peso de los hashtags vs años anteriores. El contexto del video (audio, texto en pantalla, caption) ahora es más importante que los hashtags para la distribución.</p>
+      <ul class="algo-list">
+        <li data-icon="✅">Usa 3-5 hashtags específicos de nicho — calidad sobre cantidad</li>
+        <li data-icon="✅">Combina: 1 trending relacionado + 2-3 de nicho específico + 1 propio de marca</li>
+        <li data-icon="✅">Los hashtags de nicho pequeño tienen más probabilidad de rankear que #fyp o #viral</li>
+        <li data-icon="⚠️">#fyp y #foryou ya no tienen el poder de antes — están supersaturados</li>
+        <li data-icon="⚠️">Evita usar exactamente los mismos hashtags en todos los videos — TikTok puede considerarlo spam</li>
+        <li data-icon="❌">No uses #colombia o #bogota si tu contenido no es relevante geográficamente</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🎵 Audio trending — el arma secreta de TikTok</div>
+      <ul class="algo-list">
+        <li data-icon="🔊">El audio trending en TikTok da un boost del 30-50% de alcance más que en Instagram</li>
+        <li data-icon="📈">Busca audios con la flecha ↗️ en TikTok — indica que están en ascenso</li>
+        <li data-icon="⏰">La ventana dorada: usar el audio entre el día 3-7 desde que empieza a trending (antes del pico)</li>
+        <li data-icon="🎯">Incluso el audio trending de fondo (sin que sea el punto central) ayuda al alcance</li>
+        <li data-icon="💡">Crea una versión de tu contenido habitual usando el audio trending del momento — adapta el mensaje</li>
+        <li data-icon="⚠️">Evita música con derechos de autor — TikTok silencia el video o lo bloquea en algunos países</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- LO QUE PENALIZA TIKTOK -->
+  <div class="algo-panel" id="ap-penaliza">
+    <div class="algo-section">
+      <div class="algo-section-title">🚫 Lo que penaliza el algoritmo de TikTok</div>
+      <ul class="algo-list">
+        <li data-icon="❌"><strong>Marca de agua de otras plataformas:</strong> TikTok detecta y reduce el alcance de contenido con marca de agua de Instagram, YouTube, etc.</li>
+        <li data-icon="❌"><strong>Mencionar a Instagram o YouTube en el video:</strong> TikTok penaliza promover a competidores directamente</li>
+        <li data-icon="❌"><strong>Baja tasa de finalización consistente:</strong> si tus videos tienen &lt;30% de completion, el algoritmo reduce la distribución de todos tus siguientes videos</li>
+        <li data-icon="❌"><strong>Publicar 5+ videos en 1 hora:</strong> TikTok lo detecta como spam y reduce el alcance de todos</li>
+        <li data-icon="❌"><strong>Contenido reciclado sin edición:</strong> si el video es idéntico a uno anterior, el algoritmo lo penaliza</li>
+        <li data-icon="❌"><strong>Claims falsos o exagerados:</strong> "gana $10.000 desde casa sin hacer nada" — moderación automática</li>
+        <li data-icon="⚠️"><strong>Breaks prolongados:</strong> más de 2 semanas sin publicar hace que el algoritmo "enfríe" tu cuenta</li>
+        <li data-icon="⚠️"><strong>Comentar en tus propios videos desde otra cuenta:</strong> TikTok detecta esto como manipulación</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">✅ Lo que SÍ premia el algoritmo de TikTok</div>
+      <div class="algo-row">
+        <span class="algo-tag green">Alta completion rate</span>
+        <span class="algo-tag green">Replays (rereproducciones)</span>
+        <span class="algo-tag green">Shares por DM</span>
+        <span class="algo-tag green">Comentarios que debaten</span>
+        <span class="algo-tag green">Audio trending</span>
+        <span class="algo-tag green">Texto en pantalla</span>
+        <span class="algo-tag green">Contenido original</span>
+        <span class="algo-tag green">Consistencia en nicho</span>
+        <span class="algo-tag green">Series de videos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VS INSTAGRAM -->
+  <div class="algo-panel" id="ap-vsig">
+    <div class="algo-section">
+      <div class="algo-section-title">⚔️ TikTok vs Instagram — Diferencias clave del algoritmo</div>
+      <div class="algo-compare">
+        <div class="algo-compare-col tt">
+          <h4>🎵 TikTok</h4>
+          <ul class="algo-list" style="font-size:.78rem">
+            <li data-icon="🌍">Interest graph: llega a no-seguidores desde el video 1</li>
+            <li data-icon="🔁">Completion rate + Shares = señales #1</li>
+            <li data-icon="▶️">Primer frame = thumbnail del FYP</li>
+            <li data-icon="🔊">Audio trending = boost de 30-50% de alcance</li>
+            <li data-icon="⏰">Horario de publicación importa menos</li>
+            <li data-icon="🌱">Viralizarse con 0 seguidores es completamente normal</li>
+            <li data-icon="⏱️">Videos cortos con alta retención > videos largos</li>
+            <li data-icon="🔄">Un video puede viralizarse semanas después</li>
+          </ul>
+        </div>
+        <div class="algo-compare-col ig">
+          <h4>📸 Instagram</h4>
+          <ul class="algo-list" style="font-size:.78rem">
+            <li data-icon="🔗">Social graph primero (seguidores actuales ven tu contenido)</li>
+            <li data-icon="💾">Saves = señal más diferenciadora en IG</li>
+            <li data-icon="📷">Cover image del Reel importa (se ve en perfil)</li>
+            <li data-icon="📝">Caption tiene peso SEO (keywords indexadas)</li>
+            <li data-icon="⏰">Horario de publicación importa más</li>
+            <li data-icon="🌱">Crecer desde 0 es más difícil</li>
+            <li data-icon="📊">Carrusel tiene mayor alcance que foto estática</li>
+            <li data-icon="🤝">Stories mantienen relación con seguidores existentes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🎯 Estrategia dual: cómo usar TikTok e Instagram juntos</div>
+      <ul class="algo-list">
+        <li data-icon="1️⃣">Crea primero en TikTok con audio trending (sin música con derechos problemáticos)</li>
+        <li data-icon="2️⃣">Descarga sin marca de agua → sube a Instagram Reels con caption optimizado para SEO de IG</li>
+        <li data-icon="3️⃣">En TikTok: hook más agresivo y directo. En Instagram: hook puede tener más contexto</li>
+        <li data-icon="4️⃣">En TikTok: la comunidad de nicho te encontrará sola. En Instagram: usa hashtags y collabs</li>
+        <li data-icon="5️⃣">En TikTok: prioriza completion rate y shares. En Instagram: prioriza saves y DMs</li>
+        <li data-icon="⚠️">Nunca publiques exactamente el mismo video con el mismo texto en ambas el mismo día</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <!-- Modal imagen -->
 <div class="img-modal" id="imgModal" onclick="cerrarImgModal()">
   <button class="img-modal-close">✕</button>
@@ -653,10 +923,12 @@ function getAllScreenshots() { return creativos.flatMap(c => c.imagenes); }
 
 function initCreativos() { creativos = []; _nextCreativoId = 1; agregarCreativo(); }
 
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 function agregarCreativo() {
   if (creativos.length >= MAX_GRUPOS) return;
   const id = _nextCreativoId++;
-  creativos.push({ id, nombre: '', imagenes: [] });
+  creativos.push({ id, nombre: '', imagenes: [], guion: '', videoFrames: [] });
   renderCreativos(); actualizarHint();
 }
 
@@ -707,6 +979,35 @@ function renderCreativos() {
         onchange="addFilesToCreativo(${c.id},this.files);this.value=''">
       <div class="creativo-images">${slots}</div>
       <div style="font-size:.7rem;color:var(--muted);margin-top:6px;text-align:center">${c.imagenes.length}/${MAX_SLOTS} capturas · Toca un slot vacío para subir</div>
+      ${c.videoFrames && c.videoFrames.length > 0 ? `<div style="margin-top:8px;padding:8px 10px;background:rgba(37,99,235,.06);border-radius:8px;border:1px solid rgba(37,99,235,.2)"><div style="font-size:.69rem;color:#2563eb;font-weight:700;margin-bottom:5px">🎬 ${c.videoFrames.length} frames extraídos del video</div><div style="display:flex;gap:4px;flex-wrap:wrap">${c.videoFrames.map(f=>`<img src="${f.dataURL}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;border:1.5px solid #2563eb">`).join('')}</div></div>` : ''}
+      <div style="margin-top:10px">
+        <button onclick="toggleGuion(${c.id})" style="background:none;border:1.5px dashed rgba(147,51,234,.35);border-radius:8px;padding:7px 14px;font-size:.75rem;color:var(--purple);cursor:pointer;font-family:inherit;width:100%;text-align:left;transition:border-color .2s" id="guion-toggle-${c.id}">
+          🎬 ${c.guion ? '✅ Guión agregado — clic para editar/ver' : 'Agregar video y guión del TikTok (opcional — para análisis de guión con IA)'}
+        </button>
+        <div id="guion-panel-${c.id}" style="display:${c.guion || (c.videoFrames&&c.videoFrames.length) ? 'block' : 'none'};margin-top:8px;padding:12px;background:rgba(147,51,234,.04);border-radius:8px;border:1px solid rgba(147,51,234,.15)">
+          <div style="font-size:.77rem;color:var(--muted);margin-bottom:10px;line-height:1.5">
+            📹 <strong>Sube el video del TikTok</strong> para extraer frames automáticamente (IA los analiza visualmente). Luego <strong>transcribe lo que se dice</strong> con el micrófono mientras el audio suena, o escríbelo/pégalo tú. <em>Si usas Claude, incluirá el guión en su análisis.</em>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+            <button onclick="document.getElementById('vi-${c.id}').click()" style="background:#2563eb;color:#fff;border:none;padding:7px 16px;border-radius:99px;font-size:.76rem;cursor:pointer;font-family:inherit;font-weight:700">📹 Subir video del TikTok</button>
+            <input type="file" id="vi-${c.id}" accept="video/*" style="display:none" onchange="cargarVideoCreativo(${c.id},this.files[0]);this.value=''">
+            ${c.videoFrames && c.videoFrames.length > 0 ? `<span style="font-size:.72rem;color:#16a34a;font-weight:700">✅ ${c.videoFrames.length} frames listos para IA</span>` : '<span style="font-size:.7rem;color:var(--muted)">Sin video aún</span>'}
+          </div>
+          <label style="font-size:.76rem;font-weight:700;color:var(--text);display:block;margin-bottom:5px">📝 Guión / Transcripción del TikTok:</label>
+          <textarea id="guion-ta-${c.id}" style="width:100%;min-height:90px;border:1.5px solid rgba(147,51,234,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:.79rem;resize:vertical;box-sizing:border-box;color:var(--text);background:#fff;line-height:1.5" placeholder="Ejemplo: Hook: ¿Por qué tu contenido no convierte? → Desarrollo: El error #1 es hablar de tu producto sin conectar con el dolor de tu cliente. Lo que funciona es... → CTA: Sígueme y activa notificaciones para más tips de ventas." oninput="creativos.find(x=>x.id===${c.id}).guion=this.value">${escHtml(c.guion||'')}</textarea>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
+            <button id="mic-btn-${c.id}" onclick="iniciarTranscripcion(${c.id})" style="background:none;border:1.5px solid rgba(147,51,234,.5);border-radius:99px;padding:6px 14px;font-size:.74rem;cursor:pointer;font-family:inherit;color:var(--purple);font-weight:700">🎙️ Transcribir con micrófono</button>
+            <button id="mic-stop-${c.id}" onclick="detenerTranscripcion(${c.id})" style="display:none;background:#dc2626;color:#fff;border:none;border-radius:99px;padding:6px 14px;font-size:.74rem;cursor:pointer;font-family:inherit;font-weight:700">⏹️ Detener transcripción</button>
+            <span style="font-size:.68rem;color:var(--muted)">Solo Chrome — reproduce el video y el mic captura lo que se dice</span>
+          </div>
+          <div style="margin-top:12px;border-top:1px dashed rgba(147,51,234,.2);padding-top:12px">
+            <button onclick="analizarGuion(${c.id})" id="guion-analyze-btn-${c.id}" style="background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:none;padding:10px 0;border-radius:99px;font-weight:800;font-size:.82rem;cursor:pointer;font-family:inherit;width:100%;letter-spacing:.01em">
+              🤖 Extraer y analizar guión con Claude →
+            </button>
+            <div id="guion-result-${c.id}" style="display:none;margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
     </div>`;
   }).join('');
   document.getElementById('addCreativoBtn').disabled = creativos.length >= MAX_GRUPOS;
@@ -1339,6 +1640,226 @@ mostrarEstadoIA();
 initCreativos();
 let _lastAnalysis = null;
 
+// ─── Algorithm Guide ──────────────────────────────────────────────────────────
+function mostrarGuiaAlgo() {
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('resultsSection') && (document.getElementById('resultsSection').style.display = 'none');
+  document.getElementById('guiaAlgoState').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function ocultarGuiaAlgo() {
+  document.getElementById('guiaAlgoState').style.display = 'none';
+  document.getElementById('formSection').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function algoTab(id, btn) {
+  document.querySelectorAll('.algo-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.algo-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ap-' + id).classList.add('active');
+}
+
+// ─── Video & Guión ────────────────────────────────────────────────────────────
+function toggleGuion(cid) {
+  const panel = document.getElementById('guion-panel-' + cid);
+  if (panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+async function cargarVideoCreativo(cid, file) {
+  if (!file || !file.type.startsWith('video/')) return;
+  const c = creativos.find(x => x.id === cid);
+  if (!c) return;
+  c.videoFrames = await extraerFramesDeVideo(file);
+  renderCreativos();
+  const panel = document.getElementById('guion-panel-' + cid);
+  if (panel) panel.style.display = 'block';
+}
+
+async function extraerFramesDeVideo(file) {
+  return new Promise(resolve => {
+    const video = document.createElement('video');
+    const url = URL.createObjectURL(file);
+    video.src = url; video.muted = true;
+    const frames = []; let ts = []; let i = 0;
+    function capture() {
+      if (i >= ts.length) { URL.revokeObjectURL(url); resolve(frames); return; }
+      video.currentTime = ts[i];
+    }
+    video.onseeked = () => {
+      try {
+        const cvs = document.createElement('canvas');
+        const w = video.videoWidth || 480, h = video.videoHeight || 854;
+        const sc = Math.min(1, 480 / w);
+        cvs.width = Math.round(w * sc); cvs.height = Math.round(h * sc);
+        cvs.getContext('2d').drawImage(video, 0, 0, cvs.width, cvs.height);
+        frames.push({ dataURL: cvs.toDataURL('image/jpeg', 0.5), name: 'frame_' + Math.round(ts[i]) + 's.jpg' });
+      } catch(e) {}
+      i++; capture();
+    };
+    video.onloadedmetadata = () => {
+      const d = isFinite(video.duration) && video.duration > 0 ? video.duration : 30;
+      ts = [Math.min(0.5, d*0.05), d*0.25, d*0.5, d*0.75].filter(t => t < d);
+      if (!ts.length) ts = [0];
+      capture();
+    };
+    video.onerror = () => { URL.revokeObjectURL(url); resolve(frames); };
+    setTimeout(() => resolve(frames), 25000);
+  });
+}
+
+let _recognition = null;
+function iniciarTranscripcion(cid) {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    alert('La transcripción automática solo funciona en Google Chrome en computadora.\n\nAlternativa gratuita: sube el video a gemini.google.com → escribe "transcribe este video" → copia el texto y pégalo aquí.');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  _recognition = new SR();
+  _recognition.continuous = true; _recognition.interimResults = true; _recognition.lang = 'es-CO';
+  const ta = document.getElementById('guion-ta-' + cid);
+  let base = ta ? (ta.value.trim() ? ta.value.trimEnd() + ' ' : '') : '';
+  _recognition.onresult = e => {
+    let inter = '';
+    for (let r = e.resultIndex; r < e.results.length; r++) {
+      if (e.results[r].isFinal) base += e.results[r][0].transcript + ' ';
+      else inter += e.results[r][0].transcript;
+    }
+    const t = document.getElementById('guion-ta-' + cid);
+    if (t) t.value = base + inter;
+    const c = creativos.find(x => x.id === cid);
+    if (c) c.guion = base + inter;
+  };
+  _recognition.onerror = e => { if (e.error !== 'no-speech') { alert('Error micrófono: ' + e.error); detenerTranscripcion(cid); } };
+  _recognition.onend = () => detenerTranscripcion(cid);
+  _recognition.start();
+  const mb = document.getElementById('mic-btn-' + cid), ms = document.getElementById('mic-stop-' + cid);
+  if (mb) mb.style.display = 'none'; if (ms) ms.style.display = 'inline-block';
+}
+
+function detenerTranscripcion(cid) {
+  if (_recognition) { try { _recognition.stop(); } catch(e) {} _recognition = null; }
+  const mb = document.getElementById('mic-btn-' + cid), ms = document.getElementById('mic-stop-' + cid);
+  if (mb) mb.style.display = 'inline-block'; if (ms) ms.style.display = 'none';
+  const ta = document.getElementById('guion-ta-' + cid);
+  const c = creativos.find(x => x.id === cid);
+  if (ta && c) c.guion = ta.value;
+}
+
+const PROMPT_GUION_TT = `Eres experto en marketing de contenido para TikTok. Analiza el guión/transcript y los frames visuales del video.
+
+Tu tarea:
+1. Reconstruye el guión completo (exactamente lo que se dice — usa la transcripción si está disponible, apóyate en los frames para contexto visual)
+2. Analiza la calidad del guión como especialista en contenido viral de TikTok
+3. Da sugerencias concretas y accionables para mejorar retención y conversión
+
+Devuelve SOLO JSON válido sin texto extra:
+{
+  "guion_extraido": "El guión completo reconstruido tal como se dice en el video, párrafo por párrafo",
+  "hook": "Las primeras 1-2 frases del gancho (primeros 3 segundos)",
+  "hook_puntuacion": 7,
+  "hook_analisis": "Qué funciona y qué falla en el hook (1-2 frases)",
+  "estructura_detectada": ["Hook ✅", "Desarrollo ✅", "CTA ❌"],
+  "tipo_contenido": "educativo",
+  "patron_viral": "problema-solución",
+  "duracion_estimada": "15-30 seg",
+  "cta_presente": true,
+  "cta_texto": "Exactamente qué dice el CTA, o null si no hay",
+  "puntuacion_general": 7,
+  "fortalezas": ["Fortaleza 1 específica", "Fortaleza 2"],
+  "mejoras": ["Mejora 1 concreta y accionable con ejemplo", "Mejora 2", "Mejora 3"],
+  "hook_mejorado": "Versión mejorada solo del gancho (máx 2 líneas — más impactante para TikTok)",
+  "guion_mejorado": "El guión completo reescrito y optimizado para máxima retención en TikTok"
+}`;
+
+async function analizarGuion(cid) {
+  const apiKey = localStorage.getItem('kd_claude_key');
+  if (!apiKey) { alert('Conecta tu clave de Claude primero para analizar el guión.'); return; }
+  const c = creativos.find(x => x.id === cid);
+  if (!c) return;
+  const tieneFrames = c.videoFrames && c.videoFrames.length > 0;
+  const tieneGuion = c.guion && c.guion.trim().length > 0;
+  if (!tieneFrames && !tieneGuion) {
+    alert('Sube un video o escribe el guión primero para poder analizarlo.');
+    return;
+  }
+  const btn = document.getElementById('guion-analyze-btn-' + cid);
+  const resultDiv = document.getElementById('guion-result-' + cid);
+  btn.disabled = true; btn.textContent = '⏳ Claude está analizando el guión...';
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:.82rem">🤖 Claude está leyendo el guión y los frames del video...</div>';
+  try {
+    const content = [];
+    if (tieneFrames) {
+      content.push({ type: 'text', text: `Frames del TikTok (${c.videoFrames.length} frames: inicio, 25%, 50%, 75% del video):` });
+      const compFrames = await Promise.all(c.videoFrames.map(f => comprimirImagen(f.dataURL)));
+      compFrames.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    }
+    if (tieneGuion) {
+      content.push({ type: 'text', text: `Transcripción/guión del video:\n${c.guion.trim()}` });
+    }
+    content.push({ type: 'text', text: PROMPT_GUION_TT });
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-haiku-4-5', max_tokens:2048, messages:[{ role:'user', content }] })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || data.error.type);
+    const raw = data.content[0].text;
+    const json = parseJSON(raw);
+    c.guionAnalysis = json;
+    if (!tieneGuion && json.guion_extraido) {
+      c.guion = json.guion_extraido;
+      const ta = document.getElementById('guion-ta-' + cid);
+      if (ta) ta.value = json.guion_extraido;
+    }
+    resultDiv.innerHTML = renderGuionResult(json);
+  } catch(err) {
+    resultDiv.innerHTML = `<div style="background:#fff0f0;border:1px solid #fca5a5;border-radius:8px;padding:12px;font-size:.8rem;color:#dc2626">❌ Error: ${escHtml(err.message || 'desconocido')}</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = '🔄 Volver a analizar guión →';
+  }
+}
+
+function renderGuionResult(g) {
+  const score = g.puntuacion_general || 0;
+  const color = score >= 8 ? '#16a34a' : score >= 6 ? '#d97706' : '#dc2626';
+  const estructura = (g.estructura_detectada || []).join(' · ');
+  const fortalezas = (g.fortalezas || []).map(f => `<li style="margin-bottom:4px">✅ ${escHtml(f)}</li>`).join('');
+  const mejoras = (g.mejoras || []).map((m,i) => `<li style="margin-bottom:6px"><span style="font-weight:700;color:#7c3aed">${i+1}.</span> ${escHtml(m)}</li>`).join('');
+  return `
+    <div style="border:1.5px solid rgba(147,51,234,.2);border-radius:12px;overflow:hidden;font-size:.82rem">
+      <div style="background:linear-gradient(135deg,#7c3aed,#2563eb);padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+        <span style="color:#fff;font-weight:800;font-size:.88rem">📋 Análisis de Guión — Claude</span>
+        <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:99px;padding:3px 12px;font-weight:900;font-size:.9rem">${score}/10</span>
+      </div>
+      ${g.guion_extraido ? `
+      <div style="padding:12px 16px;background:#f8f4ff;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div style="font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:6px">📝 Guión extraído del video</div>
+        <div style="white-space:pre-wrap;color:var(--text);line-height:1.6;background:#fff;border:1px solid rgba(147,51,234,.2);border-radius:8px;padding:10px">${escHtml(g.guion_extraido)}</div>
+      </div>` : ''}
+      <div style="padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">TIPO</div><div style="font-weight:700;color:var(--text)">${escHtml(g.tipo_contenido||'—')}</div></div>
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">PATRÓN</div><div style="font-weight:700;color:var(--text)">${escHtml(g.patron_viral||'—')}</div></div>
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">DURACIÓN EST.</div><div style="font-weight:700;color:var(--text)">${escHtml(g.duracion_estimada||'—')}</div></div>
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">CTA</div><div style="font-weight:700;color:${g.cta_presente?'#16a34a':'#dc2626'}">${g.cta_presente?'✅ Presente':'❌ Falta'}</div></div>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:6px">ESTRUCTURA</div>
+        <div style="font-weight:600;color:var(--text)">${escHtml(estructura||'—')}</div>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:4px">🎣 HOOK ACTUAL</div>
+        <div style="font-style:italic;color:var(--text);margin-bottom:4px">"${escHtml(g.hook||'—')}"</div>
+        <div style="font-size:.76rem;color:var(--muted)">${escHtml(g.hook_analisis||'')}</div>
+        ${g.hook_mejorado ? `<div style="margin-top:8px;background:#f0fff4;border:1px solid #86efac;border-radius:8px;padding:8px 10px"><div style="font-size:.69rem;font-weight:800;color:#16a34a;margin-bottom:3px">✨ HOOK MEJORADO</div><div style="font-style:italic;color:#15803d;font-weight:600">"${escHtml(g.hook_mejorado)}"</div></div>` : ''}
+      </div>
+      ${fortalezas ? `<div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)"><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:6px">FORTALEZAS</div><ul style="list-style:none;padding:0;margin:0;color:var(--text)">${fortalezas}</ul></div>` : ''}
+      ${mejoras ? `<div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)"><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:6px">🎯 MEJORAS PRIORITARIAS</div><ul style="list-style:none;padding:0;margin:0;color:var(--text)">${mejoras}</ul></div>` : ''}
+      ${g.guion_mejorado ? `<div style="padding:12px 16px;background:#f8f4ff"><div style="font-size:.7rem;color:#7c3aed;font-weight:800;margin-bottom:6px">🚀 GUIÓN OPTIMIZADO POR CLAUDE</div><div style="white-space:pre-wrap;color:var(--text);line-height:1.6;background:#fff;border:1px solid rgba(147,51,234,.2);border-radius:8px;padding:10px">${escHtml(g.guion_mejorado)}</div></div>` : ''}
+    </div>`;
+}
+
 // ─── Extract with AI ──────────────────────────────────────────────────────────
 const PROMPT_TIKTOK = `Analiza estas capturas de pantalla de TikTok Analytics. Las imágenes están organizadas por video/creativo (cada grupo marcado con === NOMBRE ===). Extrae los números del video principal o promedia si hay varios.
 
@@ -1424,13 +1945,23 @@ function comprimirImagen(dataURL) {
 
 async function extraerClaude(apiKey) {
   const content = [];
-  const activosCr = creativos.filter(c => c.imagenes.length > 0);
+  const activosCr = creativos.filter(c => c.imagenes.length > 0 || (c.videoFrames && c.videoFrames.length > 0));
   for (let ci = 0; ci < activosCr.length; ci++) {
     const c = activosCr[ci];
     const nombre = c.nombre.trim() || `Video ${ci + 1}`;
     content.push({ type: 'text', text: `=== ${nombre.toUpperCase()} (grupo ${ci+1} de ${activosCr.length}) ===` });
-    const comprimidas = await Promise.all(c.imagenes.map(ss => comprimirImagen(ss.dataURL)));
-    comprimidas.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    if (c.imagenes.length > 0) {
+      const comprimidas = await Promise.all(c.imagenes.map(ss => comprimirImagen(ss.dataURL)));
+      comprimidas.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    }
+    if (c.videoFrames && c.videoFrames.length > 0) {
+      content.push({ type: 'text', text: `--- FRAMES DEL VIDEO (${c.videoFrames.length} frames: inicio, 25%, 50%, 75%) ---` });
+      const compFrames = await Promise.all(c.videoFrames.map(f => comprimirImagen(f.dataURL)));
+      compFrames.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    }
+    if (c.guion && c.guion.trim()) {
+      content.push({ type: 'text', text: `--- GUIÓN/TRANSCRIPT DEL VIDEO ---\n${c.guion.trim()}` });
+    }
   }
   content.push({ type: 'text', text: PROMPT_TIKTOK });
   const res = await fetch('https://api.anthropic.com/v1/messages', {

@@ -242,6 +242,42 @@ footer a{color:var(--accent);text-decoration:none}
 .extract-btn:disabled{opacity:.5;cursor:not-allowed}
 .extract-btn:not(:disabled):hover{opacity:.88}
 .extract-status{font-size:.8rem;color:var(--muted);margin-top:8px}
+
+/* ALGORITHM GUIDE */
+.algo-guide-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;border:none;padding:8px 18px;border-radius:99px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:18px;transition:opacity .2s;letter-spacing:.01em}
+.algo-guide-btn:hover{opacity:.88}
+#guiaAlgoState{display:none;max-width:780px;margin:0 auto;padding:24px 24px 60px}
+.algo-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.82rem;font-family:inherit;padding:0;margin-bottom:20px;display:flex;align-items:center;gap:5px}
+.algo-back:hover{color:var(--accent)}
+.algo-hero{background:linear-gradient(135deg,#e91e8c,#9333ea);border-radius:20px;padding:28px;text-align:center;margin-bottom:24px}
+.algo-hero h1{color:#fff;font-size:1.5rem;font-weight:900;margin-bottom:6px}
+.algo-hero p{color:rgba(255,255,255,.85);font-size:.88rem}
+.algo-tabs{display:flex;gap:0;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;margin-bottom:20px;flex-wrap:wrap}
+.algo-tab{flex:1;min-width:80px;padding:10px 6px;text-align:center;font-size:.73rem;font-weight:700;color:var(--muted);border-right:1px solid var(--border);cursor:pointer;transition:all .2s;border-bottom:none}
+.algo-tab:last-child{border-right:none}
+.algo-tab.active{background:var(--grad);color:#fff}
+.algo-panel{display:none}.algo-panel.active{display:block}
+.algo-section{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.algo-section-title{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.algo-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.algo-tag{background:rgba(233,30,140,.08);color:var(--accent);border:1px solid rgba(233,30,140,.2);border-radius:99px;padding:4px 12px;font-size:.74rem;font-weight:700}
+.algo-tag.green{background:rgba(22,163,74,.08);color:#16a34a;border-color:rgba(22,163,74,.2)}
+.algo-tag.red{background:rgba(220,38,38,.08);color:#dc2626;border-color:rgba(220,38,38,.2)}
+.algo-tag.blue{background:rgba(37,99,235,.08);color:#2563eb;border-color:rgba(37,99,235,.2)}
+.algo-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
+.algo-list li{font-size:.82rem;color:var(--text);line-height:1.5;padding-left:20px;position:relative}
+.algo-list li::before{content:attr(data-icon);position:absolute;left:0}
+.algo-num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.algo-num-card{background:rgba(147,51,234,.04);border:1px solid rgba(147,51,234,.15);border-radius:10px;padding:12px;text-align:center}
+.algo-num-card .an-val{font-size:1.4rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.algo-num-card .an-lbl{font-size:.7rem;color:var(--muted);font-weight:600;margin-top:2px}
+.algo-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.algo-compare-col{border-radius:10px;padding:12px}
+.algo-compare-col.ig{background:linear-gradient(135deg,rgba(233,30,140,.06),rgba(147,51,234,.06));border:1.5px solid rgba(147,51,234,.2)}
+.algo-compare-col.tt{background:linear-gradient(135deg,rgba(1,1,1,.03),rgba(254,44,85,.05));border:1.5px solid rgba(254,44,85,.2)}
+.algo-compare-col h4{font-size:.76rem;font-weight:800;margin-bottom:8px}
+.algo-compare-col.ig h4{color:var(--purple)}
+.algo-compare-col.tt h4{color:#fe2c55}
 </style>
 </head>
 <body>
@@ -256,6 +292,9 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="wrap">
     <h1 class="page-title">Analiza tu <span>Instagram</span></h1>
     <p class="page-sub">Sin iniciar sesión · Sin riesgo de baneo · Tu cuenta siempre segura</p>
+    <div style="text-align:center;margin-bottom:8px">
+      <button class="algo-guide-btn" onclick="mostrarGuiaAlgo()">🧠 Guía del Algoritmo de Instagram 2026 →</button>
+    </div>
     <div style="background:linear-gradient(135deg,rgba(22,163,74,.07),rgba(22,163,74,.03));border:1.5px solid rgba(22,163,74,.25);border-radius:12px;padding:12px 16px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start">
       <div style="font-size:1.4rem;flex-shrink:0">🔒</div>
       <div>
@@ -634,6 +673,259 @@ footer a{color:var(--accent);text-decoration:none}
   <footer>Herramienta de <a href="kathe-digital.html">Kathe Digital</a> · Datos procesados localmente · Sin conexión a Instagram</footer>
 </div>
 
+<!-- GUÍA DEL ALGORITMO INSTAGRAM -->
+<div id="guiaAlgoState">
+  <button class="algo-back" onclick="ocultarGuiaAlgo()">← Volver al analizador</button>
+  <div class="algo-hero">
+    <h1>🧠 Algoritmo de Instagram 2026</h1>
+    <p>Cómo funciona realmente el algoritmo · Basado en políticas oficiales y actualizaciones de Meta</p>
+  </div>
+  <div class="algo-tabs">
+    <div class="algo-tab active" onclick="algoTab('reels',this)">📹 Reels</div>
+    <div class="algo-tab" onclick="algoTab('carrusel',this)">🖼️ Carrusel</div>
+    <div class="algo-tab" onclick="algoTab('hook',this)">🎣 Hook</div>
+    <div class="algo-tab" onclick="algoTab('hashtags',this)">🏷️ Hashtags</div>
+    <div class="algo-tab" onclick="algoTab('penaliza',this)">🚫 Evitar</div>
+    <div class="algo-tab" onclick="algoTab('vstt',this)">⚔️ IG vs TK</div>
+  </div>
+
+  <!-- REELS -->
+  <div class="algo-panel active" id="ap-reels">
+    <div class="algo-section">
+      <div class="algo-section-title">📊 Señales de ranking (orden de importancia)</div>
+      <ul class="algo-list">
+        <li data-icon="1️⃣">Watch time & completion rate — cuánto tiempo ven el Reel y si lo terminan</li>
+        <li data-icon="2️⃣">Shares (compartidos) — especialmente por DM y a Stories. La señal más poderosa de 2026</li>
+        <li data-icon="3️⃣">Saves (guardados) — indica que el contenido tiene valor a largo plazo. Pesa más que los likes</li>
+        <li data-icon="4️⃣">Comments — calidad sobre cantidad. Comentarios con palabras clave ayudan más</li>
+        <li data-icon="5️⃣">Likes — importantes pero los menos pesados de todos</li>
+        <li data-icon="6️⃣">Profile visits desde el Reel — señal de que el contenido genera interés en quien lo crea</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">⏱️ Duración óptima por tipo de contenido</div>
+      <div class="algo-num-grid">
+        <div class="algo-num-card"><div class="an-val">5-15s</div><div class="an-lbl">Clips rápidos, memes, momentos</div></div>
+        <div class="algo-num-card"><div class="an-val">15-30s</div><div class="an-lbl">Awareness y entretenimiento</div></div>
+        <div class="algo-num-card"><div class="an-val">30-60s</div><div class="an-lbl">✨ Sweet spot ventas + educación</div></div>
+        <div class="algo-num-card"><div class="an-val">60-90s</div><div class="an-lbl">Tutoriales y casos de éxito</div></div>
+        <div class="algo-num-card"><div class="an-val">90s-3min</div><div class="an-lbl">Solo si tienes audiencia sólida</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">⚠️ Regla de oro: prefiere un video de 30 seg con 80% de completion a uno de 90 seg con 30%. La tasa de finalización vale más que la duración.</p>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🔄 Cómo distribuye Instagram</div>
+      <ul class="algo-list">
+        <li data-icon="1️⃣">Primero muestra el Reel a tus seguidores actuales (social graph)</li>
+        <li data-icon="2️⃣">Si performa bien con ellos, pasa al tab de Explore y Reels de no-seguidores</li>
+        <li data-icon="3️⃣">Instagram es híbrido: social graph (conocidos) + interest graph (intereses)</li>
+        <li data-icon="📌">La cuenta nueva tiene ventaja: Instagram la empuja en Explore para ganar usuarios</li>
+        <li data-icon="💡">Los Reels con muchos shares vía DM reciben un boost significativo en distribución</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🆕 Actualizaciones 2026</div>
+      <ul class="algo-list">
+        <li data-icon="✅">Reels hasta 3 minutos ahora disponibles (antes era 90 seg)</li>
+        <li data-icon="✅">Mayor peso a contenido "DM-worthy" — si la gente lo manda por DM, el alcance se dispara</li>
+        <li data-icon="✅">Collaborative posts (collab) amplifican la audiencia de ambas cuentas</li>
+        <li data-icon="✅">Las keywords en el caption ahora están indexadas — Instagram funciona como buscador</li>
+        <li data-icon="⚠️">Mayor penalización a Reels con marca de agua de TikTok (reduce alcance ~40%)</li>
+        <li data-icon="⚠️">Contenido generado por IA con texto genérico recibe menos distribución</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CARRUSEL -->
+  <div class="algo-panel" id="ap-carrusel">
+    <div class="algo-section">
+      <div class="algo-section-title">🖼️ Por qué el carrusel es el formato con más alcance en IG</div>
+      <ul class="algo-list">
+        <li data-icon="🔄">Instagram muestra el carrusel DOS VECES en el feed si no pasaste todos los slides la primera vez</li>
+        <li data-icon="⏱️">Mayor tiempo de visualización por publicación = más señal positiva al algoritmo</li>
+        <li data-icon="💾">Los carruseles educativos generan el mayor número de saves por publicación</li>
+        <li data-icon="💬">Los carruseles tipo "¿Cuántos aplican para ti?" generan más comentarios que los Reels</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">📐 Estructura de carrusel que convierte</div>
+      <ul class="algo-list">
+        <li data-icon="1️⃣"><strong>Slide 1 (portada):</strong> la promesa. "5 errores que te están quitando ventas" — debe funcionar como un mini thumbnail</li>
+        <li data-icon="2️⃣"><strong>Slides 2-4:</strong> el valor. Información concreta, datos, ejemplos. Una idea por slide</li>
+        <li data-icon="3️⃣"><strong>Slide 5-7:</strong> profundización. El "cómo" de cada punto. Aquí pones tu expertise</li>
+        <li data-icon="4️⃣"><strong>Slide penúltimo:</strong> recapitulación rápida o dato sorpresa para no cerrar antes del CTA</li>
+        <li data-icon="5️⃣"><strong>Último slide:</strong> CTA claro. "Guarda para no olvidar" / "Comenta tu duda" / "Sígueme para más"</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">📏 Números clave</div>
+      <div class="algo-num-grid">
+        <div class="algo-num-card"><div class="an-val">5-10</div><div class="an-lbl">Slides óptimos por carrusel</div></div>
+        <div class="algo-num-card"><div class="an-val">2x</div><div class="an-lbl">Veces que se muestra si no terminas</div></div>
+        <div class="algo-num-card"><div class="an-val">+30%</div><div class="an-lbl">Más saves que fotos estáticas</div></div>
+        <div class="algo-num-card"><div class="an-val">1:1 o 4:5</div><div class="an-lbl">Ratio ideal para máximo espacio en feed</div></div>
+      </div>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🎨 Tipos de carrusel con mejor performance</div>
+      <div class="algo-row">
+        <span class="algo-tag green">Listas "X errores que..."</span>
+        <span class="algo-tag green">Tutoriales paso a paso</span>
+        <span class="algo-tag green">Before/After</span>
+        <span class="algo-tag green">Datos y estadísticas</span>
+        <span class="algo-tag green">"Guarda esto para cuando..."</span>
+        <span class="algo-tag green">Checklist accionables</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOOK -->
+  <div class="algo-panel" id="ap-hook">
+    <div class="algo-section">
+      <div class="algo-section-title">🎣 Los primeros 3 segundos lo son TODO</div>
+      <ul class="algo-list">
+        <li data-icon="⚡">En Instagram el hook tiene DOS partes: el visual del primer frame Y el caption visible sin "ver más"</li>
+        <li data-icon="📸">La foto de portada del Reel es crítica — se ve en tu perfil. TikTok no tiene esta restricción</li>
+        <li data-icon="🧠">El cerebro decide en 0.3 seg si sigue viendo. El movimiento o texto llamativo en el primer frame ayuda</li>
+        <li data-icon="💾">Hooks que empiezan con "Guarda esto..." activan la intención de guardar desde el inicio</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🏆 Fórmulas de hook que funcionan en Instagram</div>
+      <ul class="algo-list">
+        <li data-icon="✅"><strong>Pregunta que incomoda:</strong> "¿Por qué tu contenido no vende aunque tengas seguidores?"</li>
+        <li data-icon="✅"><strong>Dato sorpresa:</strong> "El 94% de los negocios online fallan en los primeros 2 años. Aquí el porqué."</li>
+        <li data-icon="✅"><strong>Resultado primero:</strong> Muestra el after antes del before. La curiosidad hace que vean cómo llegaste ahí</li>
+        <li data-icon="✅"><strong>Guardar-trigger:</strong> "3 fórmulas de caption que te van a hacer crecer — guarda esto"</li>
+        <li data-icon="✅"><strong>Afirmación contraintuitiva:</strong> "Publicar todos los días está destruyendo tu cuenta de Instagram"</li>
+        <li data-icon="✅"><strong>Identificación directa:</strong> "Si eres emprendedor y no vendes suficiente, este video es para ti"</li>
+        <li data-icon="❌"><strong>No hacer:</strong> "Hola amigos! Hoy les traigo..." — no genera expectativa ni curiosidad</li>
+        <li data-icon="❌"><strong>No hacer:</strong> Arrancar con introducción larga antes del valor</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">📝 El caption como segundo hook</div>
+      <ul class="algo-list">
+        <li data-icon="💡">Las primeras 125 caracteres del caption son visibles sin "ver más" — úsalas como hook escrito</li>
+        <li data-icon="🔑">Las keywords en el caption ahora son indexadas por el buscador de Instagram</li>
+        <li data-icon="📌">Captions largos con valor real generan más saves y comments que los cortos</li>
+        <li data-icon="🎯">Termina el caption con una pregunta directa: genera comentarios y el algoritmo lo premia</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HASHTAGS -->
+  <div class="algo-panel" id="ap-hashtags">
+    <div class="algo-section">
+      <div class="algo-section-title">🏷️ Estrategia de hashtags 2026</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:12px">Los hashtags perdieron peso en 2024-2026. Meta confirmó que las keywords en el caption y el audio/texto del video son más importantes para la distribución.</p>
+      <ul class="algo-list">
+        <li data-icon="✅">Usa 5-10 hashtags específicos en lugar de 30 genéricos</li>
+        <li data-icon="✅">Mezcla: 2-3 de nicho específico + 2-3 de audiencia + 1-2 de tendencia relacionada</li>
+        <li data-icon="✅">Los hashtags de nicho pequeño (&lt;500K posts) tienen más probabilidad de rankear</li>
+        <li data-icon="⚠️">Evita usar siempre los mismos hashtags — Instagram lo penaliza como spam</li>
+        <li data-icon="⚠️">Hashtags baneados o con contenido inapropiado reducen el alcance de TODA la publicación</li>
+        <li data-icon="❌">No uses #love #instagood — están saturados y no te llevan tráfico cualificado</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🎵 Audio trending en Instagram</div>
+      <ul class="algo-list">
+        <li data-icon="🎵">Los audios trending en Instagram dan un boost de distribución (aunque menor que en TikTok)</li>
+        <li data-icon="📈">Busca audios con la flecha ↗️ en Instagram — indica que están en tendencia</li>
+        <li data-icon="⏰">La ventana óptima para usar un audio trending es entre 2-5 días después de que empieza a viralizarse</li>
+        <li data-icon="🎯">El audio original (sin música) funciona bien para contenido educativo — más auténtico</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">⏰ Horario y frecuencia</div>
+      <div class="algo-num-grid">
+        <div class="algo-num-card"><div class="an-val">3-5x</div><div class="an-lbl">Reels por semana (óptimo)</div></div>
+        <div class="algo-num-card"><div class="an-val">5-7x</div><div class="an-lbl">Stories por semana (mantiene relación)</div></div>
+        <div class="algo-num-card"><div class="an-val">1-2x</div><div class="an-lbl">Carruseles por semana</div></div>
+        <div class="algo-num-card"><div class="an-val">7-9pm</div><div class="an-lbl">Horario pico Colombia / LATAM</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">💡 La consistencia supera a la frecuencia. 3 Reels semanales sostenibles > 7 Reels en una semana y luego silencio.</p>
+    </div>
+  </div>
+
+  <!-- LO QUE PENALIZA -->
+  <div class="algo-panel" id="ap-penaliza">
+    <div class="algo-section">
+      <div class="algo-section-title">🚫 Lo que penaliza el algoritmo de Instagram</div>
+      <ul class="algo-list">
+        <li data-icon="❌"><strong>Marca de agua de TikTok:</strong> Meta lo detecta automáticamente y reduce el alcance ~40%. Siempre descarga sin marca de agua</li>
+        <li data-icon="❌"><strong>Links en el caption:</strong> Instagram quiere que todo pase dentro de la plataforma. Los links reducen el alcance</li>
+        <li data-icon="❌"><strong>Mencionar YouTube o TikTok en el video:</strong> Instagram penaliza promover a la competencia</li>
+        <li data-icon="❌"><strong>Comportamiento de spam:</strong> muchos follows/unfollows rápidos, comentarios repetidos, DMs masivos</li>
+        <li data-icon="❌"><strong>Bajo engagement histórico:</strong> si tus publicaciones anteriores tienen mal performance, las nuevas parten con desventaja</li>
+        <li data-icon="❌"><strong>Contenido reciclado sin edición:</strong> repostear el mismo video varias veces sin cambios</li>
+        <li data-icon="❌"><strong>Shadowban:</strong> si usas hashtags baneados o haces actividad sospechosa, tu contenido se oculta sin aviso</li>
+        <li data-icon="⚠️"><strong>Breaks prolongados:</strong> no publicar por más de 2 semanas hace que el algoritmo "olvide" tu cuenta</li>
+      </ul>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">✅ Lo que SÍ premia el algoritmo</div>
+      <div class="algo-row">
+        <span class="algo-tag green">Contenido "DM-worthy"</span>
+        <span class="algo-tag green">Muchos saves</span>
+        <span class="algo-tag green">Responder comentarios rápido</span>
+        <span class="algo-tag green">Collabs</span>
+        <span class="algo-tag green">Consistencia semanal</span>
+        <span class="algo-tag green">Keywords en caption</span>
+        <span class="algo-tag green">Originado en IG (no repost)</span>
+        <span class="algo-tag green">Stories activas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VS TIKTOK -->
+  <div class="algo-panel" id="ap-vstt">
+    <div class="algo-section">
+      <div class="algo-section-title">⚔️ Instagram vs TikTok — Diferencias clave del algoritmo</div>
+      <div class="algo-compare">
+        <div class="algo-compare-col ig">
+          <h4>📸 Instagram</h4>
+          <ul class="algo-list" style="font-size:.78rem">
+            <li data-icon="🔗">Social graph primero (tus seguidores ven tu contenido)</li>
+            <li data-icon="💾">Los SAVES son la señal más diferenciadora</li>
+            <li data-icon="📷">La portada del Reel importa (se ve en el perfil)</li>
+            <li data-icon="📝">El caption tiene peso SEO (keywords indexadas)</li>
+            <li data-icon="⏰">Horario de publicación importa más</li>
+            <li data-icon="📊">Carrusel tiene mayor alcance que foto</li>
+            <li data-icon="🤝">Stories mantienen relación con seguidores existentes</li>
+            <li data-icon="🌱">Crecer desde 0 es más difícil que en TikTok</li>
+          </ul>
+        </div>
+        <div class="algo-compare-col tt">
+          <h4>🎵 TikTok</h4>
+          <ul class="algo-list" style="font-size:.78rem">
+            <li data-icon="🌍">Interest graph (te muestran a no-seguidores desde el día 1)</li>
+            <li data-icon="🔁">Los SHARES son la señal más poderosa</li>
+            <li data-icon="▶️">El primer frame importa pero no hay "portada de perfil"</li>
+            <li data-icon="🔊">Audio trending da un boost mayor que en IG</li>
+            <li data-icon="⏰">Horario de publicación importa menos</li>
+            <li data-icon="⏱️">Completion rate es la métrica #1 del algoritmo</li>
+            <li data-icon="🔥">Viralizarse con 0 seguidores es completamente normal</li>
+            <li data-icon="🌱">Crecer desde 0 es más fácil y rápido</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="algo-section">
+      <div class="algo-section-title">🎯 Estrategia dual: ¿cómo usar ambas?</div>
+      <ul class="algo-list">
+        <li data-icon="📱">Crea primero en TikTok (sin música con derechos problemáticos) → descarga sin marca de agua → sube a Instagram Reels</li>
+        <li data-icon="💡">Adapta el hook: en TikTok puede ser más agresivo y rápido; en Instagram puede tener más contexto</li>
+        <li data-icon="📊">En TikTok: prioriza videos cortos con alta tasa de finalización. En Instagram: prioriza saves y shares por DM</li>
+        <li data-icon="📝">En Instagram aprovecha el caption para añadir valor que TikTok no tiene</li>
+        <li data-icon="🎵">En TikTok: usa audio trending siempre que sea posible. En Instagram es opcional</li>
+        <li data-icon="⚠️">Nunca publiques el mismo video con la misma descripción exacta en ambas plataformas el mismo día</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <!-- Modal imagen ampliada -->
 <div class="img-modal" id="imgModal" onclick="cerrarImgModal()">
   <button class="img-modal-close" onclick="cerrarImgModal()">✕</button>
@@ -658,10 +950,12 @@ function initCreativos() {
   agregarCreativo();
 }
 
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 function agregarCreativo() {
   if (creativos.length >= MAX_GRUPOS) return;
   const id = _nextCreativoId++;
-  creativos.push({ id, nombre: '', imagenes: [] });
+  creativos.push({ id, nombre: '', imagenes: [], guion: '', videoFrames: [] });
   renderCreativos();
   actualizarHint();
 }
@@ -694,6 +988,35 @@ function renderCreativos() {
         onchange="addFilesToCreativo(${c.id},this.files);this.value=''">
       <div class="creativo-images">${slots}</div>
       <div style="font-size:.7rem;color:var(--muted);margin-top:6px;text-align:center">${c.imagenes.length}/${MAX_SLOTS} capturas · Toca un slot vacío para subir</div>
+      ${c.videoFrames && c.videoFrames.length > 0 ? `<div style="margin-top:8px;padding:8px 10px;background:rgba(37,99,235,.06);border-radius:8px;border:1px solid rgba(37,99,235,.2)"><div style="font-size:.69rem;color:#2563eb;font-weight:700;margin-bottom:5px">🎬 ${c.videoFrames.length} frames extraídos del video</div><div style="display:flex;gap:4px;flex-wrap:wrap">${c.videoFrames.map(f=>`<img src="${f.dataURL}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;border:1.5px solid #2563eb">`).join('')}</div></div>` : ''}
+      <div style="margin-top:10px">
+        <button onclick="toggleGuion(${c.id})" style="background:none;border:1.5px dashed rgba(147,51,234,.35);border-radius:8px;padding:7px 14px;font-size:.75rem;color:var(--purple);cursor:pointer;font-family:inherit;width:100%;text-align:left;transition:border-color .2s" id="guion-toggle-${c.id}">
+          🎬 ${c.guion ? '✅ Guión agregado — clic para editar/ver' : 'Agregar video y guión del Reel (opcional — para análisis de guión con IA)'}
+        </button>
+        <div id="guion-panel-${c.id}" style="display:${c.guion || (c.videoFrames&&c.videoFrames.length) ? 'block' : 'none'};margin-top:8px;padding:12px;background:rgba(147,51,234,.04);border-radius:8px;border:1px solid rgba(147,51,234,.15)">
+          <div style="font-size:.77rem;color:var(--muted);margin-bottom:10px;line-height:1.5">
+            📹 <strong>Sube el video del Reel</strong> para extraer frames automáticamente (IA los analiza visualmente). Luego <strong>transcribe lo que se dice</strong> con el micrófono mientras el audio suena, o escríbelo/pégalo tú. <em>Si usas Claude, incluirá el guión en su análisis.</em>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+            <button onclick="document.getElementById('vi-${c.id}').click()" style="background:#2563eb;color:#fff;border:none;padding:7px 16px;border-radius:99px;font-size:.76rem;cursor:pointer;font-family:inherit;font-weight:700">📹 Subir video del Reel</button>
+            <input type="file" id="vi-${c.id}" accept="video/*" style="display:none" onchange="cargarVideoCreativo(${c.id},this.files[0]);this.value=''">
+            ${c.videoFrames && c.videoFrames.length > 0 ? `<span style="font-size:.72rem;color:#16a34a;font-weight:700">✅ ${c.videoFrames.length} frames listos para IA</span>` : '<span style="font-size:.7rem;color:var(--muted)">Sin video aún</span>'}
+          </div>
+          <label style="font-size:.76rem;font-weight:700;color:var(--text);display:block;margin-bottom:5px">📝 Guión / Transcripción del Reel:</label>
+          <textarea id="guion-ta-${c.id}" style="width:100%;min-height:90px;border:1.5px solid rgba(147,51,234,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:.79rem;resize:vertical;box-sizing:border-box;color:var(--text);background:#fff;line-height:1.5" placeholder="Ejemplo: Hook: ¿Sabías que el 80% de los negocios fallan por este error? → Desarrollo: El problema es que no tienen claridad en su cliente ideal, entonces... → CTA: Sígueme para más estrategias de marketing digital gratuitas." oninput="creativos.find(x=>x.id===${c.id}).guion=this.value">${escHtml(c.guion||'')}</textarea>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
+            <button id="mic-btn-${c.id}" onclick="iniciarTranscripcion(${c.id})" style="background:none;border:1.5px solid rgba(147,51,234,.5);border-radius:99px;padding:6px 14px;font-size:.74rem;cursor:pointer;font-family:inherit;color:var(--purple);font-weight:700">🎙️ Transcribir con micrófono</button>
+            <button id="mic-stop-${c.id}" onclick="detenerTranscripcion(${c.id})" style="display:none;background:#dc2626;color:#fff;border:none;border-radius:99px;padding:6px 14px;font-size:.74rem;cursor:pointer;font-family:inherit;font-weight:700">⏹️ Detener transcripción</button>
+            <span style="font-size:.68rem;color:var(--muted)">Solo Chrome — reproduce el video y el mic captura lo que se dice</span>
+          </div>
+          <div style="margin-top:12px;border-top:1px dashed rgba(147,51,234,.2);padding-top:12px">
+            <button onclick="analizarGuion(${c.id})" id="guion-analyze-btn-${c.id}" style="background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:none;padding:10px 0;border-radius:99px;font-weight:800;font-size:.82rem;cursor:pointer;font-family:inherit;width:100%;letter-spacing:.01em">
+              🤖 Extraer y analizar guión con Claude →
+            </button>
+            <div id="guion-result-${c.id}" style="display:none;margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
     </div>`;
   }).join('');
   document.getElementById('addCreativoBtn').disabled = creativos.length >= MAX_GRUPOS;
@@ -1340,6 +1663,228 @@ mostrarEstadoIA();
 initCreativos();
 let _lastAnalysis = null;
 
+// ─── Algorithm Guide ──────────────────────────────────────────────────────────
+function mostrarGuiaAlgo() {
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('guiaAlgoState').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function ocultarGuiaAlgo() {
+  document.getElementById('guiaAlgoState').style.display = 'none';
+  document.getElementById('formSection').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function algoTab(id, btn) {
+  document.querySelectorAll('.algo-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.algo-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ap-' + id).classList.add('active');
+}
+
+// ─── Video & Guión ────────────────────────────────────────────────────────────
+function toggleGuion(cid) {
+  const panel = document.getElementById('guion-panel-' + cid);
+  if (panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+async function cargarVideoCreativo(cid, file) {
+  if (!file || !file.type.startsWith('video/')) return;
+  const c = creativos.find(x => x.id === cid);
+  if (!c) return;
+  const btn = document.querySelector(`#guion-panel-${cid} button[onclick*="vi-${cid}"]`);
+  if (btn) { btn.textContent = '⏳ Extrayendo frames...'; btn.disabled = true; }
+  c.videoFrames = await extraerFramesDeVideo(file);
+  renderCreativos();
+  const panel = document.getElementById('guion-panel-' + cid);
+  if (panel) panel.style.display = 'block';
+}
+
+async function extraerFramesDeVideo(file) {
+  return new Promise(resolve => {
+    const video = document.createElement('video');
+    const url = URL.createObjectURL(file);
+    video.src = url; video.muted = true;
+    const frames = []; let ts = []; let i = 0;
+    function capture() {
+      if (i >= ts.length) { URL.revokeObjectURL(url); resolve(frames); return; }
+      video.currentTime = ts[i];
+    }
+    video.onseeked = () => {
+      try {
+        const cvs = document.createElement('canvas');
+        const w = video.videoWidth || 480, h = video.videoHeight || 854;
+        const sc = Math.min(1, 480 / w);
+        cvs.width = Math.round(w * sc); cvs.height = Math.round(h * sc);
+        cvs.getContext('2d').drawImage(video, 0, 0, cvs.width, cvs.height);
+        frames.push({ dataURL: cvs.toDataURL('image/jpeg', 0.5), name: 'frame_' + Math.round(ts[i]) + 's.jpg' });
+      } catch(e) {}
+      i++; capture();
+    };
+    video.onloadedmetadata = () => {
+      const d = isFinite(video.duration) && video.duration > 0 ? video.duration : 30;
+      ts = [Math.min(0.5, d*0.05), d*0.25, d*0.5, d*0.75].filter(t => t < d);
+      if (!ts.length) ts = [0];
+      capture();
+    };
+    video.onerror = () => { URL.revokeObjectURL(url); resolve(frames); };
+    setTimeout(() => resolve(frames), 25000);
+  });
+}
+
+let _recognition = null;
+function iniciarTranscripcion(cid) {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    alert('La transcripción automática solo funciona en Google Chrome en computadora.\n\nAlternativa gratuita: sube el video a gemini.google.com → escribe "transcribe este video" → copia el texto y pégalo aquí.');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  _recognition = new SR();
+  _recognition.continuous = true; _recognition.interimResults = true; _recognition.lang = 'es-CO';
+  const ta = document.getElementById('guion-ta-' + cid);
+  let base = ta ? (ta.value.trim() ? ta.value.trimEnd() + ' ' : '') : '';
+  _recognition.onresult = e => {
+    let inter = '';
+    for (let r = e.resultIndex; r < e.results.length; r++) {
+      if (e.results[r].isFinal) base += e.results[r][0].transcript + ' ';
+      else inter += e.results[r][0].transcript;
+    }
+    const t = document.getElementById('guion-ta-' + cid);
+    if (t) t.value = base + inter;
+    const c = creativos.find(x => x.id === cid);
+    if (c) c.guion = base + inter;
+  };
+  _recognition.onerror = e => { if (e.error !== 'no-speech') { alert('Error micrófono: ' + e.error); detenerTranscripcion(cid); } };
+  _recognition.onend = () => detenerTranscripcion(cid);
+  _recognition.start();
+  const mb = document.getElementById('mic-btn-' + cid), ms = document.getElementById('mic-stop-' + cid);
+  if (mb) mb.style.display = 'none'; if (ms) ms.style.display = 'inline-block';
+}
+
+function detenerTranscripcion(cid) {
+  if (_recognition) { try { _recognition.stop(); } catch(e) {} _recognition = null; }
+  const mb = document.getElementById('mic-btn-' + cid), ms = document.getElementById('mic-stop-' + cid);
+  if (mb) mb.style.display = 'inline-block'; if (ms) ms.style.display = 'none';
+  const ta = document.getElementById('guion-ta-' + cid);
+  const c = creativos.find(x => x.id === cid);
+  if (ta && c) c.guion = ta.value;
+}
+
+const PROMPT_GUION_IG = `Eres experto en marketing de contenido para Instagram Reels. Analiza el guión/transcript y los frames visuales del Reel.
+
+Tu tarea:
+1. Reconstruye el guión completo (exactamente lo que se dice — usa la transcripción si está disponible, apóyate en los frames para contexto visual)
+2. Analiza la calidad del guión como especialista en contenido viral
+3. Da sugerencias concretas y accionables para mejorar retención y conversión
+
+Devuelve SOLO JSON válido sin texto extra:
+{
+  "guion_extraido": "El guión completo reconstruido tal como se dice en el video, párrafo por párrafo",
+  "hook": "Las primeras 1-2 frases del gancho",
+  "hook_puntuacion": 7,
+  "hook_analisis": "Qué funciona y qué falla en el hook (1-2 frases)",
+  "estructura_detectada": ["Hook ✅", "Desarrollo ✅", "CTA ❌"],
+  "tipo_contenido": "educativo",
+  "patron_viral": "problema-solución",
+  "duracion_estimada": "30-45 seg",
+  "cta_presente": true,
+  "cta_texto": "Exactamente qué dice el CTA, o null si no hay",
+  "puntuacion_general": 7,
+  "fortalezas": ["Fortaleza 1 específica", "Fortaleza 2"],
+  "mejoras": ["Mejora 1 concreta y accionable con ejemplo", "Mejora 2", "Mejora 3"],
+  "hook_mejorado": "Versión mejorada solo del gancho (máx 2 líneas — más impactante)",
+  "guion_mejorado": "El guión completo reescrito y optimizado para máxima retención y conversión"
+}`;
+
+async function analizarGuion(cid) {
+  const apiKey = localStorage.getItem('kd_claude_key');
+  if (!apiKey) { alert('Conecta tu clave de Claude primero para analizar el guión.'); return; }
+  const c = creativos.find(x => x.id === cid);
+  if (!c) return;
+  const tieneFrames = c.videoFrames && c.videoFrames.length > 0;
+  const tieneGuion = c.guion && c.guion.trim().length > 0;
+  if (!tieneFrames && !tieneGuion) {
+    alert('Sube un video o escribe el guión primero para poder analizarlo.');
+    return;
+  }
+  const btn = document.getElementById('guion-analyze-btn-' + cid);
+  const resultDiv = document.getElementById('guion-result-' + cid);
+  btn.disabled = true; btn.textContent = '⏳ Claude está analizando el guión...';
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:.82rem">🤖 Claude está leyendo el guión y los frames del video...</div>';
+  try {
+    const content = [];
+    if (tieneFrames) {
+      content.push({ type: 'text', text: `Frames del Reel (${tieneFrames ? c.videoFrames.length : 0} imágenes: inicio, 25%, 50%, 75% del video):` });
+      const compFrames = await Promise.all(c.videoFrames.map(f => comprimirImagen(f.dataURL)));
+      compFrames.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    }
+    if (tieneGuion) {
+      content.push({ type: 'text', text: `Transcripción/guión del video:\n${c.guion.trim()}` });
+    }
+    content.push({ type: 'text', text: PROMPT_GUION_IG });
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-haiku-4-5', max_tokens:2048, messages:[{ role:'user', content }] })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || data.error.type);
+    const raw = data.content[0].text;
+    const json = parseJSON(raw);
+    c.guionAnalysis = json;
+    // Actualizar textarea con el guión extraído si no tenía texto
+    if (!tieneGuion && json.guion_extraido) {
+      c.guion = json.guion_extraido;
+      const ta = document.getElementById('guion-ta-' + cid);
+      if (ta) ta.value = json.guion_extraido;
+    }
+    resultDiv.innerHTML = renderGuionResult(json);
+  } catch(err) {
+    resultDiv.innerHTML = `<div style="background:#fff0f0;border:1px solid #fca5a5;border-radius:8px;padding:12px;font-size:.8rem;color:#dc2626">❌ Error: ${escHtml(err.message || 'desconocido')}</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = '🔄 Volver a analizar guión →';
+  }
+}
+
+function renderGuionResult(g) {
+  const score = g.puntuacion_general || 0;
+  const color = score >= 8 ? '#16a34a' : score >= 6 ? '#d97706' : '#dc2626';
+  const estructura = (g.estructura_detectada || []).join(' · ');
+  const fortalezas = (g.fortalezas || []).map(f => `<li style="margin-bottom:4px">✅ ${escHtml(f)}</li>`).join('');
+  const mejoras = (g.mejoras || []).map((m,i) => `<li style="margin-bottom:6px"><span style="font-weight:700;color:#7c3aed">${i+1}.</span> ${escHtml(m)}</li>`).join('');
+  return `
+    <div style="border:1.5px solid rgba(147,51,234,.2);border-radius:12px;overflow:hidden;font-size:.82rem">
+      <div style="background:linear-gradient(135deg,#7c3aed,#2563eb);padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+        <span style="color:#fff;font-weight:800;font-size:.88rem">📋 Análisis de Guión — Claude</span>
+        <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:99px;padding:3px 12px;font-weight:900;font-size:.9rem">${score}/10</span>
+      </div>
+      ${g.guion_extraido ? `
+      <div style="padding:12px 16px;background:#f8f4ff;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div style="font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:6px">📝 Guión extraído del video</div>
+        <div style="white-space:pre-wrap;color:var(--text);line-height:1.6;background:#fff;border:1px solid rgba(147,51,234,.2);border-radius:8px;padding:10px">${escHtml(g.guion_extraido)}</div>
+      </div>` : ''}
+      <div style="padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">TIPO</div><div style="font-weight:700;color:var(--text)">${escHtml(g.tipo_contenido||'—')}</div></div>
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">PATRÓN</div><div style="font-weight:700;color:var(--text)">${escHtml(g.patron_viral||'—')}</div></div>
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">DURACIÓN EST.</div><div style="font-weight:700;color:var(--text)">${escHtml(g.duracion_estimada||'—')}</div></div>
+        <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:3px">CTA</div><div style="font-weight:700;color:${g.cta_presente?'#16a34a':'#dc2626'}">${g.cta_presente?'✅ Presente':'❌ Falta'}</div></div>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:6px">ESTRUCTURA</div>
+        <div style="font-weight:600;color:var(--text)">${escHtml(estructura||'—')}</div>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)">
+        <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:4px">🎣 HOOK ACTUAL</div>
+        <div style="font-style:italic;color:var(--text);margin-bottom:4px">"${escHtml(g.hook||'—')}"</div>
+        <div style="font-size:.76rem;color:var(--muted)">${escHtml(g.hook_analisis||'')}</div>
+        ${g.hook_mejorado ? `<div style="margin-top:8px;background:#f0fff4;border:1px solid #86efac;border-radius:8px;padding:8px 10px"><div style="font-size:.69rem;font-weight:800;color:#16a34a;margin-bottom:3px">✨ HOOK MEJORADO</div><div style="font-style:italic;color:#15803d;font-weight:600">"${escHtml(g.hook_mejorado)}"</div></div>` : ''}
+      </div>
+      ${fortalezas ? `<div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)"><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:6px">FORTALEZAS</div><ul style="list-style:none;padding:0;margin:0;color:var(--text)">${fortalezas}</ul></div>` : ''}
+      ${mejoras ? `<div style="padding:12px 16px;border-bottom:1px solid rgba(147,51,234,.12)"><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:6px">🎯 MEJORAS PRIORITARIAS</div><ul style="list-style:none;padding:0;margin:0;color:var(--text)">${mejoras}</ul></div>` : ''}
+      ${g.guion_mejorado ? `<div style="padding:12px 16px;background:#f8f4ff"><div style="font-size:.7rem;color:#7c3aed;font-weight:800;margin-bottom:6px">🚀 GUIÓN OPTIMIZADO POR CLAUDE</div><div style="white-space:pre-wrap;color:var(--text);line-height:1.6;background:#fff;border:1px solid rgba(147,51,234,.2);border-radius:8px;padding:10px">${escHtml(g.guion_mejorado)}</div></div>` : ''}
+    </div>`;
+}
+
 // ─── Extract with AI ──────────────────────────────────────────────────────────
 const PROMPT_IG = `Analiza estas capturas de pantalla de Instagram Insights/Estadísticas. Las imágenes están organizadas por creativo/Reel (cada grupo marcado con === NOMBRE ===). Extrae los números del creativo principal o promedia si hay varios.
 
@@ -1449,13 +1994,23 @@ async function extraerGemini(apiKey) {
 
 async function extraerClaude(apiKey) {
   const content = [];
-  const activosCr = creativos.filter(c => c.imagenes.length > 0);
+  const activosCr = creativos.filter(c => c.imagenes.length > 0 || (c.videoFrames && c.videoFrames.length > 0));
   for (let ci = 0; ci < activosCr.length; ci++) {
     const c = activosCr[ci];
     const nombre = c.nombre.trim() || `Creativo ${ci + 1}`;
     content.push({ type: 'text', text: `=== ${nombre.toUpperCase()} (grupo ${ci+1} de ${activosCr.length}) ===` });
-    const comprimidas = await Promise.all(c.imagenes.map(ss => comprimirImagen(ss.dataURL)));
-    comprimidas.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    if (c.imagenes.length > 0) {
+      const comprimidas = await Promise.all(c.imagenes.map(ss => comprimirImagen(ss.dataURL)));
+      comprimidas.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    }
+    if (c.videoFrames && c.videoFrames.length > 0) {
+      content.push({ type: 'text', text: `--- FRAMES DEL VIDEO (${c.videoFrames.length} frames: inicio, 25%, 50%, 75%) ---` });
+      const compFrames = await Promise.all(c.videoFrames.map(f => comprimirImagen(f.dataURL)));
+      compFrames.forEach(d => content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } }));
+    }
+    if (c.guion && c.guion.trim()) {
+      content.push({ type: 'text', text: `--- GUIÓN/TRANSCRIPT DEL REEL ---\n${c.guion.trim()}` });
+    }
   }
   content.push({ type: 'text', text: PROMPT_IG });
   const res = await fetch('https://api.anthropic.com/v1/messages', {
