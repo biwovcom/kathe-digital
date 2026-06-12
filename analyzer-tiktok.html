@@ -228,8 +228,14 @@ footer a{color:var(--accent);text-decoration:none}
 .extract-status{font-size:.8rem;color:var(--muted);margin-top:8px}
 
 /* ALGORITHM GUIDE */
-.algo-guide-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#010101,#fe2c55);color:#fff;border:none;padding:8px 18px;border-radius:99px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:18px;transition:opacity .2s;letter-spacing:.01em}
-.algo-guide-btn:hover{opacity:.88}
+.algo-guide-card{background:linear-gradient(135deg,rgba(1,1,1,.06),rgba(254,44,85,.06));border:1.5px solid rgba(254,44,85,.25);border-radius:16px;padding:16px 20px;margin-bottom:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;text-align:left}
+.algo-guide-card:hover{border-color:rgba(254,44,85,.5);background:linear-gradient(135deg,rgba(1,1,1,.1),rgba(254,44,85,.1));transform:translateY(-1px)}
+.algo-guide-icon{font-size:2rem;flex-shrink:0;line-height:1}
+.algo-guide-body{flex:1}
+.algo-guide-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fe2c55;margin-bottom:3px}
+.algo-guide-title{font-size:.97rem;font-weight:800;color:var(--text);margin-bottom:3px;line-height:1.3}
+.algo-guide-desc{font-size:.77rem;color:var(--muted);line-height:1.45}
+.algo-guide-arrow{font-size:1.1rem;color:#fe2c55;flex-shrink:0;font-weight:900}
 #guiaAlgoState{display:none;max-width:780px;margin:0 auto;padding:24px 24px 60px}
 .algo-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.82rem;font-family:inherit;padding:0;margin-bottom:20px;display:flex;align-items:center;gap:5px}
 .algo-back:hover{color:var(--accent)}
@@ -263,6 +269,8 @@ footer a{color:var(--accent);text-decoration:none}
 .algo-compare-col.ig h4{color:var(--purple)}
 .algo-compare-col.tt h4{color:#fe2c55}
 </style>
+<script src="https://unpkg.com/pdfjs-dist@3.11.174/legacy/build/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
 
@@ -276,8 +284,14 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="wrap">
     <h1 class="page-title">Analiza tu <span>TikTok</span></h1>
     <p class="page-sub">Sin iniciar sesión · Sin riesgo de baneo · Tu cuenta siempre segura</p>
-    <div style="text-align:center;margin-bottom:8px">
-      <button class="algo-guide-btn" onclick="mostrarGuiaAlgo()">🧠 Guía del Algoritmo de TikTok 2026 →</button>
+    <div class="algo-guide-card" onclick="mostrarGuiaAlgo()">
+      <div class="algo-guide-icon">🧠</div>
+      <div class="algo-guide-body">
+        <div class="algo-guide-label">Guía gratuita · Actualizada 2026</div>
+        <div class="algo-guide-title">¿Cómo funciona el algoritmo de TikTok?</div>
+        <div class="algo-guide-desc">Aprende qué hace que tu video llegue al Para Ti (FYP) de miles de personas: ganchos, duración, audio en tendencia y lo que el algoritmo premia o penaliza.</div>
+      </div>
+      <div class="algo-guide-arrow">→</div>
     </div>
     <div style="background:linear-gradient(135deg,rgba(22,163,74,.07),rgba(22,163,74,.03));border:1.5px solid rgba(22,163,74,.25);border-radius:12px;padding:12px 16px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start">
       <div style="font-size:1.4rem;flex-shrink:0">🔒</div>
@@ -560,6 +574,18 @@ footer a{color:var(--accent);text-decoration:none}
         </div>
       </div>
 
+      <!-- ─── Informes anteriores ─────────────────────────────── -->
+      <div style="margin-top:22px;border:1.5px dashed rgba(254,44,85,.25);border-radius:14px;padding:16px 18px;background:rgba(254,44,85,.03)">
+        <div style="font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:2px">📄 Informes anteriores — opcional</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:10px">Sube reportes previos en PDF, Word (.docx) o texto (.txt) para que la IA los considere en el análisis. Puedes subir más de 20 archivos.</div>
+        <div id="docsDropZone" onclick="document.getElementById('docsFileInput').click()" style="border:1.5px dashed rgba(254,44,85,.3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:background .2s;font-size:.8rem;color:var(--muted)" onmouseenter="this.style.background='rgba(254,44,85,.06)'" onmouseleave="this.style.background='transparent'">
+          ⬆️ Haz clic para subir archivos PDF, Word (.docx) o .txt
+        </div>
+        <input type="file" id="docsFileInput" multiple accept=".pdf,.docx,.doc,.txt" style="display:none" onchange="handleDocFiles(this.files)">
+        <div id="docsChipList" style="display:none;margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
+        <div id="docsStatus" style="font-size:.72rem;color:var(--muted);margin-top:6px"></div>
+      </div>
+
       <button class="analyze-btn" onclick="analizarTikTok()">🎵 Generar análisis completo →</button>
     </div>
   </div>
@@ -683,7 +709,7 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
   <div class="algo-tabs">
     <div class="algo-tab active" onclick="algoTab('fyp',this)">🌍 FYP</div>
-    <div class="algo-tab" onclick="algoTab('hook',this)">🎣 Hook</div>
+    <div class="algo-tab" onclick="algoTab('hook',this)">🎣 Gancho</div>
     <div class="algo-tab" onclick="algoTab('duracion',this)">⏱️ Duración</div>
     <div class="algo-tab" onclick="algoTab('hashtags',this)">🏷️ Hashtags</div>
     <div class="algo-tab" onclick="algoTab('penaliza',this)">🚫 Evitar</div>
@@ -697,20 +723,20 @@ footer a{color:var(--accent);text-decoration:none}
       <ul class="algo-list">
         <li data-icon="1️⃣"><strong>Completion rate (tasa de finalización):</strong> la señal #1. Cuántos ven el video completo o lo ven varias veces</li>
         <li data-icon="2️⃣"><strong>Watch time total:</strong> segundos totales acumulados. Un video corto con alta retención vale más que uno largo con baja retención</li>
-        <li data-icon="3️⃣"><strong>Shares (compartidos):</strong> especialmente si alguien lo manda por DM o lo sube a otra plataforma. La señal más fuerte de calidad</li>
-        <li data-icon="4️⃣"><strong>Comments:</strong> volumen y velocidad. TikTok valora que la gente debata o reaccione en comentarios</li>
-        <li data-icon="5️⃣"><strong>Likes:</strong> importantes pero pesados menos que shares y comments</li>
-        <li data-icon="6️⃣"><strong>Saves:</strong> señal de contenido útil a largo plazo</li>
-        <li data-icon="7️⃣"><strong>Replays (rereproducciones):</strong> si alguien ve el video 2+ veces, es señal muy positiva</li>
+        <li data-icon="3️⃣"><strong>Compartidos:</strong> especialmente si alguien lo manda por mensaje directo o lo sube a otra plataforma. La señal más fuerte de calidad</li>
+        <li data-icon="4️⃣"><strong>Comentarios:</strong> volumen y velocidad. TikTok valora que la gente debata o reaccione</li>
+        <li data-icon="5️⃣"><strong>Me gusta:</strong> importantes pero pesan menos que los compartidos y comentarios</li>
+        <li data-icon="6️⃣"><strong>Guardados:</strong> señal de contenido útil a largo plazo</li>
+        <li data-icon="7️⃣"><strong>Reproducciones repetidas:</strong> si alguien ve el video 2+ veces, es señal muy positiva</li>
       </ul>
     </div>
     <div class="algo-section">
-      <div class="algo-section-title">🌍 Cómo distribuye TikTok (interest graph)</div>
+      <div class="algo-section-title">🌍 Cómo distribuye TikTok (red de intereses)</div>
       <ul class="algo-list">
-        <li data-icon="📦">Batch 1: TikTok muestra tu video a ~100-500 usuarios del nicho más afín</li>
-        <li data-icon="📊">Si el engagement supera el umbral de ese nicho → Batch 2 (miles de usuarios)</li>
-        <li data-icon="🚀">Si sigue performando → Batch 3 y más. Así se viraliza paso a paso</li>
-        <li data-icon="🌱">TikTok es interest graph: te muestra a no-seguidores desde el día 1. Puedes viralizarte con 0 seguidores</li>
+        <li data-icon="📦">Tanda 1: TikTok muestra tu video a ~100-500 usuarios del nicho más afín</li>
+        <li data-icon="📊">Si la interacción supera el umbral de ese nicho → Tanda 2 (miles de usuarios)</li>
+        <li data-icon="🚀">Si sigue funcionando bien → Tanda 3 y más. Así se hace viral paso a paso</li>
+        <li data-icon="🌱">TikTok usa red de intereses: te muestra a personas sin seguirte desde el día 1. Puedes hacerte viral con 0 seguidores</li>
         <li data-icon="⏰">Un video NUNCA "muere" en TikTok — puede viralizarse semanas o meses después</li>
         <li data-icon="🎯">El contenido de nicho específico funciona MEJOR que el contenido genérico</li>
       </ul>
@@ -718,11 +744,11 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">🆕 Actualizaciones TikTok 2026</div>
       <ul class="algo-list">
-        <li data-icon="✅">Mayor peso a "Originality Score" — contenido 100% original recibe más distribución</li>
-        <li data-icon="✅">Caption keywords indexadas — TikTok funciona cada vez más como buscador</li>
-        <li data-icon="✅">Series de videos: el algoritmo premia la continuidad y los viewers que regresan</li>
-        <li data-icon="✅">TikTok Shop integration: videos con productos tienen canal adicional de distribución</li>
-        <li data-icon="⚠️">Penalización a contenido batch-posted (subir 5+ videos en 1 hora)</li>
+        <li data-icon="✅">Mayor peso a la originalidad — contenido 100% original recibe más distribución</li>
+        <li data-icon="✅">Palabras clave en el texto indexadas — TikTok funciona cada vez más como buscador</li>
+        <li data-icon="✅">Series de videos: el algoritmo premia la continuidad y los espectadores que regresan</li>
+        <li data-icon="✅">Integración con TikTok Shop: videos con productos tienen un canal adicional de distribución</li>
+        <li data-icon="⚠️">Penalización por subir muchos videos en bloque (5+ en 1 hora)</li>
         <li data-icon="⚠️">Contenido generado por IA detectado y con menor distribución si es genérico</li>
         <li data-icon="⚠️">Mayor moderación de claims de salud, finanzas y temas sensibles</li>
       </ul>
@@ -734,15 +760,15 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">🎣 Los primeros 3 segundos deciden todo</div>
       <ul class="algo-list">
-        <li data-icon="⚡">El primer frame es el "thumbnail" en el FYP. Si no captura la atención visualmente, no importa qué dices después</li>
-        <li data-icon="🧠">Tienes 0.3 segundos antes de que el usuario haga scroll. El movimiento, el texto en pantalla y la expresión facial son clave</li>
-        <li data-icon="📝">Texto en pantalla desde el segundo 0 mejora la retención significativamente (también para sordos)</li>
-        <li data-icon="🔊">El audio del hook debe ser claro e inmediato — evita intros musicales largas sin voz</li>
-        <li data-icon="❓">Los hooks en forma de pregunta generan más watch time porque crean un "loop abierto" en la mente</li>
+        <li data-icon="⚡">El primer segundo es la miniatura en el Para Ti (FYP). Si no captura la atención visualmente, no importa qué dices después</li>
+        <li data-icon="🧠">Tienes 0.3 segundos antes de que el usuario deslice. El movimiento, el texto en pantalla y la expresión facial son clave</li>
+        <li data-icon="📝">Texto en pantalla desde el segundo 0 mejora la retención significativamente (también para personas con el sonido apagado)</li>
+        <li data-icon="🔊">El audio del gancho debe ser claro e inmediato — evita introducciones musicales largas sin voz</li>
+        <li data-icon="❓">Los ganchos en forma de pregunta generan más tiempo de visualización porque crean una "duda abierta" en la mente</li>
       </ul>
     </div>
     <div class="algo-section">
-      <div class="algo-section-title">🏆 Fórmulas de hook que funcionan en TikTok</div>
+      <div class="algo-section-title">🏆 Fórmulas de gancho que funcionan en TikTok</div>
       <ul class="algo-list">
         <li data-icon="✅"><strong>La pregunta que duele:</strong> "¿Por qué tu negocio no vende aunque tienes seguidores?" (directo al dolor)</li>
         <li data-icon="✅"><strong>El secreto prohibido:</strong> "Lo que las marcas grandes NO quieren que sepas sobre el algoritmo"</li>
@@ -772,20 +798,20 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="algo-section-title">⏱️ Duración óptima en TikTok</div>
       <div class="algo-num-grid">
         <div class="algo-num-card"><div class="an-val">7-15s</div><div class="an-lbl">Máxima tasa de finalización — clips, memes, impacto rápido</div></div>
-        <div class="algo-num-card"><div class="an-val">15-30s</div><div class="an-lbl">✨ Sweet spot viral — tips, consejos, resultados</div></div>
+        <div class="algo-num-card"><div class="an-val">15-30s</div><div class="an-lbl">✨ Punto viral ideal — tips, consejos, resultados</div></div>
         <div class="algo-num-card"><div class="an-val">30-60s</div><div class="an-lbl">Tutoriales cortos, storytelling, educación</div></div>
         <div class="algo-num-card"><div class="an-val">60-3min</div><div class="an-lbl">Contenido profundo, solo si retención &gt;50%</div></div>
         <div class="algo-num-card"><div class="an-val">3-10min</div><div class="an-lbl">Solo creadores establecidos con audiencia fiel</div></div>
       </div>
-      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">⚠️ Regla de oro de TikTok: prefiere un video de 15 seg con 90% de completion a uno de 60 seg con 30%. La tasa de finalización es la métrica #1 del algoritmo.</p>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">⚠️ Regla de oro de TikTok: prefiere un video de 15 seg con 90% de tasa de finalización (que lo vean completo) a uno de 60 seg con 30%. La tasa de finalización es la métrica #1 del algoritmo.</p>
     </div>
     <div class="algo-section">
       <div class="algo-section-title">📈 La trampa de los videos largos</div>
       <ul class="algo-list">
         <li data-icon="❌">Un video de 3 minutos con 20% de completion → el algoritmo NO lo distribuye (pocos terminaron)</li>
         <li data-icon="✅">Un video de 20 segundos con 85% de completion → el algoritmo lo AMPLIFICA masivamente</li>
-        <li data-icon="🔄">Los replays (ver el video 2+ veces) son señal de video muy corto y muy bueno — TikTok los premia</li>
-        <li data-icon="💡">Técnica del cliffhanger: termina el video justo cuando van a dar el dato más importante → generan replays</li>
+        <li data-icon="🔄">Las reproducciones repetidas (ver el video 2+ veces) son señal de video muy corto y muy bueno — TikTok los premia</li>
+        <li data-icon="💡">Técnica del final en suspenso: termina el video justo antes de dar el dato más importante → la gente lo vuelve a ver</li>
       </ul>
     </div>
     <div class="algo-section">
@@ -815,13 +841,13 @@ footer a{color:var(--accent);text-decoration:none}
       </ul>
     </div>
     <div class="algo-section">
-      <div class="algo-section-title">🎵 Audio trending — el arma secreta de TikTok</div>
+      <div class="algo-section-title">🎵 Audios en tendencia — el arma secreta de TikTok</div>
       <ul class="algo-list">
-        <li data-icon="🔊">El audio trending en TikTok da un boost del 30-50% de alcance más que en Instagram</li>
-        <li data-icon="📈">Busca audios con la flecha ↗️ en TikTok — indica que están en ascenso</li>
-        <li data-icon="⏰">La ventana dorada: usar el audio entre el día 3-7 desde que empieza a trending (antes del pico)</li>
-        <li data-icon="🎯">Incluso el audio trending de fondo (sin que sea el punto central) ayuda al alcance</li>
-        <li data-icon="💡">Crea una versión de tu contenido habitual usando el audio trending del momento — adapta el mensaje</li>
+        <li data-icon="🔊">El audio en tendencia en TikTok da un impulso del 30-50% de alcance extra, más que en Instagram</li>
+        <li data-icon="📈">Busca audios con la flecha ↗️ en TikTok — indica que están en ascenso ahora</li>
+        <li data-icon="⏰">El momento ideal: usa el audio entre el día 3-7 desde que empieza a crecer (antes del pico)</li>
+        <li data-icon="🎯">Incluso el audio en tendencia de fondo (sin que sea el punto central) ayuda al alcance</li>
+        <li data-icon="💡">Crea una versión de tu contenido habitual usando el audio en tendencia del momento — adapta el mensaje</li>
         <li data-icon="⚠️">Evita música con derechos de autor — TikTok silencia el video o lo bloquea en algunos países</li>
       </ul>
     </div>
@@ -834,7 +860,7 @@ footer a{color:var(--accent);text-decoration:none}
       <ul class="algo-list">
         <li data-icon="❌"><strong>Marca de agua de otras plataformas:</strong> TikTok detecta y reduce el alcance de contenido con marca de agua de Instagram, YouTube, etc.</li>
         <li data-icon="❌"><strong>Mencionar a Instagram o YouTube en el video:</strong> TikTok penaliza promover a competidores directamente</li>
-        <li data-icon="❌"><strong>Baja tasa de finalización consistente:</strong> si tus videos tienen &lt;30% de completion, el algoritmo reduce la distribución de todos tus siguientes videos</li>
+        <li data-icon="❌"><strong>Baja tasa de finalización consistente:</strong> si tus videos tienen menos del 30% de personas que los ven completos, el algoritmo reduce la distribución de todos tus siguientes videos</li>
         <li data-icon="❌"><strong>Publicar 5+ videos en 1 hora:</strong> TikTok lo detecta como spam y reduce el alcance de todos</li>
         <li data-icon="❌"><strong>Contenido reciclado sin edición:</strong> si el video es idéntico a uno anterior, el algoritmo lo penaliza</li>
         <li data-icon="❌"><strong>Claims falsos o exagerados:</strong> "gana $10.000 desde casa sin hacer nada" — moderación automática</li>
@@ -845,11 +871,11 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">✅ Lo que SÍ premia el algoritmo de TikTok</div>
       <div class="algo-row">
-        <span class="algo-tag green">Alta completion rate</span>
-        <span class="algo-tag green">Replays (rereproducciones)</span>
-        <span class="algo-tag green">Shares por DM</span>
+        <span class="algo-tag green">Alta tasa de finalización</span>
+        <span class="algo-tag green">Reproducciones repetidas</span>
+        <span class="algo-tag green">Compartidos por mensaje directo</span>
         <span class="algo-tag green">Comentarios que debaten</span>
-        <span class="algo-tag green">Audio trending</span>
+        <span class="algo-tag green">Audio en tendencia</span>
         <span class="algo-tag green">Texto en pantalla</span>
         <span class="algo-tag green">Contenido original</span>
         <span class="algo-tag green">Consistencia en nicho</span>
@@ -866,10 +892,10 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="algo-compare-col tt">
           <h4>🎵 TikTok</h4>
           <ul class="algo-list" style="font-size:.78rem">
-            <li data-icon="🌍">Interest graph: llega a no-seguidores desde el video 1</li>
-            <li data-icon="🔁">Completion rate + Shares = señales #1</li>
-            <li data-icon="▶️">Primer frame = thumbnail del FYP</li>
-            <li data-icon="🔊">Audio trending = boost de 30-50% de alcance</li>
+            <li data-icon="🌍">Red de intereses: llega a personas sin seguirte desde el video 1</li>
+            <li data-icon="🔁">Tasa de finalización + Compartidos = señales #1</li>
+            <li data-icon="▶️">Primer segundo = miniatura en el Para Ti (FYP)</li>
+            <li data-icon="🔊">Audio en tendencia = 30-50% más de alcance</li>
             <li data-icon="⏰">Horario de publicación importa menos</li>
             <li data-icon="🌱">Viralizarse con 0 seguidores es completamente normal</li>
             <li data-icon="⏱️">Videos cortos con alta retención > videos largos</li>
@@ -879,10 +905,10 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="algo-compare-col ig">
           <h4>📸 Instagram</h4>
           <ul class="algo-list" style="font-size:.78rem">
-            <li data-icon="🔗">Social graph primero (seguidores actuales ven tu contenido)</li>
-            <li data-icon="💾">Saves = señal más diferenciadora en IG</li>
-            <li data-icon="📷">Cover image del Reel importa (se ve en perfil)</li>
-            <li data-icon="📝">Caption tiene peso SEO (keywords indexadas)</li>
+            <li data-icon="🔗">Red de seguidores primero (tus seguidores actuales ven tu contenido)</li>
+            <li data-icon="💾">Guardados = señal más diferenciadora en IG</li>
+            <li data-icon="📷">Imagen de portada del Reel importa (se ve en perfil)</li>
+            <li data-icon="📝">El texto de la publicación tiene peso en búsquedas (palabras clave)</li>
             <li data-icon="⏰">Horario de publicación importa más</li>
             <li data-icon="🌱">Crecer desde 0 es más difícil</li>
             <li data-icon="📊">Carrusel tiene mayor alcance que foto estática</li>
@@ -894,9 +920,9 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">🎯 Estrategia dual: cómo usar TikTok e Instagram juntos</div>
       <ul class="algo-list">
-        <li data-icon="1️⃣">Crea primero en TikTok con audio trending (sin música con derechos problemáticos)</li>
-        <li data-icon="2️⃣">Descarga sin marca de agua → sube a Instagram Reels con caption optimizado para SEO de IG</li>
-        <li data-icon="3️⃣">En TikTok: hook más agresivo y directo. En Instagram: hook puede tener más contexto</li>
+        <li data-icon="1️⃣">Crea primero en TikTok con audio en tendencia (sin música con derechos problemáticos)</li>
+        <li data-icon="2️⃣">Descarga sin marca de agua → sube a Instagram Reels con texto optimizado para búsquedas en Instagram</li>
+        <li data-icon="3️⃣">En TikTok: gancho más agresivo y directo. En Instagram: el gancho puede tener más contexto</li>
         <li data-icon="4️⃣">En TikTok: la comunidad de nicho te encontrará sola. En Instagram: usa hashtags y collabs</li>
         <li data-icon="5️⃣">En TikTok: prioriza completion rate y shares. En Instagram: prioriza saves y DMs</li>
         <li data-icon="⚠️">Nunca publiques exactamente el mismo video con el mismo texto en ambas el mismo día</li>
@@ -1286,20 +1312,62 @@ function analizarTikTok() {
 
   // Recs
   const recs = [];
-  if (completion<50) recs.push({p:'alta',t:'Mejorar el % de reproducción (prioridad #1)',w:`Tu % actual es ${completion}%. El algoritmo de TikTok considera esto la señal más importante. Solución: empieza los videos directamente en el punto más interesante, sin saludo. Usa texto en pantalla en los primeros 2 segundos.`});
-  if (shareRate<1) recs.push({p:'alta',t:'Crear contenido que se comparte',w:`Tasa de compartidos ${f(shareRate)}%. Los shares llevan tu video al FYP masivamente. Idea: crea contenido que la gente quiera mandar a sus amigos — humor de nicho, datos impactantes, consejos prácticos.`});
-  if (freq<3) recs.push({p:'alta',t:`Publicar más: mínimo 5 videos por semana`,w:`Publicas ${freq||0} video(s)/semana. TikTok recompensa fuertemente la consistencia y cantidad. Más videos = más datos = más distribución. No necesitan ser perfectos.`});
-  if (sounds==='nunca') recs.push({p:'media',t:'Usar trending sounds en el 70%+ de tus videos',w:'Los trending sounds dan un impulso gratuito del algoritmo. TikTok agrupa videos con el mismo audio y los muestra juntos. Revisa la pestaña "Descubrir" a diario para identificar trends de tu nicho.'});
-  if (completion<70 && duration==='long') recs.push({p:'media',t:'Reducir la duración de tus videos',w:`Videos más cortos (15-45 seg) tienen mejor % de reproducción. Con completion del ${completion}%, considera hacer videos más cortos y directos.`});
-  if (traffic==='seguidores') recs.push({p:'media',t:'Optimizar para el FYP, no para tus seguidores',w:'Tu tráfico principal es de seguidores actuales. Para escalar, necesitas llegar a nuevas audiencias vía FYP. Fórmula: mejor hook + trending sound + completion rate alto.'});
-  if (growthRate<3) recs.push({p:'media',t:'Implementar series de contenido',w:`Crecimiento mensual ${f(growthRate)}%. Las series ("Parte 1", "Parte 2") son la forma más rápida de ganar seguidores en TikTok porque crean expectativa. Crea 5 videos en torno a un mismo tema.`});
-  recs.push({p:'baja',t:'Optimizar tu bio y link para conversión',w:'Tu bio en TikTok debe tener: propuesta de valor en 1 línea + llamado a acción + link directo al siguiente paso (WhatsApp, web, tienda). Quienes visitan tu perfil ya están interesados — no los pierdas.'});
+  if (completion<50) recs.push({p:'alta',
+    t:'Mejorar cuánto ven tus videos — prioridad #1 del algoritmo',
+    w:`Tu porcentaje de reproducción es ${completion}%. El algoritmo de TikTok considera esto la señal más importante.`,
+    pq:`TikTok mide cuánto tiempo ve cada persona tu video. Si el 70%+ de los espectadores lo ven completo, el algoritmo lo lleva a más personas en el "Para Ti" (FYP). Si solo ven el 30%, el video se frena. Es como un semáforo: alta reproducción = luz verde para distribuir masivamente.`,
+    como:`Paso 1: Nunca empieces con "Hola, soy X". Empieza directamente en la acción o la frase más interesante. Paso 2: Agrega texto en pantalla desde el segundo 0, para quienes tienen el sonido apagado. Paso 3: Usa el suspenso: termina con "Y esto fue solo el principio..." para que la gente repita el video. Paso 4: Revisa en Analytics de TikTok cuánto ven cada video y cuándo salen — ese momento es lo que debes mejorar.`});
+  if (shareRate<1) recs.push({p:'alta',
+    t:'Crear videos que la gente reenvíe por mensaje privado',
+    w:`Tu tasa de compartidos es ${f(shareRate)}%. Cuando alguien comparte tu video por chat, el algoritmo lo impulsa masivamente.`,
+    pq:`TikTok trata los videos compartidos por mensaje privado como la señal más fuerte de que el contenido es valioso. Un video compartido 1.000 veces entra automáticamente en el Para Ti (FYP) de miles de personas que nunca te han visto. Es la diferencia entre un video de 500 vistas y uno de 500.000.`,
+    como:`Paso 1: Crea contenido que provoque una reacción: "¡Esto le pasa exactamente a mi amiga!" o "Tengo que mandarle esto a X". Funciona bien el humor de nicho, los datos impactantes y los consejos muy prácticos. Paso 2: Al final del video di: "Mándale esto a alguien que lo necesita 👇". Paso 3: Mide en Analytics → Compartidos cuáles videos se comparten más para repetir ese formato.`});
+  if (freq<3) recs.push({p:'alta',
+    t:`Publicar más seguido — mínimo 5 videos por semana`,
+    w:`Publicas ${freq||0} video(s) por semana. TikTok recompensa directamente la frecuencia.`,
+    pq:`TikTok le da a cada cuenta un "presupuesto" de distribución que aumenta con cada video que publicas. Si publicas 5+ veces por semana, el algoritmo tiene más datos para entender qué le gusta a tu audiencia y a quién más mostrarle tu contenido. Más videos = más oportunidades de que uno se vuelva viral.`,
+    como:`Paso 1: Graba en bloques: un día a la semana graba 5-7 videos y publícalos a lo largo de la semana. Paso 2: No necesitan ser perfectos. Un video de 30 segundos grabado en 10 minutos puede funcionar mejor que uno producido en 3 horas. Paso 3: Publica a la misma hora cada día — el algoritmo aprende cuándo tu audiencia está activa. Paso 4: Usa el programador de TikTok (Studio.TikTok.com) para agendar.`});
+  if (sounds==='nunca') recs.push({p:'media',
+    t:'Usar audios en tendencia en el 70% de tus videos',
+    w:'Los audios en tendencia ("trending sounds") le dan un impulso automático del algoritmo.',
+    pq:`TikTok agrupa todos los videos que usan el mismo audio y los muestra juntos en la pantalla "Para Ti". Si usas un audio que está en tendencia, tu video aparece junto a los de cuentas grandes que también lo usan — aunque tú tengas pocos seguidores. Es exposición gratuita a audiencias nuevas.`,
+    como:`Paso 1: Abre TikTok → toca el ícono de búsqueda → busca tu tema + agrega "2026" o "tendencia". Paso 2: Ve a la sección "Descubrir" cada mañana para ver qué audios están subiendo. Paso 3: Al crear un video, selecciona "Agregar sonido" → "Viral" y filtra por los más usados esta semana. Paso 4: El audio solo necesita estar de fondo — no tienes que hacer lip sync (mover los labios) si no encaja.`});
+  if (completion<70 && duration==='long') recs.push({p:'media',
+    t:'Hacer videos más cortos y directos al punto',
+    w:`Con un porcentaje de reproducción del ${completion}%, los videos cortos (15-45 segundos) funcionarán mejor.`,
+    pq:`TikTok descubrió que la mayoría de personas abandona los videos largos antes de terminarlos. Si tu porcentaje de reproducción está bajo, es señal de que el video pierde a la gente en el camino. Un video de 20 segundos visto completo llega a más personas que un video de 3 minutos visto solo a la mitad.`,
+    como:`Paso 1: Antes de grabar, escribe los 3 puntos más importantes que quieres decir. Paso 2: Graba solo esos 3 puntos, sin introducción ni cierre largo. Paso 3: En el editor, elimina los silencios y pausas — TikTok tiene una función de "corte automático de silencios". Paso 4: Objetivo: videos de 15-45 segundos con un solo mensaje claro.`});
+  if (traffic==='seguidores') recs.push({p:'media',
+    t:'Crear para personas nuevas, no solo para tus seguidores actuales',
+    w:'Tu tráfico principal viene de personas que ya te siguen. Para crecer, necesitas llegar a nuevas audiencias en el Para Ti (FYP).',
+    pq:`El Para Ti (FYP) de TikTok es como una vitrina en un centro comercial muy transitado — muestra tu contenido a personas que nunca te han visto. Si tu tráfico es principalmente de seguidores, significa que estás hablando siempre con el mismo grupo pequeño. Para escalar, el algoritmo necesita datos de que a personas nuevas también les gusta tu contenido.`,
+    como:`Paso 1: Al crear cada video, pregúntate: "¿Alguien que no me conoce entendería de qué trata este video?". Paso 2: Usa palabras clave en el texto de tu publicación (caption): ej. "si eres emprendedor en Colombia..." para que el algoritmo sepa a quién mostrarlo. Paso 3: Incluye en el video una frase que explique qué haces, para que nuevos espectadores entiendan tu contexto.`});
+  if (growthRate<3) recs.push({p:'media',
+    t:'Crear una serie de videos para ganar seguidores rápido',
+    w:`Tu crecimiento mensual es ${f(growthRate)}%. Las series de contenido son la estrategia más efectiva en TikTok para crecer.`,
+    pq:`Cuando publicas una serie ("Parte 1 de 5 sobre..."), las personas que ven el primero buscan activamente los siguientes y siguen tu cuenta para no perdérselos. TikTok también agrupa y recomienda los videos de la serie juntos. Una serie de 5 videos bien ejecutada puede traer más seguidores que 20 videos sueltos.`,
+    como:`Paso 1: Elige un tema de tu nicho que puedas dividir en 5 partes. Ejemplo: "Los 5 errores que cometen los emprendedores en TikTok - Parte 1". Paso 2: Graba los 5 videos el mismo día y publícalos uno por día. Paso 3: En cada video menciona: "Mañana publico la Parte 2, sígueme para no perdértela". Paso 4: Usa el mismo audio de fondo en toda la serie para que el algoritmo los agrupe.`});
+  recs.push({p:'baja',
+    t:'Mejorar tu bio y tu link para convertir visitas en clientes',
+    w:'Quien visita tu perfil ya está interesado en ti — tu bio debe convencerlos de quedarse.',
+    pq:`Después de ver un video, muchas personas van al perfil para decidir si siguen o no. Una bio vaga pierde esa oportunidad. Una bio clara con un link directo al siguiente paso (WhatsApp, web, tienda) puede convertir esa visita en un cliente potencial — sin que tengas que hacer nada más.`,
+    como:`Paso 1: Ve a tu perfil de TikTok → Editar perfil. Paso 2: En la "Biografía" escribe en máximo 80 caracteres: qué haces + a quién ayudas + qué deben hacer ahora. Ejemplo: "Ayudo a emprendedores a vender más por redes 🚀 | Agenda tu consulta gratis 👇". Paso 3: En "Sitio web" pon tu link de WhatsApp Business (wa.me/tucelular) o un Linktree con tus links. Paso 4: Activa la cuenta de empresa en TikTok (Configuración → Administrar cuenta → Cambiar a cuenta de empresa) para acceder a más estadísticas y la tienda TikTok.`});
 
   document.getElementById('recList').innerHTML = recs.slice(0,7).map(r=>`
-    <div class="rec-item"><div>
-      <span class="rec-prio prio-${r.p}">${r.p==='alta'?'🔴 Alta':r.p==='media'?'🟠 Media':'🟢 Baja'}</span>
-      <strong>${r.t}</strong><p>${r.w}</p>
-    </div></div>`).join('');
+    <div class="rec-item" style="display:block;padding:16px">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:${r.pq?'10px':'0'}">
+        <span class="rec-prio prio-${r.p}" style="flex-shrink:0">${r.p==='alta'?'🔴 Alta':r.p==='media'?'🟠 Media':'🟢 Baja'}</span>
+        <div><strong style="font-size:.9rem">${r.t}</strong><p style="margin:4px 0 0;font-size:.8rem;color:var(--muted)">${r.w}</p></div>
+      </div>
+      ${r.pq?`<div style="background:rgba(147,51,234,.05);border-radius:9px;padding:9px 11px;margin-bottom:7px">
+        <div style="font-size:.69rem;font-weight:800;color:#9333ea;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">💡 Por qué importa</div>
+        <div style="font-size:.79rem;color:#444;line-height:1.5">${r.pq}</div>
+      </div>`:''}
+      ${r.como?`<div style="background:rgba(22,163,74,.05);border-radius:9px;padding:9px 11px">
+        <div style="font-size:.69rem;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">✅ Cómo hacerlo</div>
+        <div style="font-size:.79rem;color:#1a4a1a;line-height:1.6">${r.como}</div>
+      </div>`:''}
+    </div>`).join('');
 
   // Creativo quemado guide (TikTok)
   const vidaUtil = freq >= 7 ? '3-5 días' : freq >= 5 ? '1 semana' : freq >= 3 ? '1-2 semanas' : '2-3 semanas';
@@ -1505,11 +1573,13 @@ Devuelve SOLO un objeto JSON válido, sin texto antes ni después:
     {"nombre": "Foto de portada / feed", "icono": "🎬", "status": "mejorar", "score": 5, "que_es": "La cuadrícula de videos es la primera impresión de tu contenido. Las miniaturas deben ser cohesivas y atractivas.", "feedback": "Las miniaturas no tienen consistencia visual"},
     {"nombre": "Redes sociales vinculadas", "icono": "🔗", "status": "malo", "score": 2, "que_es": "TikTok permite vincular Instagram y YouTube. Aprovéchalo para redirigir tráfico a otras plataformas.", "feedback": "No tiene otras redes vinculadas"}
   ],
-  "fortalezas": ["Fortaleza específica 1", "Fortaleza específica 2"],
+  "fortalezas": ["Fortaleza específica en español claro 1", "Fortaleza específica 2"],
   "mejoras": [
-    "Mejora muy específica 1 con ejemplo concreto",
-    "Mejora muy específica 2 con ejemplo concreto",
-    "Mejora muy específica 3 con ejemplo concreto"
+    {
+      "titulo": "Qué cambiar en una frase corta",
+      "por_que": "Explicación en español claro de por qué esto importa para que más personas te sigan o te compren. Menciona el impacto concreto: qué pasa si no lo haces.",
+      "como_hacerlo": "Paso 1: Abre TikTok → ve a tu perfil → toca 'Editar perfil' → Paso 2: [instrucción específica con el texto exacto que debe escribir]"
+    }
   ],
   "bio_sugerida": "Bio optimizada de máximo 80 caracteres basada en lo que ves en el perfil"
 }
@@ -1517,8 +1587,10 @@ Devuelve SOLO un objeto JSON válido, sin texto antes ni después:
 Reglas:
 - status: "bueno" si score 7-10, "mejorar" si score 4-6, "malo" si score 1-3
 - Evalúa SOLO lo que ves. Si no ves un elemento, márcalo como malo.
-- Las mejoras deben ser MUY específicas con ejemplos reales
-- La bio_sugerida debe ser máximo 80 caracteres (límite de TikTok)`;
+- Máximo 5 mejoras, ordenadas de mayor a menor impacto.
+- por_que: explica el impacto real en audiencia o ventas, en español cotidiano. Nada de términos técnicos sin explicar.
+- como_hacerlo: pasos numerados con instrucciones exactas, incluyendo el texto concreto que debe escribir.
+- bio_sugerida: máximo 80 caracteres (límite de TikTok). Incluir propuesta de valor + CTA.
 
 async function analizarBio(claudeKey) {
   if (!bioShot || !claudeKey) return;
@@ -1532,7 +1604,7 @@ async function analizarBio(claudeKey) {
       body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 1500,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: comprimida.split(',')[1] } },
-          { type: 'text', text: PROMPT_BIO_TT }
+          { type: 'text', text: PROMPT_BIO_TT + (typeof getDocsContextPrompt === 'function' ? getDocsContextPrompt() : '') }
         ]}]
       })
     });
@@ -1575,14 +1647,32 @@ function renderBio(b) {
           <p style="font-size:.8rem;color:${col(el.status)};font-weight:600;line-height:1.4">${el.feedback}</p>
         </div>`).join('')}
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
-      <div style="background:rgba(22,163,74,.06);border:1.5px solid rgba(22,163,74,.2);border-radius:12px;padding:14px">
-        <div style="font-weight:800;font-size:.82rem;color:#15803d;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">✅ Lo que funciona</div>
+    <div style="margin-bottom:16px">
+      <div style="background:rgba(22,163,74,.06);border:1.5px solid rgba(22,163,74,.2);border-radius:12px;padding:14px;margin-bottom:12px">
+        <div style="font-weight:800;font-size:.82rem;color:#15803d;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">✅ Lo que funciona bien</div>
         ${b.fortalezas.map(f=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#16a34a;flex-shrink:0">→</span>${f}</div>`).join('')}
       </div>
-      <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:12px;padding:14px">
-        <div style="font-weight:800;font-size:.82rem;color:#dc2626;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">🔧 Qué mejorar</div>
-        ${b.mejoras.map((m,i)=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#dc2626;font-weight:800;flex-shrink:0">${i+1}.</span>${m}</div>`).join('')}
+      <div style="font-weight:800;font-size:.82rem;color:#dc2626;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">🔧 Qué mejorar — y cómo hacerlo</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${(b.mejoras||[]).map((m,i)=>{
+          const titulo=typeof m==='string'?m:(m.titulo||m);
+          const porQue=typeof m==='object'?m.por_que:null;
+          const como=typeof m==='object'?m.como_hacerlo:null;
+          return `<div style="border:1.5px solid rgba(220,38,38,.18);border-radius:12px;padding:14px;background:rgba(220,38,38,.02)">
+            <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:${porQue||como?'10px':'0'}">
+              <span style="background:#dc2626;color:#fff;font-weight:900;font-size:.7rem;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</span>
+              <strong style="font-size:.85rem;line-height:1.4">${titulo}</strong>
+            </div>
+            ${porQue?`<div style="background:rgba(147,51,234,.05);border-radius:9px;padding:9px 11px;margin-bottom:7px">
+              <div style="font-size:.69rem;font-weight:800;color:#9333ea;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">💡 Por qué importa</div>
+              <div style="font-size:.79rem;color:#444;line-height:1.5">${porQue}</div>
+            </div>`:''}
+            ${como?`<div style="background:rgba(22,163,74,.05);border-radius:9px;padding:9px 11px">
+              <div style="font-size:.69rem;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">✅ Cómo hacerlo</div>
+              <div style="font-size:.79rem;color:#1a4a1a;line-height:1.6">${como}</div>
+            </div>`:''}
+          </div>`;
+        }).join('')}
       </div>
     </div>
     ${b.bio_sugerida?`
@@ -1797,7 +1887,7 @@ async function analizarGuion(cid) {
     if (tieneGuion) {
       content.push({ type: 'text', text: `Transcripción/guión del video:\n${c.guion.trim()}` });
     }
-    content.push({ type: 'text', text: PROMPT_GUION_TT });
+    content.push({ type: 'text', text: PROMPT_GUION_TT + (typeof getDocsContextPrompt === 'function' ? getDocsContextPrompt() : '') });
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
@@ -2104,6 +2194,88 @@ ${ssHtml}
   a.download = `informe-tiktok-${d.brand.replace(/[^a-z0-9]/gi,'-').toLowerCase()}-${d.fecha.toISOString().split('T')[0]}.doc`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
+}
+
+// ─── Document upload / text extraction ──────────────────────────────────────
+window.docsContextTexts = [];
+
+async function extractPdfText(file) {
+  if (typeof pdfjsLib === 'undefined') return null;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/legacy/build/pdf.worker.min.js';
+  const ab = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    text += tc.items.map(it => it.str).join(' ') + '\n';
+  }
+  return text.trim();
+}
+
+async function extractDocxText(file) {
+  if (typeof JSZip === 'undefined') return null;
+  const ab = await file.arrayBuffer();
+  const zip = await JSZip.loadAsync(ab);
+  const xmlFile = zip.file('word/document.xml');
+  if (!xmlFile) return null;
+  const xml = await xmlFile.async('string');
+  return xml.replace(/<w:t[^>]*>/g, ' ').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+
+async function handleDocFiles(files) {
+  const status = document.getElementById('docsStatus');
+  const arr = Array.from(files);
+  status.textContent = `⏳ Procesando ${arr.length} archivo(s)...`;
+  for (const file of arr) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    let text = null;
+    try {
+      if (ext === 'txt') {
+        text = await file.text();
+      } else if (ext === 'pdf') {
+        text = await extractPdfText(file);
+      } else if (ext === 'docx' || ext === 'doc') {
+        text = await extractDocxText(file);
+      }
+    } catch(e) { text = null; }
+    if (text && text.length > 10) {
+      window.docsContextTexts.push({ name: file.name, text: text.slice(0, 8000) });
+    } else {
+      window.docsContextTexts.push({ name: file.name, text: `[No se pudo extraer texto de ${file.name}]` });
+    }
+  }
+  renderDocChips();
+  status.textContent = `✅ ${window.docsContextTexts.length} informe(s) cargado(s) — se sumarán al análisis`;
+  document.getElementById('docsFileInput').value = '';
+}
+
+function removeDoc(idx) {
+  window.docsContextTexts.splice(idx, 1);
+  renderDocChips();
+  const status = document.getElementById('docsStatus');
+  status.textContent = window.docsContextTexts.length > 0
+    ? `✅ ${window.docsContextTexts.length} informe(s) cargado(s) — se sumarán al análisis`
+    : '';
+}
+
+function renderDocChips() {
+  const chipList = document.getElementById('docsChipList');
+  if (!window.docsContextTexts.length) { chipList.style.display = 'none'; return; }
+  chipList.style.display = 'flex';
+  chipList.innerHTML = window.docsContextTexts.map((d, i) =>
+    `<div style="display:flex;align-items:center;gap:5px;background:rgba(254,44,85,.08);border:1px solid rgba(254,44,85,.2);border-radius:20px;padding:3px 10px;font-size:.72rem;color:var(--accent)">
+      📄 ${d.name}
+      <span onclick="removeDoc(${i})" style="cursor:pointer;color:#aaa;font-size:.9rem;margin-left:2px" title="Quitar">✕</span>
+    </div>`
+  ).join('');
+}
+
+function getDocsContextPrompt() {
+  if (!window.docsContextTexts || !window.docsContextTexts.length) return '';
+  return '\n\n---\nCONTEXTO ADICIONAL — INFORMES ANTERIORES:\n' +
+    window.docsContextTexts.map(d => `\n[${d.name}]:\n${d.text}`).join('\n\n') +
+    '\n---\nTen en cuenta estos informes anteriores como contexto adicional para tu análisis.\n';
 }
 </script>
 </body>

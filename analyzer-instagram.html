@@ -244,8 +244,14 @@ footer a{color:var(--accent);text-decoration:none}
 .extract-status{font-size:.8rem;color:var(--muted);margin-top:8px}
 
 /* ALGORITHM GUIDE */
-.algo-guide-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#e91e8c,#9333ea);color:#fff;border:none;padding:8px 18px;border-radius:99px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:18px;transition:opacity .2s;letter-spacing:.01em}
-.algo-guide-btn:hover{opacity:.88}
+.algo-guide-card{background:linear-gradient(135deg,rgba(233,30,140,.08),rgba(147,51,234,.06));border:1.5px solid rgba(233,30,140,.25);border-radius:16px;padding:16px 20px;margin-bottom:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;text-align:left}
+.algo-guide-card:hover{border-color:rgba(233,30,140,.5);background:linear-gradient(135deg,rgba(233,30,140,.12),rgba(147,51,234,.09));transform:translateY(-1px)}
+.algo-guide-icon{font-size:2rem;flex-shrink:0;line-height:1}
+.algo-guide-body{flex:1}
+.algo-guide-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:3px}
+.algo-guide-title{font-size:.97rem;font-weight:800;color:var(--text);margin-bottom:3px;line-height:1.3}
+.algo-guide-desc{font-size:.77rem;color:var(--muted);line-height:1.45}
+.algo-guide-arrow{font-size:1.1rem;color:var(--accent);flex-shrink:0;font-weight:900}
 #guiaAlgoState{display:none;max-width:780px;margin:0 auto;padding:24px 24px 60px}
 .algo-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.82rem;font-family:inherit;padding:0;margin-bottom:20px;display:flex;align-items:center;gap:5px}
 .algo-back:hover{color:var(--accent)}
@@ -279,6 +285,8 @@ footer a{color:var(--accent);text-decoration:none}
 .algo-compare-col.ig h4{color:var(--purple)}
 .algo-compare-col.tt h4{color:#fe2c55}
 </style>
+<script src="https://unpkg.com/pdfjs-dist@3.11.174/legacy/build/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
 
@@ -292,8 +300,14 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="wrap">
     <h1 class="page-title">Analiza tu <span>Instagram</span></h1>
     <p class="page-sub">Sin iniciar sesión · Sin riesgo de baneo · Tu cuenta siempre segura</p>
-    <div style="text-align:center;margin-bottom:8px">
-      <button class="algo-guide-btn" onclick="mostrarGuiaAlgo()">🧠 Guía del Algoritmo de Instagram 2026 →</button>
+    <div class="algo-guide-card" onclick="mostrarGuiaAlgo()">
+      <div class="algo-guide-icon">🧠</div>
+      <div class="algo-guide-body">
+        <div class="algo-guide-label">Guía gratuita · Actualizada 2026</div>
+        <div class="algo-guide-title">¿Cómo funciona el algoritmo de Instagram?</div>
+        <div class="algo-guide-desc">Aprende qué hace que tu contenido llegue a más personas: Reels, carruseles, ganchos, horarios y lo que el algoritmo premia o penaliza.</div>
+      </div>
+      <div class="algo-guide-arrow">→</div>
     </div>
     <div style="background:linear-gradient(135deg,rgba(22,163,74,.07),rgba(22,163,74,.03));border:1.5px solid rgba(22,163,74,.25);border-radius:12px;padding:12px 16px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start">
       <div style="font-size:1.4rem;flex-shrink:0">🔒</div>
@@ -560,6 +574,18 @@ footer a{color:var(--accent);text-decoration:none}
         </div>
       </div>
 
+      <!-- ─── Informes anteriores ─────────────────────────────── -->
+      <div style="margin-top:22px;border:1.5px dashed rgba(233,30,140,.25);border-radius:14px;padding:16px 18px;background:rgba(233,30,140,.03)">
+        <div style="font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:2px">📄 Informes anteriores — opcional</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:10px">Sube reportes previos en PDF, Word (.docx) o texto (.txt) para que la IA los considere en el análisis. Puedes subir más de 20 archivos.</div>
+        <div id="docsDropZone" onclick="document.getElementById('docsFileInput').click()" style="border:1.5px dashed rgba(233,30,140,.3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:background .2s;font-size:.8rem;color:var(--muted)" onmouseenter="this.style.background='rgba(233,30,140,.06)'" onmouseleave="this.style.background='transparent'">
+          ⬆️ Haz clic para subir archivos PDF, Word (.docx) o .txt
+        </div>
+        <input type="file" id="docsFileInput" multiple accept=".pdf,.docx,.doc,.txt" style="display:none" onchange="handleDocFiles(this.files)">
+        <div id="docsChipList" style="display:none;margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
+        <div id="docsStatus" style="font-size:.72rem;color:var(--muted);margin-top:6px"></div>
+      </div>
+
       <button class="analyze-btn" onclick="analizarInstagram()">📊 Generar análisis completo →</button>
     </div>
   </div>
@@ -683,7 +709,7 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="algo-tabs">
     <div class="algo-tab active" onclick="algoTab('reels',this)">📹 Reels</div>
     <div class="algo-tab" onclick="algoTab('carrusel',this)">🖼️ Carrusel</div>
-    <div class="algo-tab" onclick="algoTab('hook',this)">🎣 Hook</div>
+    <div class="algo-tab" onclick="algoTab('hook',this)">🎣 Gancho</div>
     <div class="algo-tab" onclick="algoTab('hashtags',this)">🏷️ Hashtags</div>
     <div class="algo-tab" onclick="algoTab('penaliza',this)">🚫 Evitar</div>
     <div class="algo-tab" onclick="algoTab('vstt',this)">⚔️ IG vs TK</div>
@@ -694,42 +720,42 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">📊 Señales de ranking (orden de importancia)</div>
       <ul class="algo-list">
-        <li data-icon="1️⃣">Watch time & completion rate — cuánto tiempo ven el Reel y si lo terminan</li>
-        <li data-icon="2️⃣">Shares (compartidos) — especialmente por DM y a Stories. La señal más poderosa de 2026</li>
-        <li data-icon="3️⃣">Saves (guardados) — indica que el contenido tiene valor a largo plazo. Pesa más que los likes</li>
-        <li data-icon="4️⃣">Comments — calidad sobre cantidad. Comentarios con palabras clave ayudan más</li>
-        <li data-icon="5️⃣">Likes — importantes pero los menos pesados de todos</li>
-        <li data-icon="6️⃣">Profile visits desde el Reel — señal de que el contenido genera interés en quien lo crea</li>
+        <li data-icon="1️⃣">Tiempo de reproducción y tasa de finalización — cuánto tiempo ven el Reel y si lo terminan completo</li>
+        <li data-icon="2️⃣">Compartidos — especialmente por mensaje directo (DM) y a Historias. La señal más poderosa de 2026</li>
+        <li data-icon="3️⃣">Guardados — indica que el contenido tiene valor a largo plazo. Pesa más que los me gusta</li>
+        <li data-icon="4️⃣">Comentarios — calidad sobre cantidad. Comentarios con palabras clave ayudan más</li>
+        <li data-icon="5️⃣">Me gusta — importantes pero los menos pesados de todos</li>
+        <li data-icon="6️⃣">Visitas al perfil desde el Reel — señal de que el contenido genera interés en quien lo crea</li>
       </ul>
     </div>
     <div class="algo-section">
       <div class="algo-section-title">⏱️ Duración óptima por tipo de contenido</div>
       <div class="algo-num-grid">
         <div class="algo-num-card"><div class="an-val">5-15s</div><div class="an-lbl">Clips rápidos, memes, momentos</div></div>
-        <div class="algo-num-card"><div class="an-val">15-30s</div><div class="an-lbl">Awareness y entretenimiento</div></div>
-        <div class="algo-num-card"><div class="an-val">30-60s</div><div class="an-lbl">✨ Sweet spot ventas + educación</div></div>
+        <div class="algo-num-card"><div class="an-val">15-30s</div><div class="an-lbl">Reconocimiento y entretenimiento</div></div>
+        <div class="algo-num-card"><div class="an-val">30-60s</div><div class="an-lbl">✨ Punto ideal: ventas + educación</div></div>
         <div class="algo-num-card"><div class="an-val">60-90s</div><div class="an-lbl">Tutoriales y casos de éxito</div></div>
         <div class="algo-num-card"><div class="an-val">90s-3min</div><div class="an-lbl">Solo si tienes audiencia sólida</div></div>
       </div>
-      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">⚠️ Regla de oro: prefiere un video de 30 seg con 80% de completion a uno de 90 seg con 30%. La tasa de finalización vale más que la duración.</p>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">⚠️ Regla de oro: prefiere un video de 30 seg con 80% de tasa de finalización a uno de 90 seg con 30%. Que la gente lo vea completo vale más que la duración.</p>
     </div>
     <div class="algo-section">
       <div class="algo-section-title">🔄 Cómo distribuye Instagram</div>
       <ul class="algo-list">
-        <li data-icon="1️⃣">Primero muestra el Reel a tus seguidores actuales (social graph)</li>
-        <li data-icon="2️⃣">Si performa bien con ellos, pasa al tab de Explore y Reels de no-seguidores</li>
-        <li data-icon="3️⃣">Instagram es híbrido: social graph (conocidos) + interest graph (intereses)</li>
-        <li data-icon="📌">La cuenta nueva tiene ventaja: Instagram la empuja en Explore para ganar usuarios</li>
-        <li data-icon="💡">Los Reels con muchos shares vía DM reciben un boost significativo en distribución</li>
+        <li data-icon="1️⃣">Primero muestra el Reel a tus seguidores actuales (red de personas que te siguen)</li>
+        <li data-icon="2️⃣">Si funciona bien con ellos, pasa a la sección Explorar y llega a personas que no te siguen</li>
+        <li data-icon="3️⃣">Instagram es híbrido: usa tu red de seguidores (conocidos) + red de intereses (personas con gustos similares)</li>
+        <li data-icon="📌">La cuenta nueva tiene ventaja: Instagram la impulsa en Explorar para conseguir usuarios</li>
+        <li data-icon="💡">Los Reels con muchos compartidos por mensaje directo reciben un impulso significativo en distribución</li>
       </ul>
     </div>
     <div class="algo-section">
       <div class="algo-section-title">🆕 Actualizaciones 2026</div>
       <ul class="algo-list">
         <li data-icon="✅">Reels hasta 3 minutos ahora disponibles (antes era 90 seg)</li>
-        <li data-icon="✅">Mayor peso a contenido "DM-worthy" — si la gente lo manda por DM, el alcance se dispara</li>
-        <li data-icon="✅">Collaborative posts (collab) amplifican la audiencia de ambas cuentas</li>
-        <li data-icon="✅">Las keywords en el caption ahora están indexadas — Instagram funciona como buscador</li>
+        <li data-icon="✅">Mayor peso al contenido que la gente comparte por mensaje directo — si lo reenvían, el alcance se dispara</li>
+        <li data-icon="✅">Publicaciones colaborativas (collab) amplifican la audiencia de ambas cuentas</li>
+        <li data-icon="✅">Las palabras clave en el texto de la publicación ahora están indexadas — Instagram funciona como buscador</li>
         <li data-icon="⚠️">Mayor penalización a Reels con marca de agua de TikTok (reduce alcance ~40%)</li>
         <li data-icon="⚠️">Contenido generado por IA con texto genérico recibe menos distribución</li>
       </ul>
@@ -741,7 +767,7 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">🖼️ Por qué el carrusel es el formato con más alcance en IG</div>
       <ul class="algo-list">
-        <li data-icon="🔄">Instagram muestra el carrusel DOS VECES en el feed si no pasaste todos los slides la primera vez</li>
+        <li data-icon="🔄">Instagram muestra el carrusel DOS VECES en el inicio si no viste todas las páginas la primera vez</li>
         <li data-icon="⏱️">Mayor tiempo de visualización por publicación = más señal positiva al algoritmo</li>
         <li data-icon="💾">Los carruseles educativos generan el mayor número de saves por publicación</li>
         <li data-icon="💬">Los carruseles tipo "¿Cuántos aplican para ti?" generan más comentarios que los Reels</li>
@@ -750,28 +776,28 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">📐 Estructura de carrusel que convierte</div>
       <ul class="algo-list">
-        <li data-icon="1️⃣"><strong>Slide 1 (portada):</strong> la promesa. "5 errores que te están quitando ventas" — debe funcionar como un mini thumbnail</li>
-        <li data-icon="2️⃣"><strong>Slides 2-4:</strong> el valor. Información concreta, datos, ejemplos. Una idea por slide</li>
-        <li data-icon="3️⃣"><strong>Slide 5-7:</strong> profundización. El "cómo" de cada punto. Aquí pones tu expertise</li>
-        <li data-icon="4️⃣"><strong>Slide penúltimo:</strong> recapitulación rápida o dato sorpresa para no cerrar antes del CTA</li>
-        <li data-icon="5️⃣"><strong>Último slide:</strong> CTA claro. "Guarda para no olvidar" / "Comenta tu duda" / "Sígueme para más"</li>
+        <li data-icon="1️⃣"><strong>Página 1 (portada):</strong> la promesa. "5 errores que te están quitando ventas" — debe funcionar como una miniatura que engancha</li>
+        <li data-icon="2️⃣"><strong>Páginas 2-4:</strong> el valor. Información concreta, datos, ejemplos. Una idea por página</li>
+        <li data-icon="3️⃣"><strong>Páginas 5-7:</strong> profundización. El "cómo" de cada punto. Aquí demuestras tu conocimiento</li>
+        <li data-icon="4️⃣"><strong>Penúltima página:</strong> recapitulación rápida o dato sorpresa para no cerrar antes del llamado a la acción</li>
+        <li data-icon="5️⃣"><strong>Última página:</strong> llamado a la acción claro. "Guarda para no olvidar" / "Comenta tu duda" / "Sígueme para más"</li>
       </ul>
     </div>
     <div class="algo-section">
       <div class="algo-section-title">📏 Números clave</div>
       <div class="algo-num-grid">
-        <div class="algo-num-card"><div class="an-val">5-10</div><div class="an-lbl">Slides óptimos por carrusel</div></div>
+        <div class="algo-num-card"><div class="an-val">5-10</div><div class="an-lbl">Páginas óptimas por carrusel</div></div>
         <div class="algo-num-card"><div class="an-val">2x</div><div class="an-lbl">Veces que se muestra si no terminas</div></div>
-        <div class="algo-num-card"><div class="an-val">+30%</div><div class="an-lbl">Más saves que fotos estáticas</div></div>
-        <div class="algo-num-card"><div class="an-val">1:1 o 4:5</div><div class="an-lbl">Ratio ideal para máximo espacio en feed</div></div>
+        <div class="algo-num-card"><div class="an-val">+30%</div><div class="an-lbl">Más guardados que fotos estáticas</div></div>
+        <div class="algo-num-card"><div class="an-val">1:1 o 4:5</div><div class="an-lbl">Proporción ideal para máximo espacio en el inicio</div></div>
       </div>
     </div>
     <div class="algo-section">
-      <div class="algo-section-title">🎨 Tipos de carrusel con mejor performance</div>
+      <div class="algo-section-title">🎨 Tipos de carrusel con mejor rendimiento</div>
       <div class="algo-row">
         <span class="algo-tag green">Listas "X errores que..."</span>
         <span class="algo-tag green">Tutoriales paso a paso</span>
-        <span class="algo-tag green">Before/After</span>
+        <span class="algo-tag green">Antes/Después</span>
         <span class="algo-tag green">Datos y estadísticas</span>
         <span class="algo-tag green">"Guarda esto para cuando..."</span>
         <span class="algo-tag green">Checklist accionables</span>
@@ -784,19 +810,19 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="algo-section">
       <div class="algo-section-title">🎣 Los primeros 3 segundos lo son TODO</div>
       <ul class="algo-list">
-        <li data-icon="⚡">En Instagram el hook tiene DOS partes: el visual del primer frame Y el caption visible sin "ver más"</li>
+        <li data-icon="⚡">En Instagram el gancho (hook) tiene DOS partes: la imagen del primer segundo Y el texto visible antes del "ver más"</li>
         <li data-icon="📸">La foto de portada del Reel es crítica — se ve en tu perfil. TikTok no tiene esta restricción</li>
-        <li data-icon="🧠">El cerebro decide en 0.3 seg si sigue viendo. El movimiento o texto llamativo en el primer frame ayuda</li>
-        <li data-icon="💾">Hooks que empiezan con "Guarda esto..." activan la intención de guardar desde el inicio</li>
+        <li data-icon="🧠">El cerebro decide en 0.3 seg si sigue viendo. El movimiento o texto llamativo en el primer segundo ayuda</li>
+        <li data-icon="💾">Ganchos que empiezan con "Guarda esto..." activan la intención de guardar desde el inicio</li>
       </ul>
     </div>
     <div class="algo-section">
-      <div class="algo-section-title">🏆 Fórmulas de hook que funcionan en Instagram</div>
+      <div class="algo-section-title">🏆 Fórmulas de gancho que funcionan en Instagram</div>
       <ul class="algo-list">
         <li data-icon="✅"><strong>Pregunta que incomoda:</strong> "¿Por qué tu contenido no vende aunque tengas seguidores?"</li>
         <li data-icon="✅"><strong>Dato sorpresa:</strong> "El 94% de los negocios online fallan en los primeros 2 años. Aquí el porqué."</li>
-        <li data-icon="✅"><strong>Resultado primero:</strong> Muestra el after antes del before. La curiosidad hace que vean cómo llegaste ahí</li>
-        <li data-icon="✅"><strong>Guardar-trigger:</strong> "3 fórmulas de caption que te van a hacer crecer — guarda esto"</li>
+        <li data-icon="✅"><strong>Resultado primero:</strong> Muestra el resultado antes del proceso. La curiosidad hace que vean cómo llegaste ahí</li>
+        <li data-icon="✅"><strong>Invitación a guardar:</strong> "3 fórmulas de texto que te van a hacer crecer — guarda esto"</li>
         <li data-icon="✅"><strong>Afirmación contraintuitiva:</strong> "Publicar todos los días está destruyendo tu cuenta de Instagram"</li>
         <li data-icon="✅"><strong>Identificación directa:</strong> "Si eres emprendedor y no vendes suficiente, este video es para ti"</li>
         <li data-icon="❌"><strong>No hacer:</strong> "Hola amigos! Hoy les traigo..." — no genera expectativa ni curiosidad</li>
@@ -804,12 +830,12 @@ footer a{color:var(--accent);text-decoration:none}
       </ul>
     </div>
     <div class="algo-section">
-      <div class="algo-section-title">📝 El caption como segundo hook</div>
+      <div class="algo-section-title">📝 El texto de la publicación como segundo gancho</div>
       <ul class="algo-list">
-        <li data-icon="💡">Las primeras 125 caracteres del caption son visibles sin "ver más" — úsalas como hook escrito</li>
-        <li data-icon="🔑">Las keywords en el caption ahora son indexadas por el buscador de Instagram</li>
-        <li data-icon="📌">Captions largos con valor real generan más saves y comments que los cortos</li>
-        <li data-icon="🎯">Termina el caption con una pregunta directa: genera comentarios y el algoritmo lo premia</li>
+        <li data-icon="💡">Los primeros 125 caracteres del texto son visibles sin "ver más" — úsalos como gancho escrito</li>
+        <li data-icon="🔑">Las palabras clave en el texto ahora están indexadas por el buscador de Instagram</li>
+        <li data-icon="📌">Textos largos con valor real generan más guardados y comentarios que los cortos</li>
+        <li data-icon="🎯">Termina el texto con una pregunta directa: genera comentarios y el algoritmo lo premia</li>
       </ul>
     </div>
   </div>
@@ -829,11 +855,11 @@ footer a{color:var(--accent);text-decoration:none}
       </ul>
     </div>
     <div class="algo-section">
-      <div class="algo-section-title">🎵 Audio trending en Instagram</div>
+      <div class="algo-section-title">🎵 Audios en tendencia en Instagram</div>
       <ul class="algo-list">
-        <li data-icon="🎵">Los audios trending en Instagram dan un boost de distribución (aunque menor que en TikTok)</li>
-        <li data-icon="📈">Busca audios con la flecha ↗️ en Instagram — indica que están en tendencia</li>
-        <li data-icon="⏰">La ventana óptima para usar un audio trending es entre 2-5 días después de que empieza a viralizarse</li>
+        <li data-icon="🎵">Los audios en tendencia dan un impulso de distribución en Instagram (aunque menor que en TikTok)</li>
+        <li data-icon="📈">Busca audios con la flecha ↗️ en Instagram — indica que están en tendencia ahora</li>
+        <li data-icon="⏰">El momento óptimo para usar un audio en tendencia es entre 2-5 días después de que empieza a crecer</li>
         <li data-icon="🎯">El audio original (sin música) funciona bien para contenido educativo — más auténtico</li>
       </ul>
     </div>
@@ -858,23 +884,23 @@ footer a{color:var(--accent);text-decoration:none}
         <li data-icon="❌"><strong>Links en el caption:</strong> Instagram quiere que todo pase dentro de la plataforma. Los links reducen el alcance</li>
         <li data-icon="❌"><strong>Mencionar YouTube o TikTok en el video:</strong> Instagram penaliza promover a la competencia</li>
         <li data-icon="❌"><strong>Comportamiento de spam:</strong> muchos follows/unfollows rápidos, comentarios repetidos, DMs masivos</li>
-        <li data-icon="❌"><strong>Bajo engagement histórico:</strong> si tus publicaciones anteriores tienen mal performance, las nuevas parten con desventaja</li>
+        <li data-icon="❌"><strong>Baja interacción histórica:</strong> si tus publicaciones anteriores tienen mal rendimiento, las nuevas parten con desventaja</li>
         <li data-icon="❌"><strong>Contenido reciclado sin edición:</strong> repostear el mismo video varias veces sin cambios</li>
-        <li data-icon="❌"><strong>Shadowban:</strong> si usas hashtags baneados o haces actividad sospechosa, tu contenido se oculta sin aviso</li>
-        <li data-icon="⚠️"><strong>Breaks prolongados:</strong> no publicar por más de 2 semanas hace que el algoritmo "olvide" tu cuenta</li>
+        <li data-icon="❌"><strong>Shadowban (bloqueo invisible):</strong> si usas etiquetas bloqueadas o haces actividad sospechosa, tu contenido se oculta sin aviso</li>
+        <li data-icon="⚠️"><strong>Pausas largas:</strong> no publicar por más de 2 semanas hace que el algoritmo "olvide" tu cuenta</li>
       </ul>
     </div>
     <div class="algo-section">
       <div class="algo-section-title">✅ Lo que SÍ premia el algoritmo</div>
       <div class="algo-row">
-        <span class="algo-tag green">Contenido "DM-worthy"</span>
-        <span class="algo-tag green">Muchos saves</span>
+        <span class="algo-tag green">Contenido que la gente reenvía</span>
+        <span class="algo-tag green">Muchos guardados</span>
         <span class="algo-tag green">Responder comentarios rápido</span>
-        <span class="algo-tag green">Collabs</span>
+        <span class="algo-tag green">Publicaciones colaborativas</span>
         <span class="algo-tag green">Consistencia semanal</span>
-        <span class="algo-tag green">Keywords en caption</span>
-        <span class="algo-tag green">Originado en IG (no repost)</span>
-        <span class="algo-tag green">Stories activas</span>
+        <span class="algo-tag green">Palabras clave en el texto</span>
+        <span class="algo-tag green">Creado en IG (no repost)</span>
+        <span class="algo-tag green">Historias activas</span>
       </div>
     </div>
   </div>
@@ -887,26 +913,26 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="algo-compare-col ig">
           <h4>📸 Instagram</h4>
           <ul class="algo-list" style="font-size:.78rem">
-            <li data-icon="🔗">Social graph primero (tus seguidores ven tu contenido)</li>
-            <li data-icon="💾">Los SAVES son la señal más diferenciadora</li>
+            <li data-icon="🔗">Primero llega a tus seguidores actuales</li>
+            <li data-icon="💾">Los GUARDADOS son la señal más diferenciadora</li>
             <li data-icon="📷">La portada del Reel importa (se ve en el perfil)</li>
-            <li data-icon="📝">El caption tiene peso SEO (keywords indexadas)</li>
-            <li data-icon="⏰">Horario de publicación importa más</li>
-            <li data-icon="📊">Carrusel tiene mayor alcance que foto</li>
-            <li data-icon="🤝">Stories mantienen relación con seguidores existentes</li>
+            <li data-icon="📝">El texto de la publicación tiene peso en búsquedas (palabras clave indexadas)</li>
+            <li data-icon="⏰">El horario de publicación importa más</li>
+            <li data-icon="📊">El carrusel tiene mayor alcance que la foto</li>
+            <li data-icon="🤝">Las Historias mantienen la relación con tus seguidores</li>
             <li data-icon="🌱">Crecer desde 0 es más difícil que en TikTok</li>
           </ul>
         </div>
         <div class="algo-compare-col tt">
           <h4>🎵 TikTok</h4>
           <ul class="algo-list" style="font-size:.78rem">
-            <li data-icon="🌍">Interest graph (te muestran a no-seguidores desde el día 1)</li>
-            <li data-icon="🔁">Los SHARES son la señal más poderosa</li>
-            <li data-icon="▶️">El primer frame importa pero no hay "portada de perfil"</li>
-            <li data-icon="🔊">Audio trending da un boost mayor que en IG</li>
-            <li data-icon="⏰">Horario de publicación importa menos</li>
-            <li data-icon="⏱️">Completion rate es la métrica #1 del algoritmo</li>
-            <li data-icon="🔥">Viralizarse con 0 seguidores es completamente normal</li>
+            <li data-icon="🌍">Red de intereses (te muestra a personas sin seguidores desde el día 1)</li>
+            <li data-icon="🔁">Los COMPARTIDOS son la señal más poderosa</li>
+            <li data-icon="▶️">El primer segundo importa pero no hay "portada de perfil"</li>
+            <li data-icon="🔊">El audio en tendencia tiene mayor impulso que en IG</li>
+            <li data-icon="⏰">El horario de publicación importa menos</li>
+            <li data-icon="⏱️">La tasa de finalización (que vean el video completo) es la métrica #1 del algoritmo</li>
+            <li data-icon="🔥">Hacerse viral con 0 seguidores es completamente normal</li>
             <li data-icon="🌱">Crecer desde 0 es más fácil y rápido</li>
           </ul>
         </div>
@@ -917,9 +943,9 @@ footer a{color:var(--accent);text-decoration:none}
       <ul class="algo-list">
         <li data-icon="📱">Crea primero en TikTok (sin música con derechos problemáticos) → descarga sin marca de agua → sube a Instagram Reels</li>
         <li data-icon="💡">Adapta el hook: en TikTok puede ser más agresivo y rápido; en Instagram puede tener más contexto</li>
-        <li data-icon="📊">En TikTok: prioriza videos cortos con alta tasa de finalización. En Instagram: prioriza saves y shares por DM</li>
-        <li data-icon="📝">En Instagram aprovecha el caption para añadir valor que TikTok no tiene</li>
-        <li data-icon="🎵">En TikTok: usa audio trending siempre que sea posible. En Instagram es opcional</li>
+        <li data-icon="📊">En TikTok: prioriza videos cortos con alta tasa de finalización. En Instagram: prioriza guardados y compartidos por mensaje directo</li>
+        <li data-icon="📝">En Instagram aprovecha el texto de la publicación para añadir valor que TikTok no tiene</li>
+        <li data-icon="🎵">En TikTok: usa audio en tendencia siempre que sea posible. En Instagram es opcional</li>
         <li data-icon="⚠️">Nunca publiques el mismo video con la misma descripción exacta en ambas plataformas el mismo día</li>
       </ul>
     </div>
@@ -1310,20 +1336,62 @@ function analizarInstagram() {
 
   // Recs
   const recs = [];
-  if (saveRate<2) recs.push({p:'alta',t:'Aumentar tasa de guardados (prioridad #1)',w:`Tu tasa es ${f(saveRate)}%. El algoritmo impulsa masivamente posts con alta tasa de guardados. Publica guías, listas y tutoriales que la gente quiera guardar como referencia.`});
-  if (shareRate<1) recs.push({p:'alta',t:'Crear contenido que se comparte',w:`Tasa de compartidos ${f(shareRate)}%. Los shares son la señal más poderosa para viralizarse. Publica frases impactantes, datos sorprendentes y situaciones cotidianas que quieran enviar a amigos.`});
-  if (freq<3) recs.push({p:'alta',t:`Publicar más: mínimo 3 veces por semana`,w:`Publicas ${freq||0} vez/veces por semana. El algoritmo favorece cuentas consistentes. Plan mínimo: 2 Reels + 1 carrusel por semana.`});
-  if (reelPct<30) recs.push({p:'media',t:'Incorporar Reels como formato principal',w:'Los Reels tienen 3-4x más alcance que fotos. Son la principal puerta a nuevas audiencias. Meta: 50% de tu contenido en Reels.'});
-  if (engRate<3) recs.push({p:'alta',t:'Mejorar los hooks de tus publicaciones',w:`Engagement ${f(engRate)}%. Los primeros 2 segundos de un Reel y la primera línea del caption determinan si alguien sigue viendo. Empieza siempre con una pregunta o dato sorprendente.`});
-  if (growthRate<1) recs.push({p:'media',t:'Implementar colaboraciones',w:`Crecimiento mensual ${f(growthRate)}%. Para acelerar: haz collab posts con cuentas de tu nicho, etiqueta marcas que podrían repostear.`});
-  recs.push({p:'media',t:'Optimizar tu bio como página de ventas',w:'Tu bio son 3 segundos para convencer a alguien de seguirte. Estructura: quién eres + a quién ayudas + qué gana siguiéndote + CTA claro con link en bio.'});
-  recs.push({p:'baja',t:'Usar palabras clave en captions (no solo hashtags)',w:'Instagram funciona como buscador. Las palabras clave en el caption determinan a quién le aparece tu contenido. Escribe como hablaría tu cliente cuando busca tu tema.'});
+  if (saveRate<2) recs.push({p:'alta',
+    t:'Aumentar los guardados — prioridad #1 del algoritmo',
+    w:`Tu tasa de guardados es ${f(saveRate)}%, por debajo del 2% mínimo recomendado.`,
+    pq:`Instagram le da más distribución a los posts que la gente guarda que a los que solo les da "me gusta". Un guardado le dice al algoritmo: "este contenido tiene valor para volver a ver". Con una tasa alta de guardados, Instagram muestra tu contenido a más personas que no te siguen — sin pagar publicidad.`,
+    como:`Paso 1: En tu próximo Reel o carrusel, incluye información útil que la gente quiera guardar para después (guías paso a paso, listas de herramientas, recetas, plantillas, errores comunes). Paso 2: Al final del video o la última página del carrusel, agrega un texto: "Guarda esto para no olvidarlo 📌". Paso 3: Mide tus guardados cada semana en Estadísticas → publicación → Guardados.`});
+  if (shareRate<1) recs.push({p:'alta',
+    t:'Crear contenido que la gente reenvíe a otros',
+    w:`Tu tasa de compartidos es ${f(shareRate)}%. Cuando alguien comparte tu contenido por mensaje directo, el algoritmo lo impulsa masivamente.`,
+    pq:`Instagram considera que si alguien reenvía tu contenido por mensaje directo es porque le pareció MUY valioso. Es la señal más poderosa para que el algoritmo te lleve a personas nuevas. Es básicamente publicidad gratis generada por tu propia audiencia.`,
+    como:`Paso 1: Publica contenido que cause una reacción fuerte: frases que definen exactamente cómo se siente tu cliente, datos que sorprenden, situaciones cómicas de tu nicho. Paso 2: Termina el video con "Envíale esto a alguien que necesite verlo 👆". Paso 3: Revisa en Estadísticas → Compartidos cuántos tiene cada publicación para identificar qué tema funciona mejor.`});
+  if (freq<3) recs.push({p:'alta',
+    t:`Publicar más seguido — mínimo 3 veces por semana`,
+    w:`Estás publicando ${freq||0} vez/veces por semana. El algoritmo favorece cuentas activas.`,
+    pq:`Instagram clasifica las cuentas por nivel de actividad. Si publicas menos de 3 veces por semana, el algoritmo te considera "cuenta poco activa" y muestra tu contenido a menos personas, incluso a tus propios seguidores. La consistencia le dice al algoritmo que eres un creador serio.`,
+    como:`Paso 1: Planea tu semana de contenido los domingos: 2 Reels + 1 carrusel como mínimo. Paso 2: Graba varios videos en un solo día y publícalos durante la semana. Paso 3: Usa el programador nativo de Instagram (Meta Business Suite) para agendar publicaciones. Paso 4: Si no puedes con 3, empieza con 2 y sube a 3 cuando tengas el ritmo.`});
+  if (reelPct<30) recs.push({p:'media',
+    t:'Publicar más Reels — son tu mayor fuente de alcance gratuito',
+    w:'Los Reels llegan a 3-4 veces más personas que las fotos o carruseles.',
+    pq:`Instagram está priorizando el video corto porque compite con TikTok. Por eso, cuando publicas un Reel, el algoritmo lo muestra automáticamente a personas que no te siguen en la sección Explorar. Una foto o carrusel casi nunca llega a personas fuera de tus seguidores.`,
+    como:`Paso 1: Convierte tus carruseles más exitosos en Reels: graba una pantalla donde apareces leyendo cada página del carrusel. Paso 2: Usa la cámara del celular y graba en vertical (9:16). Paso 3: Tu meta es que el 50% o más de tu contenido sean Reels. Paso 4: Para ideas, mira qué Reels tienen más guardados en tu nicho.`});
+  if (engRate<3) recs.push({p:'alta',
+    t:'Mejorar el gancho de tus publicaciones — los primeros 2 segundos',
+    w:`Tu tasa de interacción (engagement rate) es ${f(engRate)}%. Los primeros segundos deciden todo.`,
+    pq:`El algoritmo de Instagram mide si la gente sigue viendo tu Reel o desliza rápido. Si en los primeros 2 segundos no captura la atención, el algoritmo asume que el contenido no es bueno y deja de distribuirlo. Un buen inicio puede triplicar el alcance de un video.`,
+    como:`Paso 1: Empieza SIEMPRE con una frase de impacto antes de presentarte. Ejemplos: "El error que está destruyendo tu cuenta de Instagram" o "¿Por qué no vendes aunque tienes seguidores?". Paso 2: Nunca empieces con "Hola, soy X y hoy les voy a hablar de...". Paso 3: Pon texto en pantalla desde el segundo 0 para capturar a quien tiene el sonido apagado.`});
+  if (growthRate<1) recs.push({p:'media',
+    t:'Hacer publicaciones colaborativas para crecer más rápido',
+    w:`Tu crecimiento mensual es ${f(growthRate)}%. Las colaboraciones con otras cuentas lo aceleran.`,
+    pq:`Una publicación colaborativa (collab) aparece en el perfil de DOS cuentas al mismo tiempo. Esto significa que tu contenido llega automáticamente a los seguidores de la otra cuenta — sin pagar nada. Es la forma más efectiva de crecer rápido en Instagram en 2026.`,
+    como:`Paso 1: Identifica 3-5 cuentas de tu nicho con audiencia similar (no competidores directos, sino complementarios). Paso 2: Crea un Reel que beneficie a ambas audiencias. Paso 3: Al publicar, toca "Etiquetar personas" → "Invitar a colaborar". Paso 4: La otra cuenta acepta y el post aparece en ambos perfiles.`});
+  recs.push({p:'media',
+    t:'Optimizar tu bio para convertir visitas en seguidores',
+    w:'Tu bio son 3 segundos para convencer a alguien de seguirte.',
+    pq:`Cuando alguien ve tu Reel y le gusta, lo primero que hace es ir a tu perfil. Si tu bio no explica claramente qué haces y por qué seguirte, sale sin seguirte. Una bio bien escrita puede duplicar la tasa de conversión de visitas a seguidores.`,
+    como:`Paso 1: Ve a tu perfil → Editar perfil. Paso 2: En el campo "Nombre" (no el @usuario) agrega palabras clave de búsqueda: ej. "María | Coach de Vida Colombia". Paso 3: En la Bio escribe: [qué haces] + [a quién ayudas] + [qué van a lograr] + [link o acción]. Máximo 150 caracteres. Paso 4: En el link, usa Linktree o la función nativa de Instagram para poner varios links.`});
+  recs.push({p:'baja',
+    t:'Escribir el texto de tus publicaciones con palabras clave',
+    w:'Instagram funciona cada vez más como un buscador, igual que Google.',
+    pq:`Cuando alguien busca "cómo emprender en Colombia" dentro de Instagram, el algoritmo muestra primero los posts que tienen esas palabras en el texto de la publicación. Si usas las palabras correctas, Instagram puede llevarte nuevos seguidores que nunca te habían visto.`,
+    como:`Paso 1: Piensa en cómo buscaría tu cliente ideal tu tema. Ej: si vendes cursos de marketing, las palabras clave pueden ser "marketing digital", "redes sociales", "vender online". Paso 2: Incluye esas palabras naturalmente en el texto de tus publicaciones, no las fuerces. Paso 3: Las primeras 2-3 líneas son las más importantes — aparecen sin necesidad de tocar "ver más".`});
 
   document.getElementById('recList').innerHTML = recs.slice(0,7).map(r=>`
-    <div class="rec-item"><div>
-      <span class="rec-prio prio-${r.p}">${r.p==='alta'?'🔴 Alta':r.p==='media'?'🟠 Media':'🟢 Baja'}</span>
-      <strong>${r.t}</strong><p>${r.w}</p>
-    </div></div>`).join('');
+    <div class="rec-item" style="display:block;padding:16px">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:${r.pq?'10px':'0'}">
+        <span class="rec-prio prio-${r.p}" style="flex-shrink:0">${r.p==='alta'?'🔴 Alta':r.p==='media'?'🟠 Media':'🟢 Baja'}</span>
+        <div><strong style="font-size:.9rem">${r.t}</strong><p style="margin:4px 0 0;font-size:.8rem;color:var(--muted)">${r.w}</p></div>
+      </div>
+      ${r.pq?`<div style="background:rgba(147,51,234,.05);border-radius:9px;padding:9px 11px;margin-bottom:7px">
+        <div style="font-size:.69rem;font-weight:800;color:#9333ea;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">💡 Por qué importa</div>
+        <div style="font-size:.79rem;color:#444;line-height:1.5">${r.pq}</div>
+      </div>`:''}
+      ${r.como?`<div style="background:rgba(22,163,74,.05);border-radius:9px;padding:9px 11px">
+        <div style="font-size:.69rem;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">✅ Cómo hacerlo</div>
+        <div style="font-size:.79rem;color:#1a4a1a;line-height:1.6">${r.como}</div>
+      </div>`:''}
+    </div>`).join('');
 
   // Creativo quemado guide
   const vidaUtil = freq >= 5 ? '1-2 semanas' : freq >= 3 ? '2-3 semanas' : '3-4 semanas';
@@ -1520,16 +1588,18 @@ Devuelve SOLO un objeto JSON válido, sin texto antes ni después:
   "elements": [
     {"nombre": "Foto de perfil", "icono": "📷", "status": "bueno", "score": 8, "que_es": "Tu imagen principal — primera impresión visual. Debe ser reconocible en miniatura.", "feedback": "Clara y reconocible"},
     {"nombre": "Campo Nombre", "icono": "🔍", "status": "mejorar", "score": 5, "que_es": "Aparece en búsquedas de Instagram. Incluir palabras clave aquí multiplica tu visibilidad orgánica.", "feedback": "No tiene palabras clave de búsqueda"},
-    {"nombre": "Bio / Descripción", "icono": "✍️", "status": "malo", "score": 3, "que_es": "150 caracteres para explicar qué haces, a quién ayudas y por qué seguirte. El CTA aquí convierte visitantes en seguidores.", "feedback": "No tiene propuesta de valor ni CTA claro"},
-    {"nombre": "Link en Bio", "icono": "🔗", "status": "bueno", "score": 9, "que_es": "El único enlace clickeable de Instagram. Es tu puerta de entrada a ventas, leads o contenido extra.", "feedback": "Tiene link activo"},
+    {"nombre": "Bio / Descripción", "icono": "✍️", "status": "malo", "score": 3, "que_es": "150 caracteres para explicar qué haces, a quién ayudas y por qué seguirte. El llamado a la acción aquí convierte visitantes en seguidores.", "feedback": "No tiene propuesta de valor ni llamado a la acción claro"},
+    {"nombre": "Link en Bio", "icono": "🔗", "status": "bueno", "score": 9, "que_es": "El único enlace clickeable de Instagram. Es tu puerta de entrada a ventas, contacto o contenido extra.", "feedback": "Tiene link activo"},
     {"nombre": "Categoría de negocio", "icono": "🏷️", "status": "malo", "score": 2, "que_es": "Etiqueta visible bajo tu nombre que muestra tu tipo de negocio. Le dice al algoritmo quién eres y te da credibilidad.", "feedback": "No tiene categoría configurada"},
-    {"nombre": "Highlights", "icono": "⭕", "status": "mejorar", "score": 5, "que_es": "Historias fijadas que actúan como menú de tu perfil. Los nuevos visitantes los ven primero — deben comunicar tus servicios.", "feedback": "Existen pero sin portadas de marca"}
+    {"nombre": "Historias destacadas", "icono": "⭕", "status": "mejorar", "score": 5, "que_es": "Historias fijadas que actúan como menú de tu perfil. Los nuevos visitantes las ven primero — deben comunicar tus servicios.", "feedback": "Existen pero sin portadas con diseño de marca"}
   ],
   "fortalezas": ["Fortaleza específica 1", "Fortaleza específica 2"],
   "mejoras": [
-    "Mejora muy específica 1 con ejemplo concreto de cómo hacerlo",
-    "Mejora muy específica 2 con ejemplo concreto",
-    "Mejora muy específica 3 con ejemplo concreto"
+    {
+      "titulo": "Qué cambiar en una frase corta",
+      "por_que": "Explicación en español claro de por qué esto importa para el algoritmo o para conseguir clientes. Sin tecnicismos, orientado a resultados de negocio.",
+      "como_hacerlo": "Paso 1: Ve a tu perfil de Instagram → Paso 2: Toca 'Editar perfil' → Paso 3: [instrucción específica con el texto exacto a escribir si aplica]"
+    }
   ],
   "bio_sugerida": "Bio optimizada de máximo 150 caracteres basada en lo que ves en el perfil"
 }
@@ -1537,7 +1607,11 @@ Devuelve SOLO un objeto JSON válido, sin texto antes ni después:
 Reglas:
 - status: "bueno" si score 7-10, "mejorar" si score 4-6, "malo" si score 1-3
 - Evalúa SOLO lo que ves en la imagen. Si no ves un elemento, márcalo como malo.
-- Las mejoras deben ser MUY específicas con ejemplos reales (ej: "Cambia el nombre a 'María | Coach de Vida Colombia' para aparecer en búsquedas")
+- Las mejoras: máximo 5, ordenadas de mayor a menor impacto en visibilidad y ventas.
+- En "titulo": frase corta directa tipo "Agrega palabras clave a tu nombre de perfil"
+- En "por_que": explica el beneficio concreto. Ejemplo: "Instagram usa el campo Nombre (no el usuario @) para mostrarte en búsquedas. Si alguien busca 'automatización IA', aparecen primero las cuentas que tienen esas palabras en el nombre. Es gratis y multiplica tu visibilidad."
+- En "como_hacerlo": pasos numerados muy concretos con el texto exacto cuando aplique. Ejemplo: "Paso 1: Abre Instagram y ve a tu perfil → Paso 2: Toca 'Editar perfil' → Paso 3: En el campo 'Nombre' (no el @usuario) escribe: 'Kathe Digital | Automatización IA' → Paso 4: Toca Guardar."
+- Términos en inglés: si los usas, explícalos en español inmediatamente. Ejemplo: "highlights (historias destacadas)", "CTA (llamado a la acción)"
 - La bio_sugerida debe ser una bio real y completa de máximo 150 caracteres`;
 
 async function analizarBio(claudeKey) {
@@ -1552,7 +1626,7 @@ async function analizarBio(claudeKey) {
       body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 1500,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: comprimida.split(',')[1] } },
-          { type: 'text', text: PROMPT_BIO_IG }
+          { type: 'text', text: PROMPT_BIO_IG + getDocsContextPrompt() }
         ]}]
       })
     });
@@ -1598,16 +1672,14 @@ function renderBio(b) {
         </div>`).join('')}
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
-      <div style="background:rgba(22,163,74,.06);border:1.5px solid rgba(22,163,74,.2);border-radius:12px;padding:14px">
-        <div style="font-weight:800;font-size:.82rem;color:#15803d;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">✅ Lo que funciona</div>
+    <div style="background:rgba(22,163,74,.06);border:1.5px solid rgba(22,163,74,.2);border-radius:12px;padding:14px;margin-bottom:14px">
+        <div style="font-weight:800;font-size:.82rem;color:#15803d;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">✅ Lo que funciona bien</div>
         ${b.fortalezas.map(f=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#16a34a;flex-shrink:0">→</span>${f}</div>`).join('')}
       </div>
-      <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:12px;padding:14px">
-        <div style="font-weight:800;font-size:.82rem;color:#dc2626;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">🔧 Qué mejorar</div>
-        ${b.mejoras.map((m,i)=>`<div style="display:flex;gap:8px;margin-bottom:7px;font-size:.82rem;line-height:1.4"><span style="color:#dc2626;font-weight:800;flex-shrink:0">${i+1}.</span>${m}</div>`).join('')}
+      <div style="margin-bottom:20px">
+        <div style="font-weight:800;font-size:.82rem;color:#dc2626;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em">🔧 Qué mejorar — y cómo hacerlo</div>
+        ${(b.mejoras||[]).map((m,i)=>{const titulo=typeof m==='string'?m:(m.titulo||m);const porQue=typeof m==='object'?m.por_que:null;const como=typeof m==='object'?m.como_hacerlo:null;return `<div style="background:#fff;border:1.5px solid rgba(220,38,38,.18);border-radius:12px;padding:14px;margin-bottom:10px"><div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:${porQue||como?'10px':'0'}"><span style="background:linear-gradient(135deg,#dc2626,#ea580c);color:#fff;font-weight:900;font-size:.75rem;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</span><span style="font-weight:800;font-size:.88rem;color:var(--text);line-height:1.35">${titulo}</span></div>${porQue?`<div style="margin-left:32px;margin-bottom:8px"><div style="font-size:.71rem;font-weight:800;color:#9333ea;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">💡 Por qué importa</div><div style="font-size:.8rem;color:#555;line-height:1.5">${porQue}</div></div>`:''}${como?`<div style="margin-left:32px;background:rgba(22,163,74,.06);border-radius:8px;padding:9px 11px"><div style="font-size:.71rem;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">✅ Cómo hacerlo</div><div style="font-size:.8rem;color:#1a4a1a;line-height:1.6">${como}</div></div>`:''}</div>`;}).join('')}
       </div>
-    </div>
 
     ${b.bio_sugerida?`
     <div style="background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(233,30,140,.06));border:1.5px solid rgba(124,58,237,.25);border-radius:12px;padding:16px">
@@ -2012,7 +2084,7 @@ async function extraerClaude(apiKey) {
       content.push({ type: 'text', text: `--- GUIÓN/TRANSCRIPT DEL REEL ---\n${c.guion.trim()}` });
     }
   }
-  content.push({ type: 'text', text: PROMPT_IG });
+  content.push({ type: 'text', text: PROMPT_IG + (typeof getDocsContextPrompt === 'function' ? getDocsContextPrompt() : '') });
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -2165,6 +2237,89 @@ ${ssHtml}
   a.download = `informe-instagram-${d.brand.replace(/[^a-z0-9]/gi,'-').toLowerCase()}-${fechaFile}.doc`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
+}
+
+// ─── Document upload / text extraction ──────────────────────────────────────
+window.docsContextTexts = []; // [{name, text}]
+
+async function extractPdfText(file) {
+  if (typeof pdfjsLib === 'undefined') return null;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/legacy/build/pdf.worker.min.js';
+  const ab = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    text += tc.items.map(it => it.str).join(' ') + '\n';
+  }
+  return text.trim();
+}
+
+async function extractDocxText(file) {
+  if (typeof JSZip === 'undefined') return null;
+  const ab = await file.arrayBuffer();
+  const zip = await JSZip.loadAsync(ab);
+  const xmlFile = zip.file('word/document.xml');
+  if (!xmlFile) return null;
+  const xml = await xmlFile.async('string');
+  return xml.replace(/<w:t[^>]*>/g, ' ').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+
+async function handleDocFiles(files) {
+  const status = document.getElementById('docsStatus');
+  const chipList = document.getElementById('docsChipList');
+  const arr = Array.from(files);
+  status.textContent = `⏳ Procesando ${arr.length} archivo(s)...`;
+  for (const file of arr) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    let text = null;
+    try {
+      if (ext === 'txt') {
+        text = await file.text();
+      } else if (ext === 'pdf') {
+        text = await extractPdfText(file);
+      } else if (ext === 'docx' || ext === 'doc') {
+        text = await extractDocxText(file);
+      }
+    } catch(e) { text = null; }
+    if (text && text.length > 10) {
+      window.docsContextTexts.push({ name: file.name, text: text.slice(0, 8000) });
+    } else {
+      window.docsContextTexts.push({ name: file.name, text: `[No se pudo extraer texto de ${file.name} — incluye el nombre como referencia]` });
+    }
+  }
+  renderDocChips();
+  status.textContent = `✅ ${window.docsContextTexts.length} informe(s) cargado(s) — se sumarán al análisis`;
+  document.getElementById('docsFileInput').value = '';
+}
+
+function removeDoc(idx) {
+  window.docsContextTexts.splice(idx, 1);
+  renderDocChips();
+  const status = document.getElementById('docsStatus');
+  status.textContent = window.docsContextTexts.length > 0
+    ? `✅ ${window.docsContextTexts.length} informe(s) cargado(s) — se sumarán al análisis`
+    : '';
+}
+
+function renderDocChips() {
+  const chipList = document.getElementById('docsChipList');
+  if (!window.docsContextTexts.length) { chipList.style.display = 'none'; return; }
+  chipList.style.display = 'flex';
+  chipList.innerHTML = window.docsContextTexts.map((d, i) =>
+    `<div style="display:flex;align-items:center;gap:5px;background:rgba(233,30,140,.08);border:1px solid rgba(233,30,140,.2);border-radius:20px;padding:3px 10px;font-size:.72rem;color:var(--accent)">
+      📄 ${d.name}
+      <span onclick="removeDoc(${i})" style="cursor:pointer;color:#aaa;font-size:.9rem;margin-left:2px" title="Quitar">✕</span>
+    </div>`
+  ).join('');
+}
+
+function getDocsContextPrompt() {
+  if (!window.docsContextTexts || !window.docsContextTexts.length) return '';
+  return '\n\n---\nCONTEXTO ADICIONAL — INFORMES ANTERIORES:\n' +
+    window.docsContextTexts.map(d => `\n[${d.name}]:\n${d.text}`).join('\n\n') +
+    '\n---\nTen en cuenta estos informes anteriores como contexto adicional para tu análisis.\n';
 }
 </script>
 </body>

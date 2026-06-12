@@ -259,7 +259,29 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
     <div class="url-card">
       <div class="error-banner" id="errorBanner"></div>
 
-      <!-- Tipo de análisis -->
+      <!-- 1. Código fuente (PRIMERO) -->
+      <div class="url-label" style="margin-bottom:6px">¿Tienes el código fuente del sitio? <span style="font-weight:400;font-size:.8rem;color:var(--muted)">Opcional — mejora mucho el análisis</span></div>
+      <p style="font-size:.79rem;color:var(--muted);margin-bottom:8px;line-height:1.5">En Chrome: abre el sitio → menú ⋮ → <strong>Ver código fuente</strong> (Ctrl+U) → selecciona todo (Ctrl+A) → copia (Ctrl+C) → pega aquí.</p>
+      <textarea class="html-textarea" id="htmlInput" placeholder="Pega aquí el código fuente del sitio... (opcional)" style="min-height:90px;max-height:150px;margin-bottom:18px"></textarea>
+
+      <!-- 2. Video de la landing -->
+      <div class="url-label" style="margin-bottom:6px">¿Tienes el video de ventas de la landing? <span style="font-weight:400;font-size:.8rem;color:var(--muted)">Opcional — para landing pages con video</span></div>
+      <p style="font-size:.79rem;color:var(--muted);margin-bottom:8px;line-height:1.5">Sube el video principal de tu landing page (VSL, video de ventas, presentación) y Claude lo analizará: gancho, estructura, claridad del mensaje y llamado a la acción.</p>
+      <div id="auditVideoZone" onclick="document.getElementById('auditVideoInput').click()" style="border:2px dashed rgba(124,58,237,.3);border-radius:12px;padding:16px;text-align:center;cursor:pointer;background:rgba(124,58,237,.02);transition:border-color .2s;margin-bottom:6px" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='rgba(124,58,237,.3)'">
+        <div style="font-size:1.5rem;margin-bottom:5px">🎬</div>
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:2px">Sube el video de la landing (VSL, video de ventas...)</div>
+        <div style="font-size:.76rem;color:var(--muted)">Claude extrae momentos clave y los analiza — MP4, MOV, WebM</div>
+      </div>
+      <input type="file" id="auditVideoInput" accept="video/*" style="display:none" onchange="handleAuditVideo(this.files[0])">
+      <div id="auditVideoPreview" style="display:none;margin-bottom:18px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:10px 14px;align-items:center;gap:10px;font-size:.83rem">
+        <span style="font-size:1.2rem">🎬</span>
+        <span id="auditVideoName" style="flex:1;color:var(--purple);font-weight:600"></span>
+        <button onclick="removeAuditVideo()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;line-height:1">✕</button>
+      </div>
+
+      <div class="divider" style="margin:6px 0 20px"><div class="divider-line"></div><div class="divider-text">URL del sitio a auditar</div><div class="divider-line"></div></div>
+
+      <!-- 3. Tipo de análisis -->
       <div class="url-label" style="margin-bottom:10px">¿Qué quieres analizar?</div>
       <div class="type-tabs">
         <button class="type-tab active" id="btnSitio" onclick="selType('sitio',this)">🌐 Sitio Web</button>
@@ -267,7 +289,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
       </div>
       <div class="type-desc-box" id="typeDescBox">Análisis completo: SEO, técnico, conversión y píxeles. Para sitios con múltiples páginas, tienda online, portafolio o blog.</div>
 
-      <!-- LP Objective (shown only for landing page type) -->
+      <!-- LP Objective -->
       <div id="lpGoalArea" style="display:none;margin-bottom:16px">
         <div class="url-label" style="margin-bottom:8px">¿Cuál es el objetivo de la landing page?</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px" id="lpGoalGrid">
@@ -292,23 +314,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta San
       </div>
       <div id="urlFixBanner" style="display:none;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.3);border-radius:10px;padding:9px 13px;font-size:.8rem;color:#15803d;margin-bottom:10px"></div>
 
-      <div style="text-align:center;margin-bottom:8px">
-        <button onclick="togglePasteSection(this)" style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;text-decoration:underline;font-family:inherit;padding:4px 8px">
-          ¿Tienes acceso al código fuente del sitio? Agrégalo para análisis más preciso →
-        </button>
-      </div>
-
-      <div id="pasteSection" style="display:none">
-        <div class="divider"><div class="divider-line"></div><div class="divider-text" id="pasteDividerText">Opción avanzada — análisis con código fuente</div><div class="divider-line"></div></div>
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">En Chrome: abre el sitio → menú ⋮ → <strong>Ver código fuente</strong> (Ctrl+U) → Ctrl+A → Ctrl+C → pega aquí. <em>No todos lo tienen — es opcional.</em></p>
-        <textarea class="html-textarea" id="htmlInput" placeholder="Pega aquí el código fuente del sitio..."></textarea>
-        <button class="paste-btn" onclick="analyzeFromPaste()">Analizar código fuente →</button>
-      </div>
-
       <div class="checks-list" id="checksList">
         <div class="check-item">✅ SEO básico</div>
-        <div class="check-item">✅ Conversión y CTA</div>
-        <div class="check-item">✅ Meta para redes sociales</div>
+        <div class="check-item">✅ Conversión y llamados a la acción</div>
+        <div class="check-item">✅ Cómo se ve al compartir el link</div>
         <div class="check-item">✅ Aspectos técnicos</div>
         <div class="check-item">✅ Píxeles y herramientas de rastreo</div>
         <div class="check-item" id="checkLanding" style="display:none">✅ Optimización de Landing Page</div>
@@ -766,24 +775,85 @@ function validarURLEnVivo(raw) {
   }
 }
 
+let auditVideoFile = null;
+
+function handleAuditVideo(file) {
+  if (!file) return;
+  auditVideoFile = file;
+  const preview = document.getElementById('auditVideoPreview');
+  preview.style.display = 'flex';
+  document.getElementById('auditVideoName').textContent = file.name;
+  document.getElementById('auditVideoZone').style.borderColor = 'var(--purple)';
+}
+
+function removeAuditVideo() {
+  auditVideoFile = null;
+  document.getElementById('auditVideoPreview').style.display = 'none';
+  document.getElementById('auditVideoName').textContent = '';
+  document.getElementById('auditVideoInput').value = '';
+  document.getElementById('auditVideoZone').style.borderColor = 'rgba(124,58,237,.3)';
+}
+
+async function extraerFramesAudit(file) {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    const objUrl = URL.createObjectURL(file);
+    video.src = objUrl;
+    video.muted = true;
+    video.addEventListener('loadedmetadata', async () => {
+      const d = video.duration;
+      const timestamps = [0.05, 0.25, 0.5, 0.75].map(p => p * d);
+      const frames = [];
+      for (const t of timestamps) {
+        await new Promise(r => { video.currentTime = t; video.addEventListener('seeked', r, { once: true }); });
+        const c = document.createElement('canvas');
+        c.width = Math.min(video.videoWidth, 512);
+        c.height = Math.round(c.width * video.videoHeight / video.videoWidth);
+        c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+        frames.push({ dataURL: c.toDataURL('image/jpeg', 0.4), name: `video_frame_${Math.round(t)}s.jpg` });
+      }
+      URL.revokeObjectURL(objUrl);
+      resolve(frames);
+    });
+    video.addEventListener('error', reject);
+  });
+}
+
 async function startAudit() {
   const raw = document.getElementById('urlInput').value;
+  const pastedHtml = document.getElementById('htmlInput').value.trim();
   hideError();
-  document.getElementById('pasteSection').style.display = 'none';
   document.getElementById('urlFixBanner').style.display = 'none';
+
+  // Si tiene código pegado, úsalo directamente (no necesita URL)
+  if (pastedHtml) {
+    if (!pastedHtml.toLowerCase().includes('<html') && !pastedHtml.toLowerCase().includes('<!doctype')) {
+      showError('El código pegado no parece ser HTML válido. Asegúrate de copiar el código fuente completo desde el navegador (Ctrl+U → Ctrl+A → Ctrl+C).');
+      return;
+    }
+    const res = validarYNormalizarURL(raw);
+    const url = res.url || raw || '(código fuente pegado manualmente)';
+    document.getElementById('inputState').style.display = 'none';
+    document.getElementById('loadingState').style.display = 'block';
+    setStep(2); setMsg('Analizando código fuente...');
+    await new Promise(r => setTimeout(r, 200));
+    setStep(3); setMsg('Generando informe...');
+    await new Promise(r => setTimeout(r, 200));
+    renderResults(url, pastedHtml, null);
+    if (auditVideoFile) await runVideoAnalysisAfterAudit();
+    return;
+  }
 
   const resultado = validarYNormalizarURL(raw);
   if (resultado.error) { showError(resultado.error); return; }
 
   const url = resultado.url;
-  // Actualizar el input con la URL corregida
   document.getElementById('urlInput').value = url;
 
   document.getElementById('inputState').style.display = 'none';
   document.getElementById('loadingState').style.display = 'block';
   setStep(0); setMsg('Conectando al sitio...');
 
-  // Run Microlink + HTML proxy in parallel — take whatever comes back
   setStep(1); setMsg('Obteniendo datos del sitio...');
   const [mlRes, htmlRes] = await Promise.allSettled([
     fetchMicrolink(url),
@@ -796,8 +866,7 @@ async function startAudit() {
   if (!mlData && !html) {
     document.getElementById('loadingState').style.display = 'none';
     document.getElementById('inputState').style.display = 'block';
-    document.getElementById('pasteSection').style.display = 'block';
-    showError('No se pudo acceder al sitio automáticamente. Usa la opción manual: abre el sitio → clic derecho → "Ver código fuente" (o Ctrl+U) → Ctrl+A, Ctrl+C → pega abajo.');
+    showError('No se pudo acceder al sitio automáticamente. Pega el código fuente en el campo de arriba: abre el sitio → clic derecho → "Ver código fuente" (o Ctrl+U) → Ctrl+A → Ctrl+C → pega arriba.');
     return;
   }
 
@@ -807,31 +876,42 @@ async function startAudit() {
   await new Promise(r => setTimeout(r, 200));
   try {
     renderResults(url, html, mlData);
+    if (auditVideoFile) await runVideoAnalysisAfterAudit();
   } catch(e) {
     console.error('renderResults error:', e);
-    // If we have at least some data, try to show partial results
     if (html || mlData) {
       document.getElementById('loadingState').style.display = 'none';
       document.getElementById('inputState').style.display = 'block';
-      showError(`El informe se generó parcialmente. Puede que el sitio use JavaScript avanzado que dificulta el análisis automático. Prueba pegando el HTML manualmente (Ctrl+U → Ctrl+A → Ctrl+C → pegar abajo). Error técnico: ${e.message}`);
-      document.getElementById('pasteSection').style.display = 'block';
+      showError(`El informe se generó parcialmente. El sitio puede usar JavaScript avanzado. Para un análisis completo, pega el código fuente en el campo de arriba (Ctrl+U → Ctrl+A → Ctrl+C). Error: ${e.message}`);
     } else {
       document.getElementById('loadingState').style.display = 'none';
       document.getElementById('inputState').style.display = 'block';
-      showError('No se pudo generar el informe para este sitio. El sitio puede estar bloqueando el análisis automático. Usa la opción manual: abre el sitio → Ctrl+U → Ctrl+A → Ctrl+C → pega abajo.');
-      document.getElementById('pasteSection').style.display = 'block';
+      showError('No se pudo generar el informe. Pega el código fuente en el campo de arriba: abre el sitio → Ctrl+U → Ctrl+A → Ctrl+C → pega arriba.');
     }
   }
 }
 
-function togglePasteSection(btn) {
-  const sec = document.getElementById('pasteSection');
-  const shown = sec.style.display !== 'none';
-  sec.style.display = shown ? 'none' : 'block';
-  btn.textContent = shown
-    ? '¿Tienes acceso al código fuente del sitio? Agrégalo para análisis más preciso →'
-    : '▲ Ocultar sección de código fuente';
-  document.getElementById('pasteDividerText').textContent = 'Opción avanzada — análisis con código fuente';
+async function runVideoAnalysisAfterAudit() {
+  if (!auditVideoFile) return;
+  const key = localStorage.getItem('kd_claude_key');
+  if (!key) return;
+  try {
+    const vaStatus = document.getElementById('vaStatus');
+    if (vaStatus) vaStatus.textContent = '⏳ Extrayendo momentos clave del video...';
+    const frames = await extraerFramesAudit(auditVideoFile);
+    vaFiles.push(...frames);
+    vaRenderThumbs();
+    if (vaStatus) vaStatus.textContent = '';
+    setTimeout(() => {
+      const vb = document.getElementById('visualBlock');
+      if (vb) vb.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => analizarVisual(), 600);
+    }, 800);
+  } catch(e) {
+    console.warn('Video analysis error:', e);
+    const vaStatus = document.getElementById('vaStatus');
+    if (vaStatus) vaStatus.textContent = '⚠️ No se pudieron extraer imágenes del video. Prueba con otro formato (MP4).';
+  }
 }
 
 function analyzeFromPaste() {
